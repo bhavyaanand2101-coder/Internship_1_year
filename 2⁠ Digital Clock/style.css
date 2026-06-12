@@ -1,0 +1,61 @@
+:root {
+    --bg-color: #f4f4f4;
+    --text-color: #333;
+    --clock-bg: #ffffff;
+    --accent-color: #007bff;
+}
+
+body.dark-mode {
+    --bg-color: #121212;
+    --text-color: #ffffff;
+    --clock-bg: #1e1e1e;
+    --accent-color: #00d4ff;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Courier New', Courier, monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    transition: all 0.3s ease;
+}
+
+.clock-container {
+    text-align: center;
+    background: var(--clock-bg);
+    padding: 2rem 3rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+#clock {
+    font-size: 5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+#ampm {
+    font-size: 1.5rem;
+    height: 1.5rem; /* Prevents layout jump */
+    color: var(--accent-color);
+    margin-bottom: 1rem;
+}
+
+.controls button {
+    padding: 10px 15px;
+    margin: 5px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background: var(--accent-color);
+    color: white;
+    font-weight: bold;
+}
+
+.controls button:hover {
+    opacity: 0.8;
+}
