@@ -1,0 +1,16 @@
+body { font-family: sans-serif; display: flex; justify-content: center; padding: 50px; background: #f4f4f4; }
+.container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 350px; }
+.input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+input { flex: 1; padding: 8px; }
+ul { list-style: none; padding: 0; }
+li { 
+    display: flex; 
+    justify-content: space-between; 
+    padding: 10px; 
+    border-bottom: 1px solid #eee; 
+    align-items: center;
+}
+.completed { text-decoration: line-through; color: gray; }
+button { cursor: pointer; border: none; padding: 5px 10px; border-radius: 4px; }
+#addBtn { background: #28a745; color: white; }
+.delete-btn { background: #dc3545; color: white; }
