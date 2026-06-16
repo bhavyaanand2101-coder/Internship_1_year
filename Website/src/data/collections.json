@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "name": "Summer 2024",
+    "description": "Lightweight fabrics, vibrant colors, and effortless style for warm weather.",
+    "image": "https://images.unsplash.com/photo-1520975916091-11292d6b3d0e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    "productIds": [1, 101, 2, 205]
+  },
+  {
+    "id": 2,
+    "name": "Winter 2024",
+    "description": "Luxurious wool, cashmere blends, and timeless outerwear for cold days.",
+    "image": "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    "productIds": [3, 4, 103, 104, 204]
+  },
+  {
+    "id": 3,
+    "name": "Evening Wear",
+    "description": "Silk gowns, tailored tuxedos, and sophisticated pieces for special occasions.",
+    "image": "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    "productIds": [101, 102, 4, 104, 201]
+  },
+  {
+    "id": 4,
+    "name": "Resort Collection",
+    "description": "Flowy silhouettes, tropical prints, and relaxed elegance for getaways.",
+    "image": "https://images.unsplash.com/photo-1519710343536-23a88d8771e1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    "productIds": [1, 101, 201, 205]
+  },
+  {
+    "id": 5,
+    "name": "Denim Collection",
+    "description": "Premium denim jackets, jeans, and shirts with modern fits and classic washes.",
+    "image": "https://images.unsplash.com/photo-1581093459345-3e1a8d8421f6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    "productIds": [5, 6, 105, 106]
+  },
+  {
+    "id": 6,
+    "name": "Activewear Line",
+    "description": "High-performance fabrics, supportive designs, and stylish comfort for workouts.",
+    "image": "https://images.unsplash.com/photo-1517836357463-d25dfea3416a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80",
+    "productIds": [6, 106, 203]
+  }
+]

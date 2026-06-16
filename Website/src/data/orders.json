@@ -1,0 +1,43 @@
+[
+  {
+    "id": "20260616-8109",
+    "date": "June 16, 2026",
+    "status": "Processing",
+    "shippingInfo": {
+      "firstName": "Jane",
+      "lastName": "Doe",
+      "address": "456 Luxury Lane",
+      "apartment": "Penthouse B",
+      "city": "Beverly Hills",
+      "state": "CA",
+      "zipCode": "90210",
+      "country": "USA",
+      "phone": "9876543210"
+    },
+    "items": [
+      {
+        "id": 1,
+        "name": "Linen Blazer",
+        "price": 238,
+        "quantity": 1,
+        "size": "M",
+        "color": "Navy"
+      },
+      {
+        "id": 101,
+        "name": "Silk Slip Dress",
+        "price": 198,
+        "quantity": 2,
+        "size": "S",
+        "color": "Emerald"
+      }
+    ],
+    "totals": {
+      "subtotal": 634,
+      "discount": 63.400000000000006,
+      "tax": 57.06,
+      "total": 627.6600000000001
+    },
+    "tracking": "Pending"
+  }
+]
