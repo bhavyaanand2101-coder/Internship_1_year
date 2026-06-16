@@ -50,6 +50,9 @@ export default function Men() {
     const matchesColor =
       filters.color === 'all' ||
       product.colors.some((c) => c.toLowerCase() === filters.color.toLowerCase());
+    const matchesSize =
+      filters.size === 'all' ||
+      product.sizes.some((s) => s.toLowerCase() === filters.size.toLowerCase());
     const matchesPrice =
       product.price >= filters.priceRange[0] &&
       product.price <= filters.priceRange[1];
@@ -57,7 +60,7 @@ export default function Men() {
       filters.availability === 'all' ||
       (filters.availability === 'inStock' && product.inStock) ||
       (filters.availability === 'outOfStock' && !product.inStock);
-    return matchesCategory && matchesColor && matchesPrice && matchesAvailability;
+    return matchesCategory && matchesColor && matchesSize && matchesPrice && matchesAvailability;
   });
 
   // Sort products
