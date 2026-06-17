@@ -83,10 +83,8 @@ export default function About() {
             <div className="text-center p-4 bg-white rounded-lg border border-gray-200">
               <div className="flex items-center justify-center mb-4">
                 <div className="w-10 h-10 bg-[#D4AF37]/20 rounded-full flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#D4AF37]/20 rounded-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2.25c-1.263 0-2.42.488-3.256 1.176A11.925 11.925 0 003.341 12c0 5.241 4.275 9.524 9.583 9.524 5.308 0 9.583-4.283 9.583-9.524a11.925 11.925 0 006.236-6.648A11.894 11.894 0 0020.75 4.426c-.836-.688-1.993-1.176-3.256-1.176z" />
-                    </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 2.25c-1.263 0-2.42.488-3.256 1.176A11.925 11.925 0 003.341 12c0 5.241 4.275 9.524 9.583 9.524 5.308 0 9.583-4.283 9.583-9.524a11.925 11.925 0 006.236-6.648A11.894 11.894 0 0020.75 4.426c-.836-.688-1.993-1.176-3.256-1.176z" />
                   </svg>
                 </div>
               </div>
@@ -98,10 +96,8 @@ export default function About() {
             <div className="text-center p-4 bg-white rounded-lg border border-gray-200">
               <div className="flex items-center justify-center mb-4">
                 <div className="w-10 h-10 bg-[#D4AF37]/20 rounded-full flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#D4AF37]/20 rounded-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-2m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 014.837 7.004M12 20.043c-2.749 0-5.468-.668-7.668-1.68" />
-                    </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-2m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 014.837 7.004M12 20.043c-2.749 0-5.468-.668-7.668-1.68" />
                   </svg>
                 </div>
               </div>
@@ -113,10 +109,8 @@ export default function About() {
             <div className="text-center p-4 bg-white rounded-lg border border-gray-200">
               <div className="flex items-center justify-center mb-4">
                 <div className="w-10 h-10 bg-[#D4AF37]/20 rounded-full flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#D4AF37]/20 rounded-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-1.104-.275-2.158-.764-3.082" />
-                    </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#D4AF37]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-1.104-.275-2.158-.764-3.082" />
                   </svg>
                 </div>
               </div>

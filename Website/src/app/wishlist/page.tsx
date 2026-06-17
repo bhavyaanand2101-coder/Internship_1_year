@@ -16,10 +16,23 @@ interface WishlistItem {
 
 export default function Wishlist() {
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
+  const [productsMap, setProductsMap] = useState<Record<number, string>>({});
   const [loading, setLoading] = useState(true);
 
   // Initialize wishlist from localStorage or set defaults
   useEffect(() => {
+    // Fetch products to map correct genders for details routing
+    fetch('/api/products')
+      .then((res) => res.json())
+      .then((data) => {
+        const map: Record<number, string> = {};
+        data.forEach((p: { id: number; gender: string }) => {
+          map[p.id] = p.gender;
+        });
+        setProductsMap(map);
+      })
+      .catch((err) => console.error('Error fetching products list:', err));
+
     const stored = localStorage.getItem('cosostyle_wishlist');
     if (stored) {
       try {
@@ -187,7 +200,17 @@ export default function Wishlist() {
                         Add to Cart
                       </button>
                       <Link
-                        href={item.id >= 100 ? `/women/${item.id}` : `/men/${item.id}`}
+                        href={
+                          productsMap[item.id] === 'women'
+                            ? `/women/${item.id}`
+                            : productsMap[item.id] === 'men'
+                            ? `/men/${item.id}`
+                            : productsMap[item.id] === 'unisex'
+                            ? `/unisex/${item.id}`
+                            : item.id >= 100
+                            ? `/women/${item.id}`
+                            : `/men/${item.id}`
+                        }
                         className="flex-1 flex items-center justify-center px-4 py-2 border border-gray-300 hover:bg-gray-50 text-gray-700 text-sm font-medium rounded transition-colors"
                       >
                         Details

@@ -15,6 +15,7 @@ interface Product {
   sizes: string[];
   colors: string[];
   inStock: boolean;
+  gender: string;
 }
 
 export default function NewArrivals() {
@@ -51,13 +52,11 @@ export default function NewArrivals() {
               <Link
                 key={product.id}
                 href={
-                  product.category === 'Footwear' ||
-                  product.category === 'Accessories' ||
-                  product.category === 'Bags'
-                    ? `/unisex/${product.id}`
-                    : product.category === 'Dresses' || product.category === 'Sweaters'
+                  product.gender === 'women'
                     ? `/women/${product.id}`
-                    : `/men/${product.id}`
+                    : product.gender === 'men'
+                    ? `/men/${product.id}`
+                    : `/unisex/${product.id}`
                 }
                 className="group"
               >

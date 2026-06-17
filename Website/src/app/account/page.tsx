@@ -30,7 +30,7 @@ export default function Account() {
               Save your favorite items for later
             </p>
             <Link
-              href="/account/wishlist"
+              href="/wishlist"
               className="mt-4 inline-block px-4 py-2 bg-black text-white text-sm font-medium rounded hover:bg-gray-800"
             >
               View Wishlist

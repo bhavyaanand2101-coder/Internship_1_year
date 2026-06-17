@@ -1,0 +1,14 @@
+{
+  "id": "session-1781693343401",
+  "startedAt": "2026-06-17T10:49:03.401Z",
+  "cwd": "/Users/bhavya/Desktop/ /1_internship",
+  "context": {},
+  "metrics": {
+    "edits": 0,
+    "commands": 0,
+    "tasks": 0,
+    "errors": 0
+  },
+  "endedAt": "2026-06-17T10:58:16.848Z",
+  "duration": 553452
+}

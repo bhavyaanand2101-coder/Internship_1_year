@@ -289,7 +289,7 @@ export default function WomenProductDetails({ params }: { params: Promise<{ slug
                     className="flex h-10 w-10 items-center justify-center rounded border border-gray-300"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 9l-3 3m0 0l-3-3m3 3V6h6v3z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 12H6" />
                     </svg>
                   </button>
                   <span className="w-10 text-center font-mono">{quantity}</span>
@@ -298,7 +298,7 @@ export default function WomenProductDetails({ params }: { params: Promise<{ slug
                     className="flex h-10 w-10 items-center justify-center rounded border border-gray-300"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 15l3-3m0 0l3 3m-3-3h3v4H9z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12M6 12h12" />
                     </svg>
                   </button>
                 </div>
