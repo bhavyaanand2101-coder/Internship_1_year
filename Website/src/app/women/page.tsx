@@ -1,6 +1,5 @@
 "use client";
 
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import ProductCard from '@/components/ui/ProductCard';
 
@@ -384,13 +383,7 @@ export default function Women() {
                 </p>
               ) : (
                 sortedProducts.map((product) => (
-                  <Link
-                    key={product.id}
-                    href={`/women/${product.id}`}
-                    className="group"
-                  >
-                    <ProductCard product={product} />
-                  </Link>
+                  <ProductCard key={product.id} product={product} />
                 ))
               )}
               {!loading && sortedProducts.length === 0 && (

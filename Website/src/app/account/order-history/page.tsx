@@ -1,8 +1,26 @@
 "use client";
 
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 
-const mockOrders = [
+interface OrderItem {
+  name: string;
+  quantity: number;
+  price: number;
+  size?: string;
+  color?: string;
+}
+
+interface Order {
+  id: string;
+  date: string;
+  status: string;
+  total: number;
+  items: OrderItem[];
+  tracking: string;
+}
+
+const mockOrders: Order[] = [
   {
     id: "20231105-001",
     date: "November 5, 2023",
@@ -26,7 +44,61 @@ const mockOrders = [
   }
 ];
 
+interface CheckoutOrder {
+  id: string;
+  date: string;
+  status: string;
+  totals?: { total: number };
+  total?: number;
+  items: OrderItem[];
+  tracking: string;
+}
+
 export default function OrderHistory() {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/checkout')
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch');
+        return res.json();
+      })
+      .then((data) => {
+        if (data && data.length > 0) {
+          const mapped = data.map((order: CheckoutOrder) => ({
+            id: order.id,
+            date: order.date,
+            status: order.status,
+            total: order.totals ? order.totals.total : order.total,
+            items: order.items,
+            tracking: order.tracking
+          }));
+          // Merge actual orders on top of mock orders so the user sees both
+          setOrders([...mapped, ...mockOrders]);
+        } else {
+          setOrders(mockOrders);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setOrders(mockOrders);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-gray-50">
+        <div className="text-center space-y-3">
+          <div className="w-10 h-10 border-4 border-[#D4AF37] border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="text-sm text-gray-500">Loading order history...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-[calc(100vh-4rem)] py-12 bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -41,7 +113,7 @@ export default function OrderHistory() {
         </div>
 
         <div className="space-y-6">
-          {mockOrders.map((order) => (
+          {orders.map((order) => (
             <div key={order.id} className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm p-6">
               <div className="flex flex-col sm:flex-row justify-between border-b border-gray-200 pb-4 mb-4 gap-4">
                 <div>
@@ -74,7 +146,7 @@ export default function OrderHistory() {
                   <div key={index} className="flex justify-between items-center text-sm">
                     <div>
                       <p className="font-semibold text-black">{item.name}</p>
-                      <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                      <p className="text-xs text-gray-500">Qty: {item.quantity}{item.size || item.color ? ` • Size: ${item.size || 'M'} • Color: ${item.color || 'Default'}` : ''}</p>
                     </div>
                     <p className="font-medium text-gray-700">${(item.price * item.quantity).toFixed(2)}</p>
                   </div>

@@ -130,13 +130,7 @@ export default function CollectionDetails({ params }: { params: Promise<{ id: st
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {collection.products.map((product) => (
-              <Link
-                key={product.id}
-                href={product.gender === 'women' ? `/women/${product.id}` : product.gender === 'men' ? `/men/${product.id}` : `/unisex/${product.id}`}
-                className="group"
-              >
-                <ProductCard product={product} />
-              </Link>
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         </div>

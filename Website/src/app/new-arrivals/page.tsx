@@ -1,6 +1,5 @@
 "use client";
 
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import ProductCard from '@/components/ui/ProductCard';
 
@@ -49,19 +48,7 @@ export default function NewArrivals() {
             </p>
           ) : (
             newArrivals.map((product) => (
-              <Link
-                key={product.id}
-                href={
-                  product.gender === 'women'
-                    ? `/women/${product.id}`
-                    : product.gender === 'men'
-                    ? `/men/${product.id}`
-                    : `/unisex/${product.id}`
-                }
-                className="group"
-              >
-                <ProductCard product={product} />
-              </Link>
+              <ProductCard key={product.id} product={product} />
             ))
           )}
         </div>

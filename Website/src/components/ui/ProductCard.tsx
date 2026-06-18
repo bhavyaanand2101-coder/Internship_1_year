@@ -245,9 +245,26 @@ export default function ProductCard({ product }: ProductCardProps) {
     router.push('/checkout');
   };
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest('button') || isModalOpen) {
+      return;
+    }
+    const productGender = product.gender ? product.gender.toLowerCase() : 'unisex';
+    router.push(
+      productGender === 'women'
+        ? `/women/${product.id}`
+        : productGender === 'men'
+        ? `/men/${product.id}`
+        : `/unisex/${product.id}`
+    );
+  };
+
   return (
     <>
-      <div className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300 h-full flex flex-col justify-between">
+      <div 
+        onClick={handleCardClick}
+        className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300 h-full flex flex-col justify-between cursor-pointer"
+      >
         <div className="relative group overflow-hidden">
           <div className="relative h-64 w-full">
             <Image

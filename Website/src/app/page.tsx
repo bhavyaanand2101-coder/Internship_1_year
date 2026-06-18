@@ -2,8 +2,71 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import ProductCard from '@/components/ui/ProductCard';
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  originalPrice?: number | null;
+  discount?: number | null;
+  image: string;
+  category?: string;
+  sizes?: string[];
+  colors?: string[];
+  inStock?: boolean;
+  gender?: string;
+}
+
+interface Collection {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+  productIds?: number[];
+}
 
 export default function Home() {
+  const [collections, setCollections] = useState<Collection[]>([]);
+  const [trendingProducts, setTrendingProducts] = useState<Product[]>([]);
+  const [bestSellers, setBestSellers] = useState<Product[]>([]);
+  const [loadingCollections, setLoadingCollections] = useState(true);
+  const [loadingProducts, setLoadingProducts] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/collections')
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch collections');
+        return res.json();
+      })
+      .then((data) => {
+        setCollections(data);
+        setLoadingCollections(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoadingCollections(false);
+      });
+
+    fetch('/api/products')
+      .then((res) => {
+        if (!res.ok) throw new Error('Failed to fetch products');
+        return res.json();
+      })
+      .then((data) => {
+        if (Array.isArray(data)) {
+          // Slice products for trending now and best sellers
+          setTrendingProducts(data.slice(0, 4));
+          setBestSellers(data.slice(4, 7));
+        }
+        setLoadingProducts(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoadingProducts(false);
+      });
+  }, []);
   return (
     <>
       {/* Hero Section */}
@@ -42,242 +105,53 @@ export default function Home() {
           <h2 className="mb-8 text-3xl font-bold text-black text-center">
             Featured Collections
           </h2>
-          <div className="overflow-x-auto space-x-4">
-            <div className="inline-flex min-w-[200px]">
-              <div className="bg-white rounded-lg border border-gray-200 p-4 flex-shrink-0">
-                <Image
-                  src="https://images.unsplash.com/photo-1520975916091-11292d6b3d0e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                  alt="Summer Collection"
-                  width={200}
-                  height={260}
-                  className="rounded"
-                />
-                <h3 className="mt-4 text-lg font-semibold text-black">Summer 2024</h3>
-                <p className="text-sm text-gray-500 mt-1">Lightweight fabrics • Vibrant colors</p>
-                <Link
-                  href="/collections"
-                  className="mt-3 inline-flex items-center px-3 py-2 bg-gray-100 text-sm font-medium text-gray-800 rounded hover:bg-gray-200"
-                >
-                  View Collection
-                </Link>
-              </div>
+          {loadingCollections ? (
+            <p className="text-center py-12 text-gray-500">Loading premium collections...</p>
+          ) : (
+            <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-thin scrollbar-thumb-gray-250">
+              {collections.map((collection) => (
+                <div key={collection.id} className="flex-shrink-0 w-[240px]">
+                  <div className="bg-white rounded-lg border border-gray-200 p-4 h-full flex flex-col justify-between">
+                    <div>
+                      <Image
+                        src={collection.image}
+                        alt={collection.name}
+                        width={200}
+                        height={260}
+                        className="rounded object-cover h-[260px] w-full"
+                      />
+                      <h3 className="mt-4 text-lg font-semibold text-black">{collection.name}</h3>
+                      <p className="text-sm text-gray-500 mt-1 line-clamp-2">{collection.description}</p>
+                    </div>
+                    <Link
+                      href={`/collections/${collection.id}`}
+                      className="mt-4 inline-flex items-center justify-center w-full px-3 py-2 bg-gray-100 text-sm font-medium text-gray-800 rounded hover:bg-gray-250 transition-colors"
+                    >
+                      View Collection
+                    </Link>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="inline-flex min-w-[200px] ml-4">
-              <div className="bg-white rounded-lg border border-gray-200 p-4 flex-shrink-0">
-                <Image
-                  src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                  alt="Winter Collection"
-                  width={200}
-                  height={260}
-                  className="rounded"
-                />
-                <h3 className="mt-4 text-lg font-semibold text-black">Winter 2024</h3>
-                <p className="text-sm text-gray-500 mt-1">Luxurious wool • Cashmere blends</p>
-                <Link
-                  href="/collections"
-                  className="mt-3 inline-flex items-center px-3 py-2 bg-gray-100 text-sm font-medium text-gray-800 rounded hover:bg-gray-200"
-                >
-                  View Collection
-                </Link>
-              </div>
-            </div>
-            <div className="inline-flex min-w-[200px] ml-4">
-              <div className="bg-white rounded-lg border border-gray-200 p-4 flex-shrink-0">
-                <Image
-                  src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                  alt="Evening Wear"
-                  width={200}
-                  height={260}
-                  className="rounded"
-                />
-                <h3 className="mt-4 text-lg font-semibold text-black">Evening Wear</h3>
-                <p className="text-sm text-gray-500 mt-1">Silk gowns • Tailored tuxedos</p>
-                <Link
-                  href="/collections"
-                  className="mt-3 inline-flex items-center px-3 py-2 bg-gray-100 text-sm font-medium text-gray-800 rounded hover:bg-gray-200"
-                >
-                  View Collection
-                </Link>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 
-      {/* Trending Products Carousel */}
+      {/* Trending Products */}
       <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="mb-8 text-3xl font-bold text-black text-center">
             Trending Now
           </h2>
-          <div className="space-y-6">
-            {/* Carousel placeholder - in real implementation, use Swiper or similar */}
+          {loadingProducts ? (
+            <p className="text-center py-12 text-gray-500">Loading premium collection...</p>
+          ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Product Card 1 */}
-              <div className="group">
-                <div className="relative">
-                  <Image
-                    src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                    alt="Trending Product"
-                    width={300}
-                    height={400}
-                    className="rounded"
-                  />
-                  <span className="absolute top-2 left-2 bg-[#D4AF37] text-white text-xs font-bold px-2 py-1 rounded">
-                    -20%
-                  </span>
-                  <button
-                    className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 flex items-center justify-center px-4 py-2 bg-black/70 text-white transition-opacity"
-                    onClick={() => {}}
-                  >
-                    Quick View
-                  </button>
-                </div>
-                <div className="mt-4">
-                  <h3 className="text-lg font-semibold text-black">Linen Blazer</h3>
-                  <p className="mt-1 text-gray-500 line-through">$298.00</p>
-                  <p className="mt-1 font-medium text-black">$238.00</p>
-                  <div className="mt-3 flex space-x-2">
-                    <button
-                      className="flex-1 flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m0 0l4.418 4.418A11.944 11.944 0 0012 21c5.522 0 10-4.478 10-10S17.522 4 12 4zm0-2h7a2 2 0 012 2v5h-.586m0 0L12.586 9.414a2 2 0 00-2.828 0L5.414 12H2a2 2 0 01-2-2V6a2 2 0 012-2h7z" />
-                      </svg>
-                      Wishlist
-                    </button>
-                    <button
-                      className="flex-1 flex items-center justify-center px-3 py-2 bg-black text-white hover:bg-gray-800"
-                    >
-                      Add to Cart
-                    </button>
-                  </div>
-                </div>
-              </div>
-              {/* Product Card 2 */}
-              <div className="group">
-                <div className="relative">
-                  <Image
-                    src="https://images.unsplash.com/photo-1583743814966-893c56b7fa16?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                    alt="Trending Product"
-                    width={300}
-                    height={400}
-                    className="rounded"
-                  />
-                  <span className="absolute top-2 left-2 bg-[#D4AF37] text-white text-xs font-bold px-2 py-1 rounded">
-                    New
-                  </span>
-                  <button
-                    className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 flex items-center justify-center px-4 py-2 bg-black/70 text-white transition-opacity"
-                    onClick={() => {}}
-                  >
-                    Quick View
-                  </button>
-                </div>
-                <div className="mt-4">
-                  <h3 className="text-lg font-semibold text-black">Silk Slip Dress</h3>
-                  <p className="mt-1 text-gray-500">$198.00</p>
-                  <div className="mt-3 flex space-x-2">
-                    <button
-                      className="flex-1 flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m0 0l4.418 4.418A11.944 11.944 0 0012 21c5.522 0 10-4.478 10-10S17.522 4 12 4zm0-2h7a2 2 0 012 2v5h-.586m0 0L12.586 9.414a2 2 0 00-2.828 0L5.414 12H2a2 2 0 01-2-2V6a2 2 0 012-2h7z" />
-                      </svg>
-                      Wishlist
-                    </button>
-                    <button
-                      className="flex-1 flex items-center justify-center px-3 py-2 bg-black text-white hover:bg-gray-800"
-                    >
-                      Add to Cart
-                    </button>
-                  </div>
-                </div>
-              </div>
-              {/* Product Card 3 */}
-              <div className="group">
-                <div className="relative">
-                  <Image
-                    src="https://images.unsplash.com/photo-1551041110-8a3f87411f0f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                    alt="Trending Product"
-                    width={300}
-                    height={400}
-                    className="rounded"
-                  />
-                  <span className="absolute top-2 left-2 bg-[#D4AF37] text-white text-xs font-bold px-2 py-1 rounded">
-                    -15%
-                  </span>
-                  <button
-                    className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 flex items-center justify-center px-4 py-2 bg-black/70 text-white transition-opacity"
-                    onClick={() => {}}
-                  >
-                    Quick View
-                  </button>
-                </div>
-                <div className="mt-4">
-                  <h3 className="text-lg font-semibold text-black">Cashmere Sweater</h3>
-                  <p className="mt-1 text-gray-500 line-through">$398.00</p>
-                  <p className="mt-1 font-medium text-black">$338.00</p>
-                  <div className="mt-3 flex space-x-2">
-                    <button
-                      className="flex-1 flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m0 0l4.418 4.418A11.944 11.944 0 0012 21c5.522 0 10-4.478 10-10S17.522 4 12 4zm0-2h7a2 2 0 012 2v5h-.586m0 0L12.586 9.414a2 2 0 00-2.828 0L5.414 12H2a2 2 0 01-2-2V6a2 2 0 012-2h7z" />
-                      </svg>
-                      Wishlist
-                    </button>
-                    <button
-                      className="flex-1 flex items-center justify-center px-3 py-2 bg-black text-white hover:bg-gray-800"
-                    >
-                      Add to Cart
-                    </button>
-                  </div>
-                </div>
-              </div>
-              {/* Product Card 4 */}
-              <div className="group">
-                <div className="relative">
-                  <Image
-                    src="https://images.unsplash.com/photo-1542291026-7yec2d6c2c3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                    alt="Trending Product"
-                    width={300}
-                    height={400}
-                    className="rounded"
-                  />
-                  <span className="absolute top-2 left-2 bg-[#D4AF37] text-white text-xs font-bold px-2 py-1 rounded">
-                    -10%
-                  </span>
-                  <button
-                    className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 flex items-center justify-center px-4 py-2 bg-black/70 text-white transition-opacity"
-                    onClick={() => {}}
-                  >
-                    Quick View
-                  </button>
-                </div>
-                <div className="mt-4">
-                  <h3 className="text-lg font-semibold text-black">Tailored Wool Coat</h3>
-                  <p className="mt-1 text-gray-500 line-through">$598.00</p>
-                  <p className="mt-1 font-medium text-black">$538.00</p>
-                  <div className="mt-3 flex space-x-2">
-                    <button
-                      className="flex-1 flex items-center justify-center px-3 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m0 0l4.418 4.418A11.944 11.944 0 0012 21c5.522 0 10-4.478 10-10S17.522 4 12 4zm0-2h7a2 2 0 012 2v5h-.586m0 0L12.586 9.414a2 2 0 00-2.828 0L5.414 12H2a2 2 0 01-2-2V6a2 2 0 012-2h7z" />
-                      </svg>
-                      Wishlist
-                    </button>
-                    <button
-                      className="flex-1 flex items-center justify-center px-3 py-2 bg-black text-white hover:bg-gray-800"
-                    >
-                      Add to Cart
-                    </button>
-                  </div>
-                </div>
-              </div>
+              {trendingProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
             </div>
-          </div>
+          )}
         </div>
       </section>
 
@@ -287,71 +161,15 @@ export default function Home() {
           <h2 className="mb-8 text-3xl font-bold text-black text-center">
             Best Sellers
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Best Seller Card 1 */}
-            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <Image
-                src="https://images.unsplash.com/photo-1595777460388-5b0a6d3e5b3e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                alt="Best Seller"
-                width={400}
-                height={500}
-                className="object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-lg font-semibold text-black">Classic White Shirt</h3>
-                <p className="mt-2 text-sm text-gray-500">Timeless staple</p>
-                <p className="mt-4 font-medium text-black">$98.00</p>
-                <Link
-                  href="/men"
-                  className="mt-6 inline-block px-4 py-2 bg-black text-white text-sm font-medium rounded hover:bg-gray-800"
-                >
-                  Shop Now
-                </Link>
-              </div>
+          {loadingProducts ? (
+            <p className="text-center py-12 text-gray-500">Loading premium collection...</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {bestSellers.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
             </div>
-            {/* Best Seller Card 2 */}
-            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <Image
-                src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                alt="Best Seller"
-                width={400}
-                height={500}
-                className="object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-lg font-semibold text-black">Little Black Dress</h3>
-                <p className="mt-2 text-sm text-gray-500">Essential evening wear</p>
-                <p className="mt-4 font-medium text-black">$198.00</p>
-                <Link
-                  href="/women"
-                  className="mt-6 inline-block px-4 py-2 bg-black text-white text-sm font-medium rounded hover:bg-gray-800"
-                >
-                  Shop Now
-                </Link>
-              </div>
-            </div>
-            {/* Best Seller Card 3 */}
-            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-              <Image
-                src="https://images.unsplash.com/photo-1581091852973-4657cb591151?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                alt="Best Seller"
-                width={400}
-                height={500}
-                className="object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-lg font-semibold text-black">Leather Biker Jacket</h3>
-                <p className="mt-2 text-sm text-gray-500">Premium lambskin</p>
-                <p className="mt-4 font-medium text-black">$398.00</p>
-                <Link
-                  href="/men"
-                  className="mt-6 inline-block px-4 py-2 bg-black text-white text-sm font-medium rounded hover:bg-gray-800"
-                >
-                  Shop Now
-                </Link>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 
