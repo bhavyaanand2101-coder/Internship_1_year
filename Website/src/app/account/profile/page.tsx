@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Profile() {
   const [profile, setProfile] = useState({
@@ -17,8 +17,23 @@ export default function Profile() {
     confirm: ""
   });
 
+  useEffect(() => {
+    const stored = localStorage.getItem('cosostyle_profile');
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        Promise.resolve().then(() => {
+          setProfile(parsed);
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }, []);
+
   const handleProfileSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    localStorage.setItem('cosostyle_profile', JSON.stringify(profile));
     alert("Profile updated successfully!");
   };
 

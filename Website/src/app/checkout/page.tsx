@@ -14,6 +14,16 @@ interface CartItem {
   color: string;
 }
 
+interface AddressItem {
+  id: number;
+  type: string;
+  name: string;
+  address: string;
+  cityStateZip: string;
+  country: string;
+  phone: string;
+}
+
 export default function Checkout() {
   const router = useRouter();
   const [step, setStep] = useState(1); // 1: Shipping, 2: Payment, 3: Review
@@ -66,6 +76,72 @@ export default function Checkout() {
       } catch (e) {
         console.error(e);
       }
+    }
+
+    try {
+      const storedProfile = localStorage.getItem('cosostyle_profile');
+      const storedAddresses = localStorage.getItem('cosostyle_addresses');
+
+      let profileData = null;
+      let addressData = null;
+
+      if (storedProfile) {
+        profileData = JSON.parse(storedProfile);
+      }
+      if (storedAddresses) {
+        const addresses = JSON.parse(storedAddresses) as AddressItem[];
+        addressData = addresses.find(
+          (a: AddressItem) =>
+            a.type === 'Default Shipping' || a.type.toLowerCase().includes('shipping')
+        );
+        if (!addressData && addresses.length > 0) {
+          addressData = addresses[0];
+        }
+      }
+
+      if (profileData || addressData) {
+        setTimeout(() => {
+          setShippingInfo((prev) => {
+            const addressVal = addressData ? addressData.address : '';
+            const phoneVal = profileData?.phone || addressData?.phone || '';
+
+            let cityVal = '';
+            let stateVal = '';
+            let zipVal = '';
+
+            if (addressData?.cityStateZip) {
+              const parts = addressData.cityStateZip.split(',');
+              if (parts.length > 0) {
+                cityVal = parts[0].trim();
+              }
+              if (parts.length > 1) {
+                const stateZipParts = parts[1].trim().split(' ');
+                if (stateZipParts.length > 0) {
+                  stateVal = stateZipParts[0].trim();
+                }
+                if (stateZipParts.length > 1) {
+                  zipVal = stateZipParts.slice(1).join(' ').trim();
+                }
+              }
+            }
+
+            return {
+              ...prev,
+              firstName: profileData?.firstName || addressData?.name?.split(' ')[0] || '',
+              lastName: profileData?.lastName || addressData?.name?.split(' ').slice(1).join(' ') || '',
+              email: profileData?.email || '',
+              phone: phoneVal,
+              address: addressVal,
+              city: cityVal,
+              state: stateVal,
+              zipCode: zipVal,
+              country: addressData?.country || 'USA',
+            };
+          });
+        }, 0);
+      }
+    } catch (err) {
+      console.error('Failed to prefill shipping info:', err);
     }
   }, []);
 
