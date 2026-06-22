@@ -1,15 +1,1 @@
-name: Daily Commit
 
-'on':
-  workflow_dispatch:
-
-  schedule:
-    - cron: '30 6 * * *'
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Test
-        run: echo "Workflow is working"
