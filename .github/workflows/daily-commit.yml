@@ -1,35 +1,27 @@
 name: Daily Commit
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '30 6 * * *'
-  workflow_dispatch:
 
 jobs:
   daily-commit:
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: write
-
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Configure Git
+      - name: Update file
+        run: |
+          echo "$(date)" >> activity.txt
+
+      - name: Commit and Push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Update activity file
-        run: |
-          echo "Updated on $(date)" >> activity.txt
-
-      - name: Commit changes
-        run: |
           git add activity.txt
-          git commit -m "Daily automated commit" || echo "No changes to commit"
-
-      - name: Push changes
-        run: |
+          git commit -m "Daily automated commit" || exit 0
           git push
