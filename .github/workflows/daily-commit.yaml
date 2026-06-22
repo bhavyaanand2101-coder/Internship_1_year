@@ -22,6 +22,10 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
+      - name: Create activity file if missing
+        run: |
+          touch activity.txt
+
       - name: Update Activity File
         run: |
           echo "Last automated update: $(date -u)" >> activity.txt
@@ -29,7 +33,7 @@ jobs:
       - name: Commit Changes
         run: |
           git add activity.txt
-          git commit -m "🤖 Daily automated commit $(date -u '+%Y-%m-%d')" || echo "No changes to commit"
+          git commit -m "Daily automated commit $(date -u '+%Y-%m-%d')" || echo "No changes to commit"
 
       - name: Push Changes
         run: |
