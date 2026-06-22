@@ -8,6 +8,8 @@ on:
 jobs:
   daily-commit:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
@@ -24,4 +26,5 @@ jobs:
 
           git add activity.txt
           git commit -m "Daily automated commit" || exit 0
+          git pull --rebase origin main
           git push
