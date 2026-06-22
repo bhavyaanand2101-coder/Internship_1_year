@@ -1,10 +1,10 @@
-cat > .github/workflows/daily-commit.yaml << 'EOF'
 name: Daily Commit
 
 on:
+  workflow_dispatch:
+
   schedule:
     - cron: '30 6 * * *'
-  workflow_dispatch:
 
 jobs:
   daily-commit:
@@ -14,24 +14,17 @@ jobs:
       contents: write
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Configure Git
+      - name: Update activity file
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          echo "$(date)" >> activity.txt
 
-      - name: Update Activity File
+      - name: Commit and push
         run: |
-          echo "Last automated update: $(date -u)" >> activity.txt
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Commit Changes
-        run: |
           git add activity.txt
-          git commit -m "Daily automated commit" || echo "No changes"
-
-      - name: Push Changes
-        run: |
+          git commit -m "Daily automated commit" || exit 0
           git push
-EOF
