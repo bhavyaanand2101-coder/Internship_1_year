@@ -4,6 +4,7 @@ import { use, useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import ProductCard from '@/components/ui/ProductCard';
 
 interface Product {
   id: number;
@@ -58,6 +59,12 @@ export default function MenProductDetails({ params }: { params: Promise<{ slug: 
       })
       .then((data) => {
         setProduct(data);
+        if (data.sizes && data.sizes.length > 0) {
+          setSelectedSize(data.sizes[0]);
+        }
+        if (data.colors && data.colors.length > 0) {
+          setSelectedColor(data.colors[0]);
+        }
         setError(null);
         setLoading(false);
         // Fetch related products of same category
@@ -122,10 +129,10 @@ export default function MenProductDetails({ params }: { params: Promise<{ slug: 
 
   if (loading) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-white">
-        <div className="text-center space-y-4">
-          <div className="w-12 h-12 border-4 border-[#D4AF37] border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="text-sm font-medium text-gray-500 uppercase tracking-widest animate-pulse">
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-white dark:bg-zinc-950 transition-colors duration-300">
+        <div className="text-center space-y-3">
+          <div className="w-8 h-8 border-2 border-black dark:border-white border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-widest animate-pulse">
             Loading luxury item...
           </p>
         </div>
@@ -135,12 +142,12 @@ export default function MenProductDetails({ params }: { params: Promise<{ slug: 
 
   if (error || !product) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] py-12 bg-gray-50">
+      <div className="min-h-[calc(100vh-4rem)] py-12 bg-white dark:bg-zinc-950 text-black dark:text-white transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center py-16 bg-white rounded-lg border border-gray-200 shadow-sm max-w-xl mx-auto">
-            <h1 className="text-2xl font-bold text-black mb-4">Product Not Found</h1>
-            <p className="text-gray-600 mb-6">We couldn&apos;t find that specific item. Browse our latest menswear collection instead!</p>
-            <Link href="/men" className="inline-block px-6 py-3 bg-black text-white text-sm font-medium rounded hover:bg-gray-800 transition-colors">
+          <div className="text-center py-20 max-w-xl mx-auto space-y-6">
+            <h1 className="text-xs font-semibold uppercase tracking-[0.3em] text-zinc-400 dark:text-zinc-500">Product Not Found</h1>
+            <p className="text-xs text-gray-500 dark:text-zinc-400 leading-relaxed uppercase tracking-widest">We couldn&apos;t find that specific item. Browse our latest menswear collection instead!</p>
+            <Link href="/men" className="inline-block px-8 py-3.5 bg-black dark:bg-white text-white dark:text-black text-[10px] tracking-widest uppercase font-semibold hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors rounded-none">
               Explore Menswear
             </Link>
           </div>
@@ -152,166 +159,188 @@ export default function MenProductDetails({ params }: { params: Promise<{ slug: 
   const imagesList = product.images && product.images.length > 0 ? product.images : [product.image];
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] py-8">
+    <div className="min-h-[calc(100vh-4rem)] py-16 bg-white dark:bg-zinc-950 text-black dark:text-white transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-16">
           {/* Image Gallery */}
           <div className="lg:w-1/2">
-            <div className="space-y-4">
-              <div className="relative">
+            <div className="space-y-6">
+              <div className="relative aspect-[3/4] w-full bg-zinc-50 dark:bg-zinc-900 overflow-hidden">
                 <Image
                   src={imagesList[activeImageIndex] || product.image}
                   alt={product.name}
-                  width={800}
-                  height={1000}
-                  className="rounded-lg object-cover w-full h-[65vh]"
+                  fill
+                  className="object-cover"
                   priority
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                 />
-                {/* Thumbnails */}
-                <div className="flex flex-wrap gap-2 mt-4">
+                {product.discount && (
+                  <span className="absolute top-4 left-4 bg-black dark:bg-white text-white dark:text-black text-[9px] uppercase tracking-widest font-semibold px-2.5 py-1">
+                    -{product.discount}%
+                  </span>
+                )}
+              </div>
+              
+              {/* Thumbnails */}
+              {imagesList.length > 1 && (
+                <div className="flex flex-wrap gap-3">
                   {imagesList.map((img, index) => (
                     <button
                       key={index}
                       onClick={() => setActiveImageIndex(index)}
-                      className="focus:outline-none"
+                      className={`relative w-20 aspect-[3/4] bg-zinc-50 dark:bg-zinc-900 overflow-hidden border ${
+                        activeImageIndex === index
+                          ? 'border-black dark:border-white border-2'
+                          : 'border-gray-200 dark:border-zinc-800 opacity-60 hover:opacity-100'
+                      } transition-all`}
                     >
                       <Image
                         src={img}
                         alt={`${product.name} view ${index + 1}`}
-                        width={80}
-                        height={80}
-                        className={`rounded border object-cover h-20 w-20 transition-all ${
-                          activeImageIndex === index ? 'border-[#D4AF37] border-2 shadow-sm' : 'border-gray-200 opacity-70 hover:opacity-100'
-                        }`}
+                        fill
+                        className="object-cover"
+                        sizes="80px"
                       />
                     </button>
                   ))}
                 </div>
-              </div>
+              )}
             </div>
           </div>
 
-
           {/* Product Info */}
-          <div className="lg:w-1/2 space-y-6">
-            <div className="flex items-baseline mb-2">
-              <h1 className="text-3xl font-bold text-black">{product.name}</h1>
-              {product.discount && (
-                <span className="ml-3 inline-flex items-center px-2.5 py-0.5 bg-[#D4AF37] text-white text-xs font-bold rounded">
-                  -{product.discount}%
+          <div className="lg:w-1/2 space-y-8">
+            <div className="space-y-2">
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500">
+                {product.category}
+              </p>
+              <h1 className="text-2xl font-medium tracking-wide uppercase text-zinc-900 dark:text-white">
+                {product.name}
+              </h1>
+            </div>
+
+            <div className="flex items-baseline space-x-2">
+              {product.originalPrice ? (
+                <>
+                  <span className="text-base font-semibold text-black dark:text-white">
+                    ${product.price}.00
+                  </span>
+                  <span className="text-xs text-gray-400 dark:text-zinc-500 line-through">
+                    ${product.originalPrice}.00
+                  </span>
+                </>
+              ) : (
+                <span className="text-base font-semibold text-black dark:text-white">
+                  ${product.price}.00
                 </span>
               )}
             </div>
 
-            <div className="flex items-baseline mb-4">
-              {product.originalPrice ? (
-                <>
-                  <span className="mr-2 text-lg font-medium text-gray-500 line-through">
-                    ${product.originalPrice}.00
-                  </span>
-                  <span className="text-2xl font-bold text-black">${product.price}.00</span>
-                </>
-              ) : (
-                <span className="text-2xl font-bold text-black">${product.price}.00</span>
-              )}
-            </div>
+            <p className="text-xs text-gray-500 dark:text-zinc-400 leading-relaxed font-light">
+              {product.description}
+            </p>
 
-            <div className="divide-y divide-gray-200">
+            <div className="divide-y divide-gray-150 dark:divide-zinc-900 border-t border-b border-gray-150 dark:border-zinc-900">
               {/* Size Selector */}
-              <div className="py-4">
-                <h3 className="mb-2 text-lg font-semibold text-black">Size</h3>
-                <div className="flex flex-wrap gap-2">
-                  {product.sizes.map((size) => (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className={`flex h-10 w-10 items-center justify-center rounded border border-gray-300 text-sm font-medium ${
-                        selectedSize === size
-                          ? 'bg-black text-white border-black'
-                          : 'bg-white hover:bg-gray-50'
-                      }`}
-                    >
-                      {size}
-                    </button>
-                  ))}
+              {product.sizes && product.sizes.length > 0 && product.sizes[0] !== 'One Size' && (
+                <div className="py-6">
+                  <h3 className="text-[10px] font-bold text-gray-700 dark:text-zinc-300 uppercase tracking-widest mb-4">
+                    Size
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {product.sizes.map((size) => (
+                      <button
+                        key={size}
+                        onClick={() => setSelectedSize(size)}
+                        className={`px-4 py-2 border text-[11px] font-medium transition-all rounded-none uppercase tracking-wider ${
+                          selectedSize === size
+                            ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                            : 'bg-transparent text-gray-500 hover:text-black hover:border-black dark:text-zinc-400 dark:hover:text-white border-gray-200 dark:border-zinc-800'
+                        }`}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Color Selector */}
-              <div className="py-4">
-                <h3 className="mb-2 text-lg font-semibold text-black">Color</h3>
-                <div className="flex flex-wrap gap-2">
-                  {product.colors.map((color) => (
-                    <button
-                      key={color}
-                      onClick={() => setSelectedColor(color)}
-                      className={`flex h-10 w-10 items-center justify-center rounded border border-gray-300 ${
-                        selectedColor === color
-                          ? 'bg-black text-white border-black'
-                          : 'bg-white hover:bg-gray-50'
-                      }`}
-                    >
-                      <span
-                        className="w-4 h-4 rounded-full"
-                        style={{
-                          backgroundColor:
-                            color.toLowerCase() === 'white'
-                              ? '#f0f0f0'
-                            : color.toLowerCase() === 'black'
-                              ? '#000000'
-                            : color.toLowerCase() === 'navy'
-                              ? '#000080'
-                            : color.toLowerCase() === 'gray'
-                              ? '#808080'
-                            : color.toLowerCase() === 'beige'
-                              ? '#f5f5dc'
-                            : color.toLowerCase() === 'brown'
-                              ? '#a52a2a'
-                            : color.toLowerCase() === 'charcoal'
-                              ? '#36454f'
-                            : '#808080',
-                        }}
-                      />
-                    </button>
-                  ))}
+              {product.colors && product.colors.length > 0 && (
+                <div className="py-6">
+                  <h3 className="text-[10px] font-bold text-gray-700 dark:text-zinc-300 uppercase tracking-widest mb-4">
+                    Color
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {product.colors.map((color) => (
+                      <button
+                        key={color}
+                        onClick={() => setSelectedColor(color)}
+                        className={`flex items-center px-4 py-2 border text-[11px] font-medium transition-all rounded-none uppercase tracking-wider ${
+                          selectedColor === color
+                            ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                            : 'bg-transparent text-gray-500 hover:text-black hover:border-black dark:text-zinc-400 dark:hover:text-white border-gray-200 dark:border-zinc-800'
+                        }`}
+                      >
+                        <span
+                          className="w-3.5 h-3.5 rounded-full mr-2 border border-gray-200 dark:border-zinc-800"
+                          style={{
+                            backgroundColor:
+                              color.toLowerCase() === 'white' ? '#f8f8f8' :
+                              color.toLowerCase() === 'black' ? '#000000' :
+                              color.toLowerCase() === 'navy' ? '#000080' :
+                              color.toLowerCase() === 'gray' ? '#808080' :
+                              color.toLowerCase() === 'beige' ? '#f5f5dc' :
+                              color.toLowerCase() === 'brown' ? '#a52a2a' :
+                              color.toLowerCase() === 'charcoal' ? '#36454f' :
+                              color.toLowerCase() === 'olive' ? '#556b2f' :
+                              color.toLowerCase() === 'red' ? '#ff0000' : '#808080'
+                          }}
+                        />
+                        {color}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Quantity Selector */}
-              <div className="py-4">
-                <h3 className="mb-2 text-lg font-semibold text-black">Quantity</h3>
+              <div className="py-6">
+                <h3 className="text-[10px] font-bold text-gray-700 dark:text-zinc-300 uppercase tracking-widest mb-4">
+                  Quantity
+                </h3>
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => setQuantity((prev) => Math.max(1, prev - 1))}
-                    className="flex h-10 w-10 items-center justify-center rounded border border-gray-300"
+                    className="flex h-8 w-8 items-center justify-center border border-gray-200 dark:border-zinc-800 text-gray-500 hover:text-black dark:hover:text-white rounded-none hover:bg-gray-50 dark:hover:bg-zinc-900 transition-all"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 12H6" />
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18 12H6" />
                     </svg>
                   </button>
-                  <span className="w-10 text-center font-mono">{quantity}</span>
+                  <span className="w-8 text-center font-mono text-xs">{quantity}</span>
                   <button
                     onClick={() => setQuantity((prev) => prev + 1)}
-                    className="flex h-10 w-10 items-center justify-center rounded border border-gray-300"
+                    className="flex h-8 w-8 items-center justify-center border border-gray-200 dark:border-zinc-800 text-gray-500 hover:text-black dark:hover:text-white rounded-none hover:bg-gray-50 dark:hover:bg-zinc-900 transition-all"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12M6 12h12" />
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v12M6 12h12" />
                     </svg>
                   </button>
                 </div>
               </div>
             </div>
 
-            <div className="flex space-x-4 mt-6">
+            <div className="flex gap-4 pt-4">
               <button
                 onClick={handleAddToCart}
-                className="flex-1 flex items-center justify-center px-6 py-3 bg-black text-white text-sm font-medium rounded hover:bg-gray-800 transition-colors"
+                className="flex-1 py-4 bg-black dark:bg-white text-white dark:text-black text-[10px] tracking-widest uppercase font-semibold rounded-none border border-black dark:border-white hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors"
               >
                 Add to Cart
               </button>
               <button
                 onClick={handleBuyNow}
-                className="flex-1 flex items-center justify-center px-6 py-3 bg-[#D4AF37] text-white text-sm font-medium rounded hover:bg-[#b8860b] transition-colors"
+                className="flex-1 py-4 bg-transparent text-black dark:text-white text-[10px] tracking-widest uppercase font-semibold rounded-none border border-black dark:border-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-all"
               >
                 Buy Now
               </button>
@@ -320,196 +349,141 @@ export default function MenProductDetails({ params }: { params: Promise<{ slug: 
         </div>
 
         {/* Tabs for Description, Materials, Reviews */}
-        <div className="mt-12">
-          <div className="flex border-b border-gray-200 mb-4">
+        <div className="mt-24">
+          <div className="flex border-b border-gray-150 dark:border-zinc-900 mb-8 space-x-8">
             <button
               onClick={() => setActiveTab('description')}
-              className={`px-4 py-2 text-sm font-medium ${
+              className={`pb-4 text-xs font-semibold uppercase tracking-widest transition-all ${
                 activeTab === 'description'
-                  ? 'text-black border-b-2 border-black'
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'text-black dark:text-white border-b-2 border-black dark:border-white'
+                  : 'text-gray-400 dark:text-zinc-500 hover:text-black dark:hover:text-white'
               }`}
             >
               Description
             </button>
             <button
               onClick={() => setActiveTab('materials')}
-              className={`px-4 py-2 text-sm font-medium ${
+              className={`pb-4 text-xs font-semibold uppercase tracking-widest transition-all ${
                 activeTab === 'materials'
-                  ? 'text-black border-b-2 border-black'
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'text-black dark:text-white border-b-2 border-black dark:border-white'
+                  : 'text-gray-400 dark:text-zinc-500 hover:text-black dark:hover:text-white'
               }`}
             >
               Materials & Care
             </button>
             <button
               onClick={() => setActiveTab('reviews')}
-              className={`px-4 py-2 text-sm font-medium ${
+              className={`pb-4 text-xs font-semibold uppercase tracking-widest transition-all ${
                 activeTab === 'reviews'
-                  ? 'text-black border-b-2 border-black'
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'text-black dark:text-white border-b-2 border-black dark:border-white'
+                  : 'text-gray-400 dark:text-zinc-500 hover:text-black dark:hover:text-white'
               }`}
             >
               Reviews ({product.reviewCount})
             </button>
           </div>
 
-          {activeTab === 'description' && (
-            <div className="text-gray-700 leading-relaxed">
-              <p>{product.description}</p>
-            </div>
-          )}
-          {activeTab === 'materials' && (
-            <div className="space-y-4">
-              <div>
-                <h3 className="font-semibold text-black">Materials</h3>
-                <p className="text-gray-600">{product.materials}</p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-black">Care Instructions</h3>
-                <p className="text-gray-600">{product.care}</p>
-              </div>
-            </div>
-          )}
-          {activeTab === 'reviews' && (
-            <div>
-              <h3 className="mb-4 text-lg font-semibold text-black">Customer Reviews</h3>
-              <div className="flex items-center mb-4">
-                <div className="flex-1 space-x-1 flex items-center">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <svg
-                      key={star}
-                      className={`h-5 w-5 ${
-                        star <= product.rating ? 'text-[#D4AF37] fill-[#D4AF37]' : 'text-gray-300 fill-gray-200'
-                      }`}
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                  <span className="ml-2 text-sm text-gray-600 font-medium">
-                    {product.rating} ({product.reviewCount} reviews)
-                  </span>
+          <div className="max-w-2xl text-xs leading-relaxed text-gray-600 dark:text-zinc-400 font-light">
+            {activeTab === 'description' && (
+              <p className="uppercase tracking-wider">{product.description}</p>
+            )}
+            {activeTab === 'materials' && (
+              <div className="space-y-6">
+                <div>
+                  <h3 className="font-semibold text-black dark:text-white uppercase tracking-wider mb-1">Materials</h3>
+                  <p className="uppercase tracking-wider">{product.materials}</p>
+                </div>
+                <div>
+                  <h3 className="font-semibold text-black dark:text-white uppercase tracking-wider mb-1">Care Instructions</h3>
+                  <p className="uppercase tracking-wider">{product.care}</p>
                 </div>
               </div>
-              <div className="space-y-4">
-                {/* Review 1 */}
-                <div className="border-t border-gray-200 pt-4">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex-1">
-                      <h4 className="font-medium text-black">Alexandra Chen</h4>
-                      <p className="text-sm text-gray-500">Verified Buyer • October 15, 2023</p>
-                    </div>
-                    <div className="flex space-x-0.5">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <svg
-                          key={star}
-                          className={`h-4 w-4 ${
-                            star <= 5 ? 'text-[#D4AF37] fill-[#D4AF37]' : 'text-gray-300 fill-gray-200'
-                          }`}
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      ))}
-                    </div>
+            )}
+            {activeTab === 'reviews' && (
+              <div className="space-y-8">
+                <div className="flex items-center mb-6">
+                  <div className="flex space-x-1 items-center">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <svg
+                        key={star}
+                        className={`h-4.5 w-4.5 ${
+                          star <= product.rating ? 'text-black dark:text-white fill-current' : 'text-gray-200 dark:text-zinc-800 fill-current'
+                        }`}
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                    <span className="ml-3 text-xs text-zinc-900 dark:text-zinc-100 font-semibold uppercase tracking-wider">
+                      {product.rating} &middot; {product.reviewCount} reviews
+                    </span>
                   </div>
-                  <p className="text-gray-700 leading-relaxed">
-                    &quot;The linen blazer is perfect for summer events. Lightweight, comfortable, and looks expensive. Highly recommend!&quot;
-                  </p>
                 </div>
-                {/* Review 2 */}
-                <div className="border-t border-gray-200 pt-4">
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex-1">
-                      <h4 className="font-medium text-black">Michael Torres</h4>
-                      <p className="text-sm text-gray-500">Verified Buyer • September 30, 2023</p>
+                
+                <div className="divide-y divide-gray-150 dark:divide-zinc-900 border-t border-gray-150 dark:border-zinc-900">
+                  {/* Review 1 */}
+                  <div className="py-6 space-y-2">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h4 className="font-semibold text-black dark:text-white uppercase tracking-wider">Alexandra Chen</h4>
+                        <p className="text-[10px] text-gray-400 dark:text-zinc-500 uppercase tracking-widest mt-0.5">Verified Buyer &bull; October 15, 2023</p>
+                      </div>
+                      <div className="flex space-x-0.5">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <svg
+                            key={star}
+                            className="h-3.5 w-3.5 text-black dark:text-white fill-current"
+                            viewBox="0 0 20 20"
+                          >
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        ))}
+                      </div>
                     </div>
-                    <div className="flex space-x-0.5">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <svg
-                          key={star}
-                          className={`h-4 w-4 ${
-                            star <= 4 ? 'text-[#D4AF37] fill-[#D4AF37]' : 'text-gray-300 fill-gray-200'
-                          }`}
-                          viewBox="0 0 20 20"
-                        >
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                      ))}
-                    </div>
+                    <p className="text-gray-500 dark:text-zinc-400 tracking-wider">
+                      &quot;The linen blazer is perfect for summer events. Lightweight, comfortable, and looks expensive. Highly recommend!&quot;
+                    </p>
                   </div>
-                  <p className="text-gray-700 leading-relaxed">
-                    &quot;Great quality and fit. The white shirt is a staple in my wardrobe now.&quot;
-                  </p>
+                  
+                  {/* Review 2 */}
+                  <div className="py-6 space-y-2">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h4 className="font-semibold text-black dark:text-white uppercase tracking-wider">Michael Torres</h4>
+                        <p className="text-[10px] text-gray-400 dark:text-zinc-500 uppercase tracking-widest mt-0.5">Verified Buyer &bull; September 30, 2023</p>
+                      </div>
+                      <div className="flex space-x-0.5">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <svg
+                            key={star}
+                            className={`h-3.5 w-3.5 ${
+                              star <= 4 ? 'text-black dark:text-white fill-current' : 'text-gray-250 dark:text-zinc-800 fill-current'
+                            }`}
+                            viewBox="0 0 20 20"
+                          >
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        ))}
+                      </div>
+                    </div>
+                    <p className="text-gray-500 dark:text-zinc-400 tracking-wider">
+                      &quot;Great quality and fit. The white shirt is a staple in my wardrobe now.&quot;
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Related Products */}
-        <div className="mt-16">
-          <h2 className="mb-6 text-3xl font-bold text-black text-center">
+        <div className="mt-32">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.3em] text-center mb-16 text-zinc-400 dark:text-zinc-500">
             You May Also Like
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-12">
             {relatedProducts.map((relatedProduct) => (
-              <Link
-                key={relatedProduct.id}
-                href={relatedProduct.gender === 'women' ? `/women/${relatedProduct.id}` : relatedProduct.gender === 'men' ? `/men/${relatedProduct.id}` : `/unisex/${relatedProduct.id}`}
-                className="group"
-              >
-                <div className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300">
-                  <div className="relative group">
-                    <Image
-                      src={relatedProduct.images?.[0] || relatedProduct.image}
-                      alt={relatedProduct.name}
-                      width={400}
-                      height={500}
-                      className="object-cover w-full h-48"
-                    />
-                    {relatedProduct.discount && (
-                      <span className="absolute top-3 left-3 bg-[#D4AF37] text-white text-xs font-bold px-2 py-1 rounded">
-                        -{relatedProduct.discount}%
-                      </span>
-                    )}
-                    <div className="absolute bottom-0 left-0 right-0 opacity-0 group-hover:opacity-100 bg-black/50 flex flex-col items-center justify-center p-4 space-y-2">
-                      <button
-                        className="flex items-center px-3 py-2 bg-white text-black text-sm font-medium rounded hover:bg-gray-100"
-                      >
-                        Quick View
-                      </button>
-                      <div className="flex space-x-2">
-                        <button
-                          className="flex items-center px-3 py-2 bg-[#D4AF37] text-white text-sm font-medium rounded hover:bg-[#b8860b]"
-                        >
-                          Add to Cart
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <h3 className="mb-2 text-lg font-semibold text-black">{relatedProduct.name}</h3>
-                    <div className="flex items-baseline mb-2">
-                      {relatedProduct.discount ? (
-                        <>
-                          <span className="mr-2 text-sm font-medium text-gray-500 line-through">
-                            ${relatedProduct.originalPrice}.00
-                          </span>
-                          <span className="font-bold text-black text-lg">
-                            ${relatedProduct.price}.00
-                          </span>
-                        </>
-                      ) : (
-                        <span className="font-bold text-black text-lg">
-                          ${relatedProduct.price}.00
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </Link>
+              <ProductCard key={relatedProduct.id} product={relatedProduct} />
             ))}
           </div>
         </div>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CineSearch — Movie Discovery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="app">
+
+        <!-- ── Navbar ── -->
+        <nav>
+            <div class="nav-logo">
+                &#127916; Cine<span>Search</span>
+            </div>
+            <span class="nav-badge">OMDB</span>
+        </nav>
+
+        <!-- ── Search view ── -->
+        <div id="searchView">
+
+            <div class="hero">
+                <div class="hero-eyebrow">&#9733; Movie Discovery</div>
+                <h1>Find your next<br><span>favourite film</span></h1>
+                <p>Search from millions of movies, get ratings, cast, plot and more — powered by OMDB API.</p>
+
+                <div class="search-box">
+                    <div class="search-icon">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.35-4.35" />
+                        </svg>
+                    </div>
+                    <input id="searchInput" type="text" placeholder="Search movies… e.g. Inception, Batman"
+                        aria-label="Search movies" />
+                    <button id="searchBtn">Search</button>
+                </div>
+
+                <div class="quick-tags">
+                    <button class="quick-tag" data-q="Spider-Man">Spider-Man</button>
+                    <button class="quick-tag" data-q="Avengers">Avengers</button>
+                    <button class="quick-tag" data-q="Batman">Batman</button>
+                    <button class="quick-tag" data-q="Interstellar">Interstellar</button>
+                    <button class="quick-tag" data-q="John Wick">John Wick</button>
+                </div>
+            </div>
+
+            <!-- Stats bar -->
+            <div class="stats-bar" id="statsBar">
+                <div class="stat-item">
+                    <div class="stat-dot"></div>
+                    <strong id="statCount">0</strong> results found
+                </div>
+                <div class="stat-item">Showing: <strong id="statQuery">—</strong></div>
+                <select class="sort-select" id="sortSel">
+                    <option value="default">Sort: Default</option>
+                    <option value="year_desc">Year: Newest</option>
+                    <option value="year_asc">Year: Oldest</option>
+                    <option value="title">Title A–Z</option>
+                </select>
+            </div>
+
+            <div class="section-label" id="sectionLabel" style="display:none;">Results</div>
+
+            <!-- Movie grid (dynamic) -->
+            <div class="movie-grid" id="movieGrid">
+                <div class="status">
+                    <div class="spinner"></div>
+                    <h3>Loading movies…</h3>
+                    <p>Fetching Spider-Man films</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ══════════════════════════════
+     DETAIL MODAL
+    ══════════════════════════════ -->
+    <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal" id="modal">
+            <button class="modal-close" id="closeBtn" aria-label="Close">&#x2715;</button>
+
+            <!-- Blurred poster banner -->
+            <div class="modal-banner">
+                <img class="banner-img" id="bannerImg" src="" alt="" />
+                <div class="modal-banner-overlay"></div>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-poster">
+                    <img id="detailPoster" src="" alt="Poster" />
+                </div>
+                <div class="modal-info">
+                    <div class="modal-title" id="modalTitle"></div>
+                    <div class="modal-tagline" id="modalTagline"></div>
+
+                    <div class="modal-badges" id="modalBadges"></div>
+                    <div class="genre-list" id="modalGenres"></div>
+
+                    <div class="modal-plot" id="modalPlot"></div>
+
+                    <div class="info-grid" id="infoGrid"></div>
+
+                    <div class="ratings-section" id="ratingsSection"></div>
+
+                    <div class="modal-actions">
+                        <button class="btn-primary" id="imdbBtn">View on IMDb</button>
+                        <button class="btn-outline" id="closeBtn2">&#x2190; Back to results</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

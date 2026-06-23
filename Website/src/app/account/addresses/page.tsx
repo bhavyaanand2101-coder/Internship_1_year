@@ -133,100 +133,105 @@ export default function Addresses() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] py-12 bg-gray-50">
+    <div className="min-h-[calc(100vh-4rem)] py-16 text-black dark:text-white bg-white dark:bg-zinc-950 transition-colors duration-300">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-black">My Addresses</h1>
-          <Link href="/account" className="text-sm font-semibold text-[#D4AF37] hover:text-[#b8860b] flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        <div className="flex justify-between items-end mb-12 border-b border-zinc-150 dark:border-zinc-900 pb-6">
+          <div>
+            <h1 className="text-xl font-light uppercase tracking-widest text-black dark:text-white">My Addresses</h1>
+            <p className="text-[10px] text-gray-450 dark:text-zinc-500 mt-1 uppercase tracking-widest">
+              Manage your delivery locations
+            </p>
+          </div>
+          <Link href="/account" className="text-[10px] font-semibold tracking-widest uppercase text-black dark:text-white border-b border-black dark:border-white pb-0.5 hover:opacity-75 transition-opacity flex items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            Account Dashboard
+            Dashboard
           </Link>
         </div>
 
         {/* Edit or Add Form */}
         {(isAdding || editingAddress) ? (
-          <div className="bg-white rounded-lg border border-gray-200 shadow-sm p-6 mb-8 max-w-xl mx-auto">
-            <h2 className="text-xl font-bold text-black mb-6">
+          <div className="border border-zinc-200 dark:border-zinc-800 p-8 mb-12 max-w-xl mx-auto rounded-none bg-transparent">
+            <h2 className="text-xs font-bold uppercase tracking-widest text-black dark:text-white mb-6">
               {editingAddress ? 'Edit Address' : 'Add New Address'}
             </h2>
             <form onSubmit={handleFormSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Address Label (e.g. Shipping, Billing)</label>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-700 dark:text-zinc-300 mb-2">Address Label (e.g. Shipping, Billing)</label>
                 <input
                   type="text"
                   value={formData.type}
                   onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                  className="w-full px-4 py-3 border border-zinc-200 dark:border-zinc-800 bg-transparent text-xs font-mono rounded-none focus:outline-none focus:border-black dark:focus:border-white text-black dark:text-white transition-colors"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Recipient Name</label>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-700 dark:text-zinc-300 mb-2">Recipient Name</label>
                 <input
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                  className="w-full px-4 py-3 border border-zinc-200 dark:border-zinc-800 bg-transparent text-xs font-mono rounded-none focus:outline-none focus:border-black dark:focus:border-white text-black dark:text-white transition-colors"
                   placeholder="John Doe"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Street Address</label>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-700 dark:text-zinc-300 mb-2">Street Address</label>
                 <input
                   type="text"
                   value={formData.address}
                   onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                  className="w-full px-4 py-3 border border-zinc-200 dark:border-zinc-800 bg-transparent text-xs font-mono rounded-none focus:outline-none focus:border-black dark:focus:border-white text-black dark:text-white transition-colors"
                   placeholder="123 Main St, Apt 4"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">City, State, Zip Code</label>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-700 dark:text-zinc-300 mb-2">City, State, Zip Code</label>
                 <input
                   type="text"
                   value={formData.cityStateZip}
                   onChange={(e) => setFormData(prev => ({ ...prev, cityStateZip: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                  className="w-full px-4 py-3 border border-zinc-200 dark:border-zinc-800 bg-transparent text-xs font-mono rounded-none focus:outline-none focus:border-black dark:focus:border-white text-black dark:text-white transition-colors"
                   placeholder="New York, NY 10001"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-700 dark:text-zinc-300 mb-2">Country</label>
                 <input
                   type="text"
                   value={formData.country}
                   onChange={(e) => setFormData(prev => ({ ...prev, country: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                  className="w-full px-4 py-3 border border-zinc-200 dark:border-zinc-800 bg-transparent text-xs font-mono rounded-none focus:outline-none focus:border-black dark:focus:border-white text-black dark:text-white transition-colors"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                <label className="block text-[10px] font-bold uppercase tracking-widest text-gray-700 dark:text-zinc-300 mb-2">Phone Number</label>
                 <input
                   type="text"
                   value={formData.phone}
                   onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+                  className="w-full px-4 py-3 border border-zinc-200 dark:border-zinc-800 bg-transparent text-xs font-mono rounded-none focus:outline-none focus:border-black dark:focus:border-white text-black dark:text-white transition-colors"
                   placeholder="+1 (555) 000-0000"
                   required
                 />
               </div>
-              <div className="flex space-x-3 pt-4">
+              <div className="flex space-x-3 pt-6">
                 <button
                   type="submit"
-                  className="px-5 py-2.5 bg-black hover:bg-gray-800 text-white text-sm font-medium rounded transition-colors"
+                  className="px-8 py-3.5 bg-black dark:bg-white text-white dark:text-black text-[10px] font-semibold uppercase tracking-widest rounded-none border border-black dark:border-white hover:opacity-85 transition-opacity"
                 >
                   Save Address
                 </button>
                 <button
                   type="button"
                   onClick={handleCancel}
-                  className="px-5 py-2.5 border border-gray-300 text-gray-700 text-sm font-medium rounded hover:bg-gray-150 transition-colors"
+                  className="px-8 py-3.5 bg-transparent text-black dark:text-white text-[10px] font-semibold uppercase tracking-widest rounded-none border border-zinc-200 dark:border-zinc-800 hover:border-black dark:hover:border-white transition-colors"
                 >
                   Cancel
                 </button>
@@ -235,34 +240,34 @@ export default function Addresses() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
               {addresses.map((address) => (
-                <div key={address.id} className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-sm p-6 flex flex-col justify-between">
+                <div key={address.id} className="border border-zinc-200 dark:border-zinc-800 p-8 flex flex-col justify-between rounded-none bg-transparent hover:border-black dark:hover:border-white transition-colors duration-300">
                   <div>
-                    <div className="flex justify-between items-center mb-3">
-                      <span className="text-xs font-bold uppercase tracking-wider text-[#D4AF37] bg-[#D4AF37]/10 px-2 py-0.5 rounded">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="text-[9px] font-bold uppercase tracking-widest text-black dark:text-white bg-zinc-100 dark:bg-zinc-900 border border-zinc-250 dark:border-zinc-800 px-2.5 py-1">
                         {address.type}
                       </span>
                     </div>
-                    <h3 className="font-bold text-black text-lg mb-2">{address.name}</h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">
+                    <h3 className="text-xs font-bold uppercase tracking-widest text-black dark:text-white mb-3">{address.name}</h3>
+                    <p className="text-xs text-gray-500 dark:text-zinc-400 leading-relaxed uppercase tracking-wider space-y-1">
                       {address.address}<br />
                       {address.cityStateZip}<br />
                       {address.country}<br />
-                      <span className="text-gray-400">Phone:</span> {address.phone}
+                      <span className="text-gray-400 dark:text-zinc-650">Phone:</span> {address.phone}
                     </p>
                   </div>
                   
-                  <div className="mt-6 flex space-x-3 border-t border-gray-100 pt-4">
+                  <div className="mt-8 flex space-x-4 border-t border-zinc-150 dark:border-zinc-900 pt-4">
                     <button
                       onClick={() => handleEditClick(address)}
-                      className="text-sm font-semibold text-gray-700 hover:text-black transition-colors"
+                      className="text-[10px] font-semibold uppercase tracking-widest text-black dark:text-white border-b border-black dark:border-white pb-0.5 hover:opacity-75 transition-opacity"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleRemove(address.id)}
-                      className="text-sm font-semibold text-gray-400 hover:text-red-500 transition-colors"
+                      className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 dark:text-zinc-500 border-b border-transparent hover:text-red-500 transition-colors"
                     >
                       Remove
                     </button>
@@ -270,7 +275,7 @@ export default function Addresses() {
                 </div>
               ))}
               {addresses.length === 0 && (
-                <p className="col-span-2 text-center py-12 text-gray-500">
+                <p className="col-span-2 text-center py-24 text-xs font-mono uppercase tracking-widest text-gray-400 dark:text-zinc-500">
                   No addresses saved. Add a new shipping or billing address below.
                 </p>
               )}
@@ -278,7 +283,7 @@ export default function Addresses() {
 
             <button
               onClick={handleAddClick}
-              className="w-full sm:w-auto px-6 py-3 bg-black hover:bg-gray-800 text-white text-sm font-medium rounded transition-colors shadow-sm"
+              className="w-full sm:w-auto px-8 py-4 bg-black dark:bg-white text-white dark:text-black text-[10px] font-semibold uppercase tracking-widest rounded-none border border-black dark:border-white hover:opacity-85 transition-opacity"
             >
               Add New Address
             </button>

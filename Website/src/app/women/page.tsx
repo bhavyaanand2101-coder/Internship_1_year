@@ -72,326 +72,203 @@ export default function Women() {
   });
 
   return (
-    <div className="min-h-[calc(100vh-4rem)]">
-      <div className="flex flex-col lg:flex-row">
+    <div className="min-h-[calc(100vh-4rem)] py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <div className="flex flex-col lg:flex-row gap-12">
         {/* Sidebar Filters */}
-        <aside className="lg:w-64 lg:pr-8 lg:mb-8 mb-6">
-          <div className="space-y-6">
+        <aside className="lg:w-56 shrink-0 lg:mb-8 mb-6">
+          <div className="space-y-8">
             <div>
-              <h3 className="text-lg font-semibold text-black mb-3">Category</h3>
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-black dark:text-white mb-4">Category</h3>
               <div className="space-y-2">
-                <label className="flex items-center p-2 rounded-hover bg-gray-50">
-                  <input
-                    type="radio"
-                    name="category"
-                    value="all"
-                    checked={filters.category === 'all'}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, category: e.target.value }))
-                    }
-                    className="h-4 w-4 text-[#D4AF37]"
-                  />
-                  <span className="ml-3 text-sm">All</span>
-                </label>
-                <label className="flex items-center p-2 rounded-hover bg-gray-50">
-                  <input
-                    type="radio"
-                    name="category"
-                    value="dresses"
-                    checked={filters.category === 'dresses'}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, category: e.target.value }))
-                    }
-                    className="h-4 w-4 text-[#D4AF37]"
-                  />
-                  <span className="ml-3 text-sm">Dresses</span>
-                </label>
-                <label className="flex items-center p-2 rounded-hover bg-gray-50">
-                  <input
-                    type="radio"
-                    name="category"
-                    value="sweaters"
-                    checked={filters.category === 'sweaters'}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, category: e.target.value }))
-                    }
-                    className="h-4 w-4 text-[#D4AF37]"
-                  />
-                  <span className="ml-3 text-sm">Sweaters</span>
-                </label>
-                <label className="flex items-center p-2 rounded-hover bg-gray-50">
-                  <input
-                    type="radio"
-                    name="category"
-                    value="blazers"
-                    checked={filters.category === 'blazers'}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, category: e.target.value }))
-                    }
-                    className="h-4 w-4 text-[#D4AF37]"
-                  />
-                  <span className="ml-3 text-sm">Blazers</span>
-                </label>
-                <label className="flex items-center p-2 rounded-hover bg-gray-50">
-                  <input
-                    type="radio"
-                    name="category"
-                    value="jackets"
-                    checked={filters.category === 'jackets'}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, category: e.target.value }))
-                    }
-                    className="h-4 w-4 text-[#D4AF37]"
-                  />
-                  <span className="ml-3 text-sm">Jackets</span>
-                </label>
-                <label className="flex items-center p-2 rounded-hover bg-gray-50">
-                  <input
-                    type="radio"
-                    name="category"
-                    value="trousers"
-                    checked={filters.category === 'trousers'}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, category: e.target.value }))
-                    }
-                    className="h-4 w-4 text-[#D4AF37]"
-                  />
-                  <span className="ml-3 text-sm">Trousers</span>
-                </label>
-                <label className="flex items-center p-2 rounded-hover bg-gray-50">
-                  <input
-                    type="radio"
-                    name="category"
-                    value="accessories"
-                    checked={filters.category === 'accessories'}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, category: e.target.value }))
-                    }
-                    className="h-4 w-4 text-[#D4AF37]"
-                  />
-                  <span className="ml-3 text-sm">Accessories</span>
-                </label>
+                {['all', 'dresses', 'sweaters', 'blazers', 'jackets', 'trousers', 'accessories'].map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setFilters((prev) => ({ ...prev, category: cat }))}
+                    className={`block w-full text-left py-1 text-xs uppercase tracking-wider transition-colors ${
+                      filters.category === cat
+                        ? 'font-semibold text-black dark:text-white underline underline-offset-4'
+                        : 'text-gray-400 dark:text-zinc-500 hover:text-black dark:hover:text-white'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
               </div>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-black mb-3">Size</h3>
-              <div className="space-y-2">
-                <label className="flex items-center p-2 rounded-hover bg-gray-50">
-                  <input
-                    type="radio"
-                    name="size"
-                    value="all"
-                    checked={filters.size === 'all'}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, size: e.target.value }))
-                    }
-                    className="h-4 w-4 text-[#D4AF37]"
-                  />
-                  <span className="ml-3 text-sm">All</span>
-                </label>
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-black dark:text-white mb-4">Size</h3>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => setFilters((prev) => ({ ...prev, size: 'all' }))}
+                  className={`px-3 py-1.5 border text-[10px] font-medium uppercase tracking-wider transition-all rounded-none ${
+                    filters.size === 'all'
+                      ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                      : 'bg-transparent text-gray-400 dark:text-zinc-500 border-zinc-200 dark:border-zinc-800 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white'
+                  }`}
+                >
+                  All
+                </button>
                 {[...new Set(products.flatMap((p) => p.sizes))].map((size) => (
-                  <label key={size} className="flex items-center p-2 rounded-hover bg-gray-50">
-                    <input
-                      type="radio"
-                      name="size"
-                      value={size}
-                      checked={filters.size === size}
-                      onChange={(e) =>
-                        setFilters((prev) => ({ ...prev, size: e.target.value }))
-                      }
-                      className="h-4 w-4 text-[#D4AF37]"
-                    />
-                    <span className="ml-3 text-sm">{size}</span>
-                  </label>
+                  <button
+                    key={size}
+                    onClick={() => setFilters((prev) => ({ ...prev, size: size }))}
+                    className={`px-3 py-1.5 border text-[10px] font-medium uppercase tracking-wider transition-all rounded-none ${
+                      filters.size === size
+                        ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                        : 'bg-transparent text-gray-400 dark:text-zinc-500 border-zinc-200 dark:border-zinc-800 hover:text-black dark:hover:text-white hover:border-black dark:hover:border-white'
+                    }`}
+                  >
+                    {size}
+                  </button>
                 ))}
               </div>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-black mb-3">Color</h3>
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-black dark:text-white mb-4">Color</h3>
               <div className="space-y-2">
-                <label className="flex items-center p-2 rounded-hover bg-gray-50">
-                  <input
-                    type="radio"
-                    name="color"
-                    value="all"
-                    checked={filters.color === 'all'}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, color: e.target.value }))
-                    }
-                    className="h-4 w-4 text-[#D4AF37]"
-                  />
-                  <span className="ml-3 text-sm">All</span>
-                </label>
+                <button
+                  onClick={() => setFilters((prev) => ({ ...prev, color: 'all' }))}
+                  className={`block w-full text-left py-1 text-xs uppercase tracking-wider transition-colors ${
+                    filters.color === 'all'
+                      ? 'font-semibold text-black dark:text-white underline underline-offset-4'
+                      : 'text-gray-400 dark:text-zinc-500 hover:text-black dark:hover:text-white'
+                  }`}
+                >
+                  All
+                </button>
                 {[...new Set(products.flatMap((p) => p.colors))].map((color) => (
-                  <label key={color} className="flex items-center p-2 rounded-hover bg-gray-50">
-                    <input
-                      type="radio"
-                      name="color"
-                      value={color}
-                      checked={filters.color === color}
-                      onChange={(e) =>
-                        setFilters((prev) => ({ ...prev, color: e.target.value }))
-                      }
-                      className="h-4 w-4 text-[#D4AF37]"
+                  <button
+                    key={color}
+                    onClick={() => setFilters((prev) => ({ ...prev, color: color }))}
+                    className={`flex items-center w-full text-left py-1 text-xs uppercase tracking-wider transition-colors ${
+                      filters.color === color
+                        ? 'font-semibold text-black dark:text-white'
+                        : 'text-gray-400 dark:text-zinc-500 hover:text-black dark:hover:text-white'
+                    }`}
+                  >
+                    <span
+                      className="w-2.5 h-2.5 mr-2 rounded-full border border-zinc-200 dark:border-zinc-800"
+                      style={{
+                        backgroundColor:
+                          color.toLowerCase() === 'white' ? '#f8f8f8' :
+                          color.toLowerCase() === 'black' ? '#000000' :
+                          color.toLowerCase() === 'navy' ? '#000080' :
+                          color.toLowerCase() === 'gray' ? '#808080' :
+                          color.toLowerCase() === 'beige' ? '#f5f5dc' :
+                          color.toLowerCase() === 'brown' ? '#a52a2a' :
+                          color.toLowerCase() === 'charcoal' ? '#36454f' :
+                          '#808080'
+                      }}
                     />
-                    <span className="ml-3 flex items-center">
-                      <span
-                        className="w-3 h-3 mr-2 rounded"
-                        style={{
-                          backgroundColor:
-                            color.toLowerCase() === 'white'
-                              ? '#f0f0f0'
-                              : color.toLowerCase() === 'black'
-                              ? '#000000'
-                              : color.toLowerCase() === 'navy'
-                              ? '#000080'
-                              : color.toLowerCase() === 'red'
-                              ? '#ff0000'
-                              : color.toLowerCase() === 'blush'
-                              ? '#ffc0cb'
-                              : color.toLowerCase() === 'cream'
-                              ? '#fffdd0'
-                              : color.toLowerCase() === 'gray'
-                              ? '#808080'
-                              : color.toLowerCase() === 'gold'
-                              ? '#ffd700'
-                              : color.toLowerCase() === 'silver'
-                              ? '#c0c0c0'
-                              : '#808080',
-                        }}
-                      />
-                      <span className="text-sm">{color}</span>
-                    </span>
-                  </label>
+                    {color}
+                  </button>
                 ))}
               </div>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-black mb-3">Price</h3>
-              <div className="space-y-3">
-                <div className="flex items-center">
-                  <span className="w-1/2">Min</span>
-                  <input
-                    type="number"
-                    value={filters.priceRange[0]}
-                    onChange={(e) =>
-                      setFilters((prev) => ({
-                        ...prev,
-                        priceRange: [Number(e.target.value), prev.priceRange[1]],
-                      }))
-                    }
-                    className="w-1/2 px-3 py-1 border border-gray-300 rounded-md text-sm"
-                    min="0"
-                  />
-                </div>
-                <div className="flex items-center">
-                  <span className="w-1/2">Max</span>
-                  <input
-                    type="number"
-                    value={filters.priceRange[1]}
-                    onChange={(e) =>
-                      setFilters((prev) => ({
-                        ...prev,
-                        priceRange: [prev.priceRange[0], Number(e.target.value)],
-                      }))
-                    }
-                    className="w-1/2 px-3 py-1 border border-gray-300 rounded-md text-sm"
-                    min="0"
-                  />
-                </div>
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-black dark:text-white mb-4">Price</h3>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="number"
+                  placeholder="Min"
+                  value={filters.priceRange[0] || ''}
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      priceRange: [Number(e.target.value), prev.priceRange[1]],
+                    }))
+                  }
+                  className="w-1/2 px-3 py-2 border border-zinc-200 dark:border-zinc-800 bg-transparent text-xs font-mono rounded-none focus:outline-none focus:border-black dark:focus:border-white text-black dark:text-white"
+                  min="0"
+                />
+                <span className="text-gray-400 text-xs">—</span>
+                <input
+                  type="number"
+                  placeholder="Max"
+                  value={filters.priceRange[1] || ''}
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      priceRange: [prev.priceRange[0], Number(e.target.value)],
+                    }))
+                  }
+                  className="w-1/2 px-3 py-2 border border-zinc-200 dark:border-zinc-800 bg-transparent text-xs font-mono rounded-none focus:outline-none focus:border-black dark:focus:border-white text-black dark:text-white"
+                  min="0"
+                />
               </div>
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold text-black mb-3">Availability</h3>
+              <h3 className="text-[10px] font-bold uppercase tracking-widest text-black dark:text-white mb-4">Availability</h3>
               <div className="space-y-2">
-                <label className="flex items-center p-2 rounded-hover bg-gray-50">
-                  <input
-                    type="radio"
-                    name="availability"
-                    value="all"
-                    checked={filters.availability === 'all'}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, availability: e.target.value }))
-                    }
-                    className="h-4 w-4 text-[#D4AF37]"
-                  />
-                  <span className="ml-3 text-sm">All</span>
-                </label>
-                <label className="flex items-center p-2 rounded-hover bg-gray-50">
-                  <input
-                    type="radio"
-                    name="availability"
-                    value="inStock"
-                    checked={filters.availability === 'inStock'}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, availability: e.target.value }))
-                    }
-                    className="h-4 w-4 text-[#D4AF37]"
-                  />
-                  <span className="ml-3 text-sm">In Stock</span>
-                </label>
-                <label className="flex items-center p-2 rounded-hover bg-gray-50">
-                  <input
-                    type="radio"
-                    name="availability"
-                    value="outOfStock"
-                    checked={filters.availability === 'outOfStock'}
-                    onChange={(e) =>
-                      setFilters((prev) => ({ ...prev, availability: e.target.value }))
-                    }
-                    className="h-4 w-4 text-[#D4AF37]"
-                  />
-                  <span className="ml-3 text-sm">Out of Stock</span>
-                </label>
+                {[
+                  { value: 'all', label: 'All' },
+                  { value: 'inStock', label: 'In Stock' },
+                  { value: 'outOfStock', label: 'Out of Stock' }
+                ].map((option) => (
+                  <button
+                    key={option.value}
+                    onClick={() => setFilters((prev) => ({ ...prev, availability: option.value }))}
+                    className={`block w-full text-left py-1 text-xs uppercase tracking-wider transition-colors ${
+                      filters.availability === option.value
+                        ? 'font-semibold text-black dark:text-white underline underline-offset-4'
+                        : 'text-gray-400 dark:text-zinc-500 hover:text-black dark:hover:text-white'
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
               </div>
             </div>
           </div>
         </aside>
 
         {/* Products Grid */}
-        <section className="lg:flex-1 w-full">
-          <div className="flex flex-col lg:flex-row-reverse lg:space-x-8">
-            {/* Sorting */}
-            <div className="lg:w-64 lg:mb-8 mb-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-gray-600">Sort by:</span>
-                <select
-                  value={sort}
-                  onChange={(e) => setSort(e.target.value)}
-                  className="px-3 py-1 border border-gray-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus-ring-[#D4AF37]"
-                >
-                  <option value="popularity">Popularity</option>
-                  <option value="priceLowHigh">Price: Low to High</option>
-                  <option value="priceHighLow">Price: High to Low</option>
-                  <option value="newest">Newest</option>
-                </select>
-              </div>
-              <p className="text-sm text-gray-500">
-                Showing {sortedProducts.length} products
+        <section className="flex-1 w-full">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-8 mb-8 border-b border-zinc-150 dark:border-zinc-900 gap-4">
+            <div>
+              <h1 className="text-xl font-light uppercase tracking-widest text-black dark:text-white">
+                Women&apos;s Collection
+              </h1>
+              <p className="text-[10px] text-gray-400 dark:text-zinc-500 mt-1 uppercase tracking-widest">
+                Showing {sortedProducts.length} items
               </p>
             </div>
 
-            {/* Products Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {loading ? (
-                <p className="col-span-3 text-center py-12 text-gray-500">
-                  Loading premium collection...
-                </p>
-              ) : (
-                sortedProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))
-              )}
-              {!loading && sortedProducts.length === 0 && (
-                <p className="col-span-3 text-center py-12 text-gray-500">
-                  No products match your filters.
-                </p>
-              )}
+            <div className="flex items-center space-x-3">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-gray-450 dark:text-zinc-400">Sort By</span>
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value)}
+                className="px-4 py-2 border border-zinc-200 dark:border-zinc-800 bg-transparent text-xs font-mono rounded-none uppercase tracking-widest text-black dark:text-white focus:outline-none focus:border-black dark:focus:border-white"
+              >
+                <option value="popularity" className="bg-white dark:bg-zinc-950">Popularity</option>
+                <option value="priceLowHigh" className="bg-white dark:bg-zinc-950">Price: Low to High</option>
+                <option value="priceHighLow" className="bg-white dark:bg-zinc-950">Price: High to Low</option>
+                <option value="newest" className="bg-white dark:bg-zinc-950">Newest</option>
+              </select>
             </div>
+          </div>
+
+          {/* Products Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+            {loading ? (
+              <p className="col-span-3 text-center py-24 text-xs font-mono uppercase tracking-widest text-gray-400 dark:text-zinc-500 animate-pulse">
+                Loading collection...
+              </p>
+            ) : (
+              sortedProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))
+            )}
+            {!loading && sortedProducts.length === 0 && (
+              <p className="col-span-3 text-center py-24 text-xs font-mono uppercase tracking-widest text-gray-400 dark:text-zinc-500">
+                No products match your filters.
+              </p>
+            )}
           </div>
         </section>
       </div>

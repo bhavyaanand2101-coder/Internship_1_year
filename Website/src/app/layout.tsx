@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={inter.className}>
-      <body className="antialiased bg-gray-50 min-h-screen">
+      <body className="antialiased bg-white text-black dark:bg-zinc-950 dark:text-zinc-50 min-h-screen transition-colors duration-350">
         <Header />
         <main className="min-h-[calc(100vh-4rem)]">{children}</main>
         <Footer />

@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CineSearch — Movie Discovery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0b1120;
+            --bg2: #111827;
+            --bg3: #1a2235;
+            --card: #151e2e;
+            --accent: #6c63ff;
+            --accent2: #a78bfa;
+            --green: #10b981;
+            --amber: #f59e0b;
+            --red: #ef4444;
+            --text: #f1f5f9;
+            --text2: #94a3b8;
+            --text3: #475569;
+            --border: rgba(255, 255, 255, 0.07);
+            --border2: rgba(255, 255, 255, 0.12);
+            --radius: 12px;
+            --radius-lg: 18px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── Animated background dots ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at 20% 20%, rgba(108, 99, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(167, 139, 250, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        #app {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ══════════════════════════════
+       NAVBAR
+    ══════════════════════════════ */
+        nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+            background: rgba(11, 17, 32, 0.85);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-logo {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-logo span {
+            color: var(--accent2);
+        }
+
+        .nav-badge {
+            font-size: 10px;
+            background: var(--accent);
+            color: #fff;
+            padding: 2px 7px;
+            border-radius: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* ══════════════════════════════
+       HERO / SEARCH SECTION
+    ══════════════════════════════ */
+        .hero {
+            text-align: center;
+            padding: 4rem 1.5rem 2.5rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--accent2);
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            background: rgba(108, 99, 255, 0.1);
+            border: 1px solid rgba(108, 99, 255, 0.25);
+            padding: 4px 14px;
+            border-radius: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 6vw, 52px);
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .hero h1 span {
+            color: var(--accent2);
+        }
+
+        .hero p {
+            font-size: 16px;
+            color: var(--text2);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        /* ── Search bar ── */
+        .search-box {
+            display: flex;
+            gap: 0;
+            background: var(--bg3);
+            border: 1.5px solid var(--border2);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.15);
+        }
+
+        .search-icon {
+            padding: 0 14px;
+            display: flex;
+            align-items: center;
+            color: var(--text3);
+            flex-shrink: 0;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 14px 4px;
+            font-size: 15px;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            outline: none;
+            font-family: inherit;
+        }
+
+        .search-box input::placeholder {
+            color: var(--text3);
+        }
+
+        .search-box button {
+            padding: 0 24px;
+            font-size: 14px;
+            font-weight: 600;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: inherit;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .search-box button:hover {
+            background: #5a52d5;
+        }
+
+        .search-box button:active {
+            transform: scale(0.98);
+        }
+
+        /* ── Search tags ── */
+        .quick-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 1.25rem;
+        }
+
+        .quick-tag {
+            font-size: 12px;
+            color: var(--text2);
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            padding: 5px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: inherit;
+        }
+
+        .quick-tag:hover {
+            border-color: var(--accent2);
+            color: var(--accent2);
+            background: rgba(167, 139, 250, 0.08);
+        }
+
+        /* ══════════════════════════════
+       STATS BAR
+    ══════════════════════════════ */
+        .stats-bar {
+            display: none;
+            align-items: center;
+            gap: 1.5rem;
+            max-width: 1100px;
+            margin: 0 auto 1.5rem;
+            padding: 0 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .stats-bar.visible {
+            display: flex;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text2);
+        }
+
+        .stat-item strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .stat-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+        }
+
+        /* Sort select */
+        .sort-select {
+            margin-left: auto;
+            font-size: 13px;
+            color: var(--text2);
+            background: var(--bg3);
+            border: 1px solid var(--border2);
+            border-radius: 8px;
+            padding: 6px 10px;
+            cursor: pointer;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .sort-select option {
+            background: var(--bg2);
+        }
+
+        /* ══════════════════════════════
+       SECTION LABEL
+    ══════════════════════════════ */
+        .section-label {
+            max-width: 1100px;
+            margin: 0 auto 1.25rem;
+            padding: 0 1.5rem;
+            font-size: 13px;
+            color: var(--text3);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* ══════════════════════════════
+       MOVIE GRID
+    ══════════════════════════════ */
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+            gap: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        /* ── Movie card ── */
+        .movie-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .movie-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(108, 99, 255, 0.4);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(108, 99, 255, 0.15);
+        }
+
+        /* Favourite button overlay */
+        .fav-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0, 0, 0, 0.55);
+            color: #fff;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s, background 0.2s;
+            backdrop-filter: blur(4px);
+            z-index: 2;
+        }
+
+        .movie-card:hover .fav-btn {
+            opacity: 1;
+        }
+
+        .fav-btn.active {
+            background: rgba(239, 68, 68, 0.8);
+            opacity: 1;
+        }
+
+        /* Rating pill overlay on poster */
+        .rating-pill {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #f59e0b;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .movie-card img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .poster-wrap {
+            position: relative;
+        }
+
+        .no-poster {
+            width: 100%;
+            height: 260px;
+            background: var(--bg3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text3);
+            font-size: 12px;
+            gap: 10px;
+        }
+
+        .card-body {
+            padding: 12px 14px 14px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.35;
+            margin-bottom: 5px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text3);
+        }
+
+        .card-type {
+            background: rgba(108, 99, 255, 0.15);
+            color: var(--accent2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* ══════════════════════════════
+       STATUS / EMPTY STATES
+    ══════════════════════════════ */
+        .status {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 4rem 1rem;
+            color: var(--text3);
+        }
+
+        .status-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--bg3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 24px;
+        }
+
+        .status h3 {
+            font-size: 16px;
+            color: var(--text2);
+            margin-bottom: 6px;
+        }
+
+        .status p {
+            font-size: 14px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid var(--bg3);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.75s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        /* ══════════════════════════════
+       DETAIL MODAL BACKDROP
+    ══════════════════════════════ */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 500;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            backdrop-filter: blur(6px);
+        }
+
+        .modal-backdrop.open {
+            display: flex;
+        }
+
+        /* ── Detail modal ── */
+        .modal {
+            background: var(--bg2);
+            border: 1px solid var(--border2);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 760px;
+            max-height: 88vh;
+            overflow-y: auto;
+            position: relative;
+            animation: modalIn 0.2s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Close button */
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid var(--border2);
+            background: var(--bg3);
+            color: var(--text2);
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.15s, color 0.15s;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            background: var(--red);
+            color: #fff;
+            border-color: var(--red);
+        }
+
+        /* ── Backdrop poster banner ── */
+        .modal-banner {
+            position: relative;
+            height: 180px;
+            background: var(--bg3);
+            overflow: hidden;
+        }
+
+        .modal-banner img.banner-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(18px) brightness(0.35) saturate(1.4);
+            transform: scale(1.1);
+        }
+
+        .modal-banner-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 40%, var(--bg2));
+        }
+
+        /* ── Modal body ── */
+        .modal-body {
+            display: flex;
+            gap: 1.5rem;
+            padding: 0 1.5rem 1.5rem;
+            margin-top: -80px;
+            position: relative;
+        }
+
+        .modal-poster {
+            flex-shrink: 0;
+        }
+
+        .modal-poster img {
+            width: 140px;
+            border-radius: var(--radius);
+            border: 3px solid var(--bg2);
+            display: block;
+        }
+
+        .modal-poster .no-poster {
+            width: 140px;
+            height: 200px;
+            border-radius: var(--radius);
+            border: 3px solid var(--bg2);
+        }
+
+        .modal-info {
+            flex: 1;
+            min-width: 0;
+            padding-top: 5rem;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.25;
+            margin-bottom: 4px;
+        }
+
+        .modal-tagline {
+            font-size: 13px;
+            color: var(--accent2);
+            font-style: italic;
+            margin-bottom: 14px;
+        }
+
+        /* Score + badges row */
+        .modal-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-rating {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .badge-year {
+            background: rgba(16, 185, 129, 0.12);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .badge-runtime {
+            background: rgba(108, 99, 255, 0.12);
+            color: var(--accent2);
+            border: 1px solid rgba(108, 99, 255, 0.25);
+        }
+
+        .badge-rated {
+            background: rgba(148, 163, 184, 0.1);
+            color: var(--text2);
+            border: 1px solid var(--border2);
+        }
+
+        /* Genre pills */
+        .genre-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .genre-pill {
+            font-size: 12px;
+            color: var(--text2);
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            padding: 4px 12px;
+            border-radius: 6px;
+        }
+
+        /* Info grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .info-cell {
+            font-size: 13px;
+        }
+
+        .info-label {
+            color: var(--text3);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            margin-bottom: 3px;
+        }
+
+        .info-value {
+            color: var(--text2);
+            line-height: 1.4;
+        }
+
+        /* Plot */
+        .modal-plot {
+            font-size: 14px;
+            color: var(--text2);
+            line-height: 1.7;
+            padding: 14px;
+            background: var(--bg3);
+            border-radius: var(--radius);
+            border-left: 3px solid var(--accent);
+            margin-bottom: 16px;
+        }
+
+        /* Ratings breakdown */
+        .ratings-section {
+            margin-bottom: 16px;
+        }
+
+        .ratings-title {
+            font-size: 12px;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+            margin-bottom: 10px;
+        }
+
+        .rating-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .rating-bar-label {
+            color: var(--text3);
+            width: 70px;
+            flex-shrink: 0;
+            font-size: 11px;
+        }
+
+        .rating-bar-track {
+            flex: 1;
+            height: 5px;
+            background: var(--bg3);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .rating-bar-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 4px;
+            transition: width 0.6s ease;
+        }
+
+        .rating-bar-val {
+            color: var(--text2);
+            font-weight: 600;
+            font-size: 12px;
+            min-width: 36px;
+            text-align: right;
+        }
+
+        /* Action buttons */
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 10px 22px;
+            font-size: 14px;
+            font-weight: 600;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #5a52d5;
+        }
+
+        .btn-outline {
+            padding: 10px 22px;
+            font-size: 14px;
+            font-weight: 600;
+            background: transparent;
+            color: var(--text2);
+            border: 1px solid var(--border2);
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            background: var(--bg3);
+            color: var(--text);
+        }
+
+        /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+        @media (max-width: 600px) {
+            nav {
+                padding: 0.75rem 1rem;
+            }
+
+            .modal-body {
+                flex-direction: column;
+                margin-top: -60px;
+                gap: 1rem;
+            }
+
+            .modal-poster img {
+                width: 110px;
+            }
+
+            .modal-info {
+                padding-top: 0;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+
+            .btn-primary,
+            .btn-outline {
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="app">
+
+        <!-- ── Navbar ── -->
+        <nav>
+            <div class="nav-logo">
+                &#127916; Cine<span>Search</span>
+            </div>
+            <span class="nav-badge">OMDB</span>
+        </nav>
+
+        <!-- ── Search view ── -->
+        <div id="searchView">
+
+            <div class="hero">
+                <div class="hero-eyebrow">&#9733; Movie Discovery</div>
+                <h1>Find your next<br><span>favourite film</span></h1>
+                <p>Search from millions of movies, get ratings, cast, plot and more — powered by OMDB API.</p>
+
+                <div class="search-box">
+                    <div class="search-icon">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="m21 21-4.35-4.35" />
+                        </svg>
+                    </div>
+                    <input id="searchInput" type="text" placeholder="Search movies… e.g. Inception, Batman"
+                        aria-label="Search movies" />
+                    <button id="searchBtn">Search</button>
+                </div>
+
+                <div class="quick-tags">
+                    <button class="quick-tag" data-q="Spider-Man">Spider-Man</button>
+                    <button class="quick-tag" data-q="Avengers">Avengers</button>
+                    <button class="quick-tag" data-q="Batman">Batman</button>
+                    <button class="quick-tag" data-q="Interstellar">Interstellar</button>
+                    <button class="quick-tag" data-q="John Wick">John Wick</button>
+                </div>
+            </div>
+
+            <!-- Stats bar -->
+            <div class="stats-bar" id="statsBar">
+                <div class="stat-item">
+                    <div class="stat-dot"></div>
+                    <strong id="statCount">0</strong> results found
+                </div>
+                <div class="stat-item">Showing: <strong id="statQuery">—</strong></div>
+                <select class="sort-select" id="sortSel">
+                    <option value="default">Sort: Default</option>
+                    <option value="year_desc">Year: Newest</option>
+                    <option value="year_asc">Year: Oldest</option>
+                    <option value="title">Title A–Z</option>
+                </select>
+            </div>
+
+            <div class="section-label" id="sectionLabel" style="display:none;">Results</div>
+
+            <!-- Movie grid (dynamic) -->
+            <div class="movie-grid" id="movieGrid">
+                <div class="status">
+                    <div class="spinner"></div>
+                    <h3>Loading movies…</h3>
+                    <p>Fetching Spider-Man films</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ══════════════════════════════
+     DETAIL MODAL
+     (outside #app so backdrop covers everything)
+══════════════════════════════ -->
+    <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal" id="modal">
+            <button class="modal-close" id="closeBtn" aria-label="Close">&#x2715;</button>
+
+            <!-- Blurred poster banner -->
+            <div class="modal-banner">
+                <img class="banner-img" id="bannerImg" src="" alt="" />
+                <div class="modal-banner-overlay"></div>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-poster">
+                    <img id="detailPoster" src="" alt="Poster" />
+                </div>
+                <div class="modal-info">
+                    <div class="modal-title" id="modalTitle"></div>
+                    <div class="modal-tagline" id="modalTagline"></div>
+
+                    <div class="modal-badges" id="modalBadges"></div>
+                    <div class="genre-list" id="modalGenres"></div>
+
+                    <div class="modal-plot" id="modalPlot"></div>
+
+                    <div class="info-grid" id="infoGrid"></div>
+
+                    <div class="ratings-section" id="ratingsSection"></div>
+
+                    <div class="modal-actions">
+                        <button class="btn-primary" id="imdbBtn">View on IMDb</button>
+                        <button class="btn-outline" id="closeBtn2">&#x2190; Back to results</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        /*
+         * OMDB API config
+         * Replace API_KEY with your own from: https://www.omdbapi.com/apikey.aspx
+         */
+        const API_KEY = "b5382e81";
+        const BASE_URL = "https://www.omdbapi.com/";
+
+        /* App state */
+        let state = {
+            search: "",
+            results: [],
+            allResults: [],
+            lastQuery: "",
+            favs: new Set()
+        };
+
+        /* DOM refs */
+        const searchInput = document.getElementById("searchInput");
+        const searchBtn = document.getElementById("searchBtn");
+        const movieGrid = document.getElementById("movieGrid");
+        const statsBar = document.getElementById("statsBar");
+        const sectionLabel = document.getElementById("sectionLabel");
+        const statCount = document.getElementById("statCount");
+        const statQuery = document.getElementById("statQuery");
+        const sortSel = document.getElementById("sortSel");
+        const backdrop = document.getElementById("modalBackdrop");
+        const closeBtn = document.getElementById("closeBtn");
+        const closeBtn2 = document.getElementById("closeBtn2");
+
+        /* ── Quick search tags ── */
+        document.querySelectorAll(".quick-tag").forEach(tag => {
+            tag.addEventListener("click", () => {
+                searchInput.value = tag.dataset.q;
+                state.search = tag.dataset.q;
+                doSearch();
+            });
+        });
+
+        /* ── Sort ── */
+        sortSel.addEventListener("change", () => {
+            const v = sortSel.value;
+            let arr = [...state.allResults];
+            if (v === "year_desc") arr.sort((a, b) => (b.Year || "").localeCompare(a.Year || ""));
+            if (v === "year_asc") arr.sort((a, b) => (a.Year || "").localeCompare(b.Year || ""));
+            if (v === "title") arr.sort((a, b) => a.Title.localeCompare(b.Title));
+            state.results = arr;
+            renderGrid();
+        });
+
+        /* ════════════════════════════════════════
+           SEARCH API call
+        ════════════════════════════════════════ */
+        async function doSearch() {
+            const q = (state.search || "").trim();
+            if (!q) return;
+
+            movieGrid.innerHTML = `
+      <div class="status">
+        <div class="spinner"></div>
+        <h3>Searching…</h3>
+        <p>Looking for "${q}"</p>
+      </div>`;
+            statsBar.classList.remove("visible");
+            sectionLabel.style.display = "none";
+
+            try {
+                const res = await fetch(`${BASE_URL}?apikey=${API_KEY}&type=movie&s=${encodeURIComponent(q)}`);
+                const data = await res.json();
+
+                state.allResults = data.Search || [];
+                state.results = [...state.allResults];
+                state.lastQuery = q;
+                sortSel.value = "default";
+                renderGrid();
+
+            } catch (err) {
+                movieGrid.innerHTML = `
+        <div class="status">
+          <div class="status-icon">&#x26A0;</div>
+          <h3>Network error</h3>
+          <p>Check your API key or internet connection.</p>
+        </div>`;
+            }
+        }
+
+        /* ════════════════════════════════════════
+           RENDER GRID
+        ════════════════════════════════════════ */
+        function renderGrid() {
+            if (!state.results || state.results.length === 0) {
+                statsBar.classList.remove("visible");
+                sectionLabel.style.display = "none";
+                movieGrid.innerHTML = `
+        <div class="status">
+          <div class="status-icon">&#128270;</div>
+          <h3>No results found</h3>
+          <p>Try a different search term</p>
+        </div>`;
+                return;
+            }
+
+            statsBar.classList.add("visible");
+            sectionLabel.style.display = "block";
+            statCount.textContent = state.results.length;
+            statQuery.textContent = state.lastQuery;
+
+            movieGrid.innerHTML = state.results.map(m => {
+                const hasPoster = m.Poster && m.Poster !== "N/A";
+                const isFav = state.favs.has(m.imdbID);
+                return `
+        <div class="movie-card" data-id="${m.imdbID}" tabindex="0" role="button" aria-label="${m.Title}">
+          <div class="poster-wrap">
+            ${hasPoster
+                        ? `<img src="${m.Poster}" alt="${m.Title} poster" loading="lazy">`
+                        : `<div class="no-poster">
+                   <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                     <rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 9 5-5 4 4 3-3 4 4"/>
+                   </svg>
+                   No poster
+                 </div>`
+                    }
+            <button class="fav-btn ${isFav ? 'active' : ''}" data-id="${m.imdbID}" aria-label="Favourite">&#9829;</button>
+          </div>
+          <div class="card-body">
+            <div class="card-title">${m.Title}</div>
+            <div class="card-meta">
+              <span>${m.Year || "—"}</span>
+              <span class="card-type">${(m.Type || "movie").toUpperCase()}</span>
+            </div>
+          </div>
+        </div>`;
+            }).join("");
+
+            /* Card click → open detail */
+            movieGrid.querySelectorAll(".movie-card").forEach(card => {
+                card.addEventListener("click", e => {
+                    if (e.target.closest(".fav-btn")) return;
+                    openDetail(card.dataset.id);
+                });
+                card.addEventListener("keydown", e => {
+                    if (e.key === "Enter") openDetail(card.dataset.id);
+                });
+            });
+
+            /* Fav button */
+            movieGrid.querySelectorAll(".fav-btn").forEach(btn => {
+                btn.addEventListener("click", e => {
+                    e.stopPropagation();
+                    const id = btn.dataset.id;
+                    if (state.favs.has(id)) state.favs.delete(id);
+                    else state.favs.add(id);
+                    btn.classList.toggle("active", state.favs.has(id));
+                });
+            });
+        }
+
+        /* ════════════════════════════════════════
+           OPEN DETAIL MODAL
+        ════════════════════════════════════════ */
+        async function openDetail(imdbID) {
+            backdrop.classList.add("open");
+            document.getElementById("modal").innerHTML = `
+      <button class="modal-close" id="closeBtn" aria-label="Close">&#x2715;</button>
+      <div style="padding:5rem; text-align:center;">
+        <div class="spinner" style="margin:0 auto 1rem;"></div>
+        <p style="color:var(--text3);font-size:14px;">Loading details…</p>
+      </div>`;
+            document.getElementById("closeBtn").addEventListener("click", closeModal);
+
+            try {
+                const res = await fetch(`${BASE_URL}?apikey=${API_KEY}&i=${imdbID}&plot=full`);
+                const m = await res.json();
+
+                const hasPoster = m.Poster && m.Poster !== "N/A";
+
+                /* Ratings bars */
+                let ratingsBarsHtml = "";
+                if (m.Ratings && m.Ratings.length > 0) {
+                    ratingsBarsHtml = `
+          <div class="ratings-section">
+            <div class="ratings-title">Ratings</div>
+            ${m.Ratings.map(r => {
+                        let pct = 0;
+                        if (r.Value.includes("/10")) pct = (parseFloat(r.Value) / 10) * 100;
+                        else if (r.Value.includes("/100")) pct = parseFloat(r.Value);
+                        else if (r.Value.includes("%")) pct = parseFloat(r.Value);
+                        return `
+                <div class="rating-bar-row">
+                  <div class="rating-bar-label">${r.Source.replace("Internet Movie Database", "IMDb").replace("Rotten Tomatoes", "Rotten T.")}</div>
+                  <div class="rating-bar-track">
+                    <div class="rating-bar-fill" style="width:${Math.min(pct, 100).toFixed(0)}%"></div>
+                  </div>
+                  <div class="rating-bar-val">${r.Value}</div>
+                </div>`;
+                    }).join("")}
+          </div>`;
+                }
+
+                /* Badges */
+                const badges = [
+                    m.imdbRating && m.imdbRating !== "N/A"
+                        ? `<span class="badge badge-rating">&#9733; ${m.imdbRating}/10</span>` : "",
+                    m.Year && m.Year !== "N/A"
+                        ? `<span class="badge badge-year">&#128197; ${m.Year}</span>` : "",
+                    m.Runtime && m.Runtime !== "N/A"
+                        ? `<span class="badge badge-runtime">&#9201; ${m.Runtime}</span>` : "",
+                    m.Rated && m.Rated !== "N/A"
+                        ? `<span class="badge badge-rated">${m.Rated}</span>` : "",
+                ].filter(Boolean).join("");
+
+                /* Genre pills */
+                const genres = (m.Genre || "").split(",").map(g => g.trim()).filter(Boolean)
+                    .map(g => `<span class="genre-pill">${g}</span>`).join("");
+
+                /* Info grid */
+                const infoRows = [
+                    ["Director", m.Director],
+                    ["Cast", m.Actors],
+                    ["Country", m.Country],
+                    ["Language", m.Language],
+                    ["Awards", m.Awards],
+                    ["Box Office", m.BoxOffice],
+                ].filter(([, v]) => v && v !== "N/A")
+                    .map(([l, v]) => `
+          <div class="info-cell">
+            <div class="info-label">${l}</div>
+            <div class="info-value">${v}</div>
+          </div>`).join("");
+
+                document.getElementById("modal").innerHTML = `
+        <button class="modal-close" id="closeBtn" aria-label="Close">&#x2715;</button>
+
+        <div class="modal-banner">
+          ${hasPoster ? `<img class="banner-img" src="${m.Poster}" alt="" />` : ""}
+          <div class="modal-banner-overlay"></div>
+        </div>
+
+        <div class="modal-body">
+          <div class="modal-poster">
+            ${hasPoster
+                        ? `<img src="${m.Poster}" alt="${m.Title} poster">`
+                        : `<div class="no-poster" style="width:140px;height:200px;border-radius:12px;">No poster</div>`}
+          </div>
+          <div class="modal-info">
+            <div class="modal-title" id="modalTitle">${m.Title}</div>
+            ${m.tagline ? `<div class="modal-tagline">${m.tagline}</div>` : ""}
+
+            <div class="modal-badges">${badges}</div>
+            <div class="genre-list">${genres}</div>
+            ${m.Plot && m.Plot !== "N/A" ? `<div class="modal-plot">${m.Plot}</div>` : ""}
+            <div class="info-grid">${infoRows}</div>
+            ${ratingsBarsHtml}
+
+            <div class="modal-actions">
+              ${m.imdbID ? `<button class="btn-primary" onclick="window.open('https://www.imdb.com/title/${m.imdbID}','_blank')">View on IMDb</button>` : ""}
+              <button class="btn-outline" onclick="closeModal()">&#x2190; Back to results</button>
+            </div>
+          </div>
+        </div>`;
+
+                document.getElementById("closeBtn").addEventListener("click", closeModal);
+
+            } catch (err) {
+                document.getElementById("modal").innerHTML = `
+        <button class="modal-close" id="closeBtn">&#x2715;</button>
+        <div style="padding:3rem;text-align:center;color:var(--text3);">
+          <p>Could not load movie details.</p>
+        </div>`;
+                document.getElementById("closeBtn").addEventListener("click", closeModal);
+            }
+        }
+
+        /* ── Close modal ── */
+        function closeModal() {
+            backdrop.classList.remove("open");
+        }
+
+        /* Click outside modal to close */
+        backdrop.addEventListener("click", e => {
+            if (e.target === backdrop) closeModal();
+        });
+
+        /* Escape key */
+        document.addEventListener("keydown", e => {
+            if (e.key === "Escape" && backdrop.classList.contains("open")) closeModal();
+        });
+
+        /* ── Search events ── */
+        searchBtn.addEventListener("click", doSearch);
+        searchInput.addEventListener("input", e => { state.search = e.target.value; });
+        searchInput.addEventListener("keydown", e => { if (e.key === "Enter") doSearch(); });
+
+        /* ── Initial load (mirrors useEffect → s=spider) ── */
+        (async () => {
+            try {
+                const res = await fetch(`${BASE_URL}?apikey=${API_KEY}&type=movie&s=spider`);
+                const data = await res.json();
+                state.allResults = data.Search || [];
+                state.results = [...state.allResults];
+                state.lastQuery = "Spider-Man";
+                renderGrid();
+            } catch (err) {
+                movieGrid.innerHTML = `
+        <div class="status">
+          <div class="status-icon">&#x26A0;</div>
+          <h3>Could not load movies</h3>
+          <p>Check your connection and API key.</p>
+        </div>`;
+            }
+        })();
+    </script>
+</body>
+
+</html>

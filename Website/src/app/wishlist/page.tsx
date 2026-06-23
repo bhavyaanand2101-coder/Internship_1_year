@@ -59,7 +59,7 @@ export default function Wishlist() {
           price: 198,
           originalPrice: null,
           discount: null,
-          image: 'https://images.unsplash.com/photo-1583743814966-893c56b7fa16?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+          image: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
           inStock: true,
         },
       ];

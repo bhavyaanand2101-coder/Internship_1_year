@@ -13,6 +13,38 @@ export default function Header() {
   const [wishlistCount, setWishlistCount] = useState(0);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    try {
+      const savedTheme = localStorage.getItem('cosostyle_theme') || 'light';
+      Promise.resolve().then(() => {
+        setTheme(savedTheme as 'light' | 'dark');
+      });
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const nextTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(nextTheme);
+    try {
+      localStorage.setItem('cosostyle_theme', nextTheme);
+      if (nextTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,88 +83,103 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
+    <header className="bg-white/80 dark:bg-black/80 backdrop-blur-md sticky top-0 z-50 transition-all duration-300 shadow-[0_2px_20px_rgba(0,0,0,0.02)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
         <div className="flex flex-shrink-0 items-center">
-          <Link href="/" className="flex items-center space-x-3">
+          <Link href="/" className="flex items-center space-x-2">
             <Image
               src="/logo.svg"
               alt="CoSoStyle Logo"
-              width={32}
-              height={32}
+              width={26}
+              height={26}
               priority
+              className="dark:invert transition-all duration-300"
             />
-            <span className="text-xl font-bold text-black">CoSoStyle</span>
+            <span className="text-base font-semibold tracking-widest text-black dark:text-white uppercase transition-colors duration-300">CoSoStyle</span>
           </Link>
         </div>
 
         <nav className="hidden md:flex md:items-center md:space-x-8">
           <Link
             href="/"
-            className={pathname === '/' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37] pb-1' : 'text-gray-600 hover:text-gray-900'}
+            className={`text-[11px] uppercase tracking-[0.2em] transition-colors duration-300 ${
+              pathname === '/' ? 'text-black dark:text-white font-semibold' : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white'
+            }`}
           >
             Home
           </Link>
           <Link
             href="/men"
-            className={pathname.startsWith('/men') ? 'text-[#D4AF37] border-b-2 border-[#D4AF37] pb-1' : 'text-gray-600 hover:text-gray-900'}
+            className={`text-[11px] uppercase tracking-[0.2em] transition-colors duration-300 ${
+              pathname.startsWith('/men') ? 'text-black dark:text-white font-semibold' : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white'
+            }`}
           >
             Men
           </Link>
           <Link
             href="/women"
-            className={pathname.startsWith('/women') ? 'text-[#D4AF37] border-b-2 border-[#D4AF37] pb-1' : 'text-gray-600 hover:text-gray-900'}
+            className={`text-[11px] uppercase tracking-[0.2em] transition-colors duration-300 ${
+              pathname.startsWith('/women') ? 'text-black dark:text-white font-semibold' : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white'
+            }`}
           >
             Women
           </Link>
           <Link
             href="/new-arrivals"
-            className={pathname === '/new-arrivals' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37] pb-1' : 'text-gray-600 hover:text-gray-900'}
+            className={`text-[11px] uppercase tracking-[0.2em] transition-colors duration-300 ${
+              pathname === '/new-arrivals' ? 'text-black dark:text-white font-semibold' : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white'
+            }`}
           >
             New Arrivals
           </Link>
           <Link
             href="/collections"
-            className={pathname === '/collections' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37] pb-1' : 'text-gray-600 hover:text-gray-900'}
+            className={`text-[11px] uppercase tracking-[0.2em] transition-colors duration-300 ${
+              pathname === '/collections' ? 'text-black dark:text-white font-semibold' : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white'
+            }`}
           >
             Collections
           </Link>
           <Link
             href="/about"
-            className={pathname === '/about' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37] pb-1' : 'text-gray-600 hover:text-gray-900'}
+            className={`text-[11px] uppercase tracking-[0.2em] transition-colors duration-300 ${
+              pathname === '/about' ? 'text-black dark:text-white font-semibold' : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white'
+            }`}
           >
-            About Us
+            About
           </Link>
           <Link
             href="/contact"
-            className={pathname === '/contact' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37] pb-1' : 'text-gray-600 hover:text-gray-900'}
+            className={`text-[11px] uppercase tracking-[0.2em] transition-colors duration-300 ${
+              pathname === '/contact' ? 'text-black dark:text-white font-semibold' : 'text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white'
+            }`}
           >
             Contact
           </Link>
         </nav>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-5">
           {/* Search Toggle/Field */}
           <div className="relative flex items-center">
             {searchOpen ? (
-              <form onSubmit={handleSearchSubmit} className="absolute right-0 flex items-center bg-white border border-gray-300 rounded-full shadow-sm py-1 px-3 z-10 w-44 sm:w-56">
+              <form onSubmit={handleSearchSubmit} className="absolute right-0 flex items-center bg-gray-50 dark:bg-zinc-900 rounded-full py-1 px-3.5 z-10 w-44 sm:w-56 transition-all duration-300">
                 <input
                   type="text"
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full text-xs text-black bg-transparent focus:outline-none"
+                  className="w-full text-[11px] text-black dark:text-white bg-transparent focus:outline-none placeholder-gray-400 dark:placeholder-gray-500"
                   autoFocus
                 />
-                <button type="submit" className="text-gray-500 hover:text-black">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <button type="submit" className="text-gray-400 hover:text-black dark:hover:text-white">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
                 </button>
                 <button 
                   type="button" 
                   onClick={() => setSearchOpen(false)} 
-                  className="text-gray-400 hover:text-gray-600 ml-2"
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 ml-2"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -142,84 +189,101 @@ export default function Header() {
             ) : (
               <button
                 onClick={() => setSearchOpen(true)}
-                className="p-1 rounded-full text-gray-600 hover:text-gray-900 transition-colors"
+                className="p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors"
                 aria-label="Search"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
+                  className="h-5 w-5"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </button>
             )}
           </div>
 
-          <Link href="/wishlist" className="relative">
+          <Link href="/wishlist" className="relative p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-gray-600 hover:text-gray-900"
+              className="h-5 w-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.36l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 12l-5.657-5.657z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.36l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 12l-5.657-5.657z" />
             </svg>
             {/* Wishlist count badge */}
             {wishlistCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-3 w-3 items-center justify-center rounded-full bg-red-500 text-[9px] font-medium text-white p-2">
+              <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-black dark:bg-white text-[9px] font-bold text-white dark:text-black shadow-sm transition-colors duration-300">
                 {wishlistCount}
               </span>
             )}
           </Link>
 
-          <Link href="/cart" className="relative">
+          <Link href="/cart" className="relative p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-gray-600 hover:text-gray-900"
+              className="h-5 w-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l2.292 6.232A2.916 2.916 0 0010.417 15H15a2 2 0 002 2v2a2 2 0 002 2m-7-4h12a2 2 0 012 2v4.314c0 .58-.33 1.095-.801 1.406a2.007 2.007 0 01-.416 1.12l-.378 1.088a2 2 0 01-2.074 0L9.41 18.25a2 2 0 01-.416-1.12A2.007 2.007 0 017 13.314V11z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
             {/* Cart count badge */}
             {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-3 w-3 items-center justify-center rounded-full bg-red-500 text-[9px] font-medium text-white p-2">
+              <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-black dark:bg-white text-[9px] font-bold text-white dark:text-black shadow-sm transition-colors duration-300">
                 {cartCount}
               </span>
             )}
           </Link>
 
-          <Link href="/account" className="relative">
+          {/* Theme Toggler */}
+          <button
+            onClick={toggleTheme}
+            className="p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors focus:outline-none"
+            aria-label="Toggle theme"
+          >
+            {theme === 'light' ? (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400 hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+              </svg>
+            )}
+          </button>
+
+          <Link href="/account" className="p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-gray-600 hover:text-gray-900"
+              className="h-5 w-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 2a.5.5 0 01.5-.5h.7a.5.5 0 010 1h-2a.5.5 0 01-.5-.5zm0 4a.5.5 0 01.5-.5h2a.5.5 0 010 1h-2a.5.5 0 01-.5-.5z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z" />
             </svg>
           </Link>
 
           {/* Mobile menu button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+            className="md:hidden p-1.5 rounded text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-50 dark:hover:bg-zinc-900 transition-colors"
             aria-label="Open menu"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-gray-600"
+              className="h-5 w-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
         </div>
@@ -227,47 +291,68 @@ export default function Header() {
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <div className="md:hidden bg-white/95 dark:bg-black/95 backdrop-blur-md transition-colors duration-300">
+          <div className="px-4 pt-2 pb-6 space-y-1 sm:px-6 border-t border-gray-100 dark:border-zinc-900">
             <Link
               href="/"
-              className={pathname === '/' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37] pb-1 block px-3 py-2 rounded-md' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 rounded-md'}
+              className={`block py-3 text-[11px] uppercase tracking-[0.2em] ${
+                pathname === '/' ? 'text-black dark:text-white font-semibold' : 'text-gray-500 dark:text-gray-400'
+              }`}
+              onClick={() => setIsOpen(false)}
             >
               Home
             </Link>
             <Link
               href="/men"
-              className={pathname.startsWith('/men') ? 'text-[#D4AF37] border-b-2 border-[#D4AF37] pb-1 block px-3 py-2 rounded-md' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 rounded-md'}
+              className={`block py-3 text-[11px] uppercase tracking-[0.2em] ${
+                pathname.startsWith('/men') ? 'text-black dark:text-white font-semibold' : 'text-gray-500 dark:text-gray-400'
+              }`}
+              onClick={() => setIsOpen(false)}
             >
               Men
             </Link>
             <Link
               href="/women"
-              className={pathname.startsWith('/women') ? 'text-[#D4AF37] border-b-2 border-[#D4AF37] pb-1 block px-3 py-2 rounded-md' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 rounded-md'}
+              className={`block py-3 text-[11px] uppercase tracking-[0.2em] ${
+                pathname.startsWith('/women') ? 'text-black dark:text-white font-semibold' : 'text-gray-500 dark:text-gray-400'
+              }`}
+              onClick={() => setIsOpen(false)}
             >
               Women
             </Link>
             <Link
               href="/new-arrivals"
-              className={pathname === '/new-arrivals' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37] pb-1 block px-3 py-2 rounded-md' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 rounded-md'}
+              className={`block py-3 text-[11px] uppercase tracking-[0.2em] ${
+                pathname === '/new-arrivals' ? 'text-black dark:text-white font-semibold' : 'text-gray-500 dark:text-gray-400'
+              }`}
+              onClick={() => setIsOpen(false)}
             >
               New Arrivals
             </Link>
             <Link
               href="/collections"
-              className={pathname === '/collections' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37] pb-1 block px-3 py-2 rounded-md' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 rounded-md'}
+              className={`block py-3 text-[11px] uppercase tracking-[0.2em] ${
+                pathname === '/collections' ? 'text-black dark:text-white font-semibold' : 'text-gray-500 dark:text-gray-400'
+              }`}
+              onClick={() => setIsOpen(false)}
             >
               Collections
             </Link>
             <Link
               href="/about"
-              className={pathname === '/about' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37] pb-1 block px-3 py-2 rounded-md' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 rounded-md'}
+              className={`block py-3 text-[11px] uppercase tracking-[0.2em] ${
+                pathname === '/about' ? 'text-black dark:text-white font-semibold' : 'text-gray-500 dark:text-gray-400'
+              }`}
+              onClick={() => setIsOpen(false)}
             >
-              About Us
+              About
             </Link>
             <Link
               href="/contact"
-              className={pathname === '/contact' ? 'text-[#D4AF37] border-b-2 border-[#D4AF37] pb-1 block px-3 py-2 rounded-md' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 rounded-md'}
+              className={`block py-3 text-[11px] uppercase tracking-[0.2em] ${
+                pathname === '/contact' ? 'text-black dark:text-white font-semibold' : 'text-gray-500 dark:text-gray-400'
+              }`}
+              onClick={() => setIsOpen(false)}
             >
               Contact
             </Link>
