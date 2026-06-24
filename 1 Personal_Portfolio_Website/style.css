@@ -1,108 +1,125 @@
+/* Global Reset: Applies to all elements to normalize margins, padding, and box sizing */
 *{
     margin:0;
     padding:0;
-    box-sizing:border-box;
+    box-sizing:border-box; /* Includes padding and borders in total width/height */
     font-family:Arial, sans-serif;
 }
 
+/* Body element background styling */
 body{
     background:#f4f4f4;
 }
 
+/* Navigation bar styling using flexbox layout */
 nav{
     display:flex;
-    justify-content:space-between;
-    align-items:center;
+    justify-content:space-between; /* Positions logo on the left and menu on the right */
+    align-items:center; /* Vertically centers navigation content */
     padding:20px 50px;
     background:#222;
     color:white;
-    position:sticky;
+    position:sticky; /* Keeps navigation at top of screen while scrolling */
     top:0;
 }
 
+/* Unordered list inside the navigation bar */
 nav ul{
-    display:flex;
-    list-style:none;
+    display:flex; /* Lays out list items horizontally */
+    list-style:none; /* Removes default list bullet points */
 }
 
+/* List items under the nav bar */
 nav ul li{
-    margin-left:20px;
+    margin-left:20px; /* Space between each menu item */
 }
 
+/* Navigation link text styling */
 nav a{
     color:white;
-    text-decoration:none;
+    text-decoration:none; /* Removes default link underline */
 }
 
+/* Hero (Welcome banner) section styling */
 .hero{
-    height:100vh;
+    height:100vh; /* Banner spans full viewport height */
     display:flex;
-    justify-content:center;
-    align-items:center;
+    justify-content:center; /* Centers content horizontally */
+    align-items:center; /* Centers content vertically */
     text-align:center;
     background:linear-gradient(
         135deg,
         #667eea,
         #764ba2
-    );
+    ); /* Smooth diagonal gradient background */
     color:white;
 }
 
+/* Hero section title text size */
 .hero h1{
     font-size:3rem;
 }
 
+/* Hero section subtitle spacing and size */
 .hero p{
     margin:20px 0;
     font-size:1.2rem;
 }
 
+/* Default button styling */
 button{
     padding:12px 25px;
     border:none;
     background:white;
     color:#333;
-    cursor:pointer;
+    cursor:pointer; /* Changes cursor to a hand pointer on hover */
     border-radius:5px;
 }
 
+/* Main section containers spacing */
 section{
     padding:80px 50px;
 }
 
+/* Section titles styling */
 h2{
     text-align:center;
     margin-bottom:40px;
 }
 
+/* Responsive grid layout container for projects */
 .project-container{
     display:grid;
     grid-template-columns:
-    repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
+    repeat(auto-fit,minmax(250px,1fr)); /* Automatically fits as many columns as possible (min-width 250px each) */
+    gap:20px; /* Gap between grid cells */
 }
 
+/* Card components styling */
 .card{
     background:white;
     padding:20px;
     border-radius:10px;
     box-shadow:
-    0 2px 10px rgba(0,0,0,0.1);
+    0 2px 10px rgba(0,0,0,0.1); /* Subtle container shadow */
 }
 
+/* Contact form layout */
 form{
     max-width:500px;
-    margin:auto;
+    margin:auto; /* Centers form horizontally */
     display:flex;
-    flex-direction:column;
-    gap:15px;
+    flex-direction:column; /* Positions form fields vertically */
+    gap:15px; /* Vertical gap between fields */
 }
 
+/* Inputs and text areas padding */
 input,
 textarea{
     padding:12px;
 }
 
+/* Form submission button background override */
 form button{
     background:#667eea;
     color:white;

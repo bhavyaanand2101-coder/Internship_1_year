@@ -1,12 +1,15 @@
 <!DOCTYPE html>
+<!-- Standard HTML5 specification declaring English language support -->
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Expense Tracker</title>
+    <!-- Connects Tabler Icons webfont for beautiful interface icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
     <style>
+        /* Global Reset: Applies to all elements to normalize margins, padding, and box sizing */
         *,
         *::before,
         *::after {
@@ -15,14 +18,16 @@
             padding: 0;
         }
 
+        /* Body element styling with clean neutral backgrounds */
         body {
             font-family: system-ui, sans-serif;
-            background: #f5f5f0;
+            background: #f5f5f0; /* Off-white grey */
             color: #1a1a18;
             min-height: 100vh;
             padding: 2rem 1rem;
         }
 
+        /* Main layout wrapper centering the content */
         .container {
             max-width: 680px;
             margin: 0 auto;
@@ -35,7 +40,7 @@
             color: #1a1a18;
         }
 
-        /* Summary cards */
+        /* Summary balance cards grid layout */
         .summary {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -43,6 +48,7 @@
             margin-bottom: 1.5rem;
         }
 
+        /* Base summary card styling rules */
         .card {
             background: #e8e6df;
             border-radius: 8px;
@@ -62,15 +68,17 @@
             color: #1a1a18;
         }
 
+        /* Green text highlighting positive/income states */
         .card-val.income {
             color: #3B6D11;
         }
 
+        /* Red text highlighting negative/expense states */
         .card-val.expense {
             color: #A32D2D;
         }
 
-        /* Form */
+        /* Form card box layout */
         .form-box {
             background: #fff;
             border: 0.5px solid #d3d1c7;
@@ -79,12 +87,14 @@
             margin-bottom: 1.5rem;
         }
 
+        /* Displays type buttons on a side-by-side row layout */
         .type-toggle {
             display: flex;
             gap: 8px;
             margin-bottom: 12px;
         }
 
+        /* Type selection buttons formatting */
         .type-btn {
             flex: 1;
             padding: 8px;
@@ -97,18 +107,21 @@
             transition: all 0.15s;
         }
 
+        /* Active styling when Income type is chosen */
         .type-btn.active-income {
             background: #EAF3DE;
             color: #3B6D11;
             border-color: #639922;
         }
 
+        /* Active styling when Expense type is chosen */
         .type-btn.active-expense {
             background: #FCEBEB;
             color: #A32D2D;
             border-color: #E24B4A;
         }
 
+        /* Form double column layout fields */
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -136,12 +149,14 @@
             transition: border-color 0.15s;
         }
 
+        /* Highlight border color on active focus */
         input:focus,
         select:focus {
             border-color: #378ADD;
             box-shadow: 0 0 0 2px rgba(55, 138, 221, 0.15);
         }
 
+        /* Submit transaction button styling */
         .add-btn {
             width: 100%;
             padding: 10px;
@@ -160,7 +175,7 @@
             background: #d3d1c7;
         }
 
-        /* List */
+        /* Headers styling for transactions section */
         .section-head {
             display: flex;
             justify-content: space-between;
@@ -173,12 +188,14 @@
             font-weight: 500;
         }
 
+        /* Filter selection bar layout positioning */
         .filter-row {
             display: flex;
             gap: 8px;
             align-items: center;
         }
 
+        /* Compact select drop-down styles */
         .filter {
             font-size: 13px;
             padding: 4px 8px;
@@ -189,6 +206,7 @@
             width: auto;
         }
 
+        /* Tiny link button layout */
         .clear-btn {
             font-size: 12px;
             color: #b4b2a9;
@@ -202,12 +220,14 @@
             color: #A32D2D;
         }
 
+        /* Vertically stacked list wrapper */
         .list {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
 
+        /* Specific transaction entry row block styling */
         .item {
             display: flex;
             align-items: center;
@@ -218,6 +238,7 @@
             padding: 10px 14px;
         }
 
+        /* Circular background avatar showing the category icon */
         .item-icon {
             width: 36px;
             height: 36px;
@@ -250,7 +271,7 @@
             color: #1a1a18;
             white-space: nowrap;
             overflow: hidden;
-            text-overflow: ellipsis;
+            text-overflow: ellipsis; /* Hides extra long texts nicely */
         }
 
         .item-meta {
@@ -272,6 +293,7 @@
             color: #A32D2D;
         }
 
+        /* Quick deletion icon trigger button layout */
         .del-btn {
             background: none;
             border: none;
@@ -286,6 +308,7 @@
             color: #A32D2D;
         }
 
+        /* Empty state styling */
         .empty {
             text-align: center;
             padding: 2rem;
@@ -293,7 +316,7 @@
             font-size: 14px;
         }
 
-        /* Chart */
+        /* Chart card wrapper */
         .chart-box {
             margin-top: 1.5rem;
             background: #fff;
@@ -309,12 +332,14 @@
             margin-bottom: 12px;
         }
 
+        /* Container forcing Chart.js responsive sizing constraints */
         .chart-wrap {
             position: relative;
             width: 100%;
             height: 200px;
         }
 
+        /* Responsive layout rules for mobile viewports */
         @media (max-width: 480px) {
             .summary {
                 grid-template-columns: 1fr;
@@ -331,7 +356,7 @@
     <div class="container">
         <h1><i class="ti ti-wallet"></i> Expense Tracker</h1>
 
-        <!-- Summary -->
+        <!-- Summary section card metrics displaying balance, income, expenses -->
         <div class="summary">
             <div class="card">
                 <p class="card-label">Balance</p>
@@ -347,8 +372,9 @@
             </div>
         </div>
 
-        <!-- Form -->
+        <!-- Form module to register a new transaction entry -->
         <div class="form-box">
+            <!-- Toggle selectors choosing between transaction flow directions (Income vs Expense) -->
             <div class="type-toggle">
                 <button class="type-btn active-income" id="btn-income" onclick="setType('income')">
                     <i class="ti ti-trending-up"></i> Income
@@ -357,6 +383,7 @@
                     <i class="ti ti-trending-down"></i> Expense
                 </button>
             </div>
+            <!-- Input rows capturing text description & numeric value parameters -->
             <div class="form-row">
                 <div>
                     <label for="et-desc">Description</label>
@@ -367,6 +394,7 @@
                     <input type="number" id="et-amount" placeholder="0.00" min="0" step="0.01" />
                 </div>
             </div>
+            <!-- Select items categorizing transactions, and Date fields -->
             <div class="form-row">
                 <div>
                     <label for="et-cat">Category</label>
@@ -393,15 +421,17 @@
             </button>
         </div>
 
-        <!-- Transaction List -->
+        <!-- Transaction List displaying filtered/recorded transactions -->
         <div class="section-head">
             <h2>Transactions</h2>
             <div class="filter-row">
+                <!-- Dropdown selector filter (All, Income, Expense) -->
                 <select class="filter" id="filter-type" onchange="renderList()">
                     <option value="all">All</option>
                     <option value="income">Income</option>
                     <option value="expense">Expenses</option>
                 </select>
+                <!-- Trigger clearing entire LocalStorage data -->
                 <button class="clear-btn" onclick="clearAll()">
                     <i class="ti ti-trash"></i> Clear all
                 </button>
@@ -409,7 +439,7 @@
         </div>
         <div class="list" id="et-list"></div>
 
-        <!-- Chart -->
+        <!-- Doughnut chart representing spending proportions by Category using Chart.js -->
         <div class="chart-box">
             <p class="chart-title">Spending by category</p>
             <div class="chart-wrap">
@@ -418,11 +448,14 @@
         </div>
     </div>
 
+    <!-- Integrates external Chart.js library for drawing interactive graphs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
     <script>
         // ── Constants ──────────────────────────────────────────────
+        // LocalStorage schema key configuration
         const STORAGE_KEY = 'et_transactions_v1';
 
+        // Association dictionary mapping category names to Tabler Icon class names
         const CATEGORY_ICONS = {
             General: 'ti-layout-grid', Food: 'ti-tools-kitchen-2',
             Transport: 'ti-car', Shopping: 'ti-shopping-bag',
@@ -431,17 +464,19 @@
             Investment: 'ti-trending-up', Other: 'ti-dots-circle-horizontal'
         };
 
+        // Harmonious color values matching category tags inside charts
         const CAT_COLORS = [
             '#378ADD', '#1D9E75', '#D85A30', '#D4537E',
             '#888780', '#639922', '#BA7517', '#7F77DD', '#E24B4A', '#0F6E56'
         ];
 
         // ── State ──────────────────────────────────────────────────
-        let transactions = [];
-        let currentType = 'income';
-        let catChart = null;
+        let transactions = []; // Main array containing transaction objects
+        let currentType = 'income'; // Tracks toggle state: 'income' or 'expense'
+        let catChart = null; // Stores references to the Chart.js instance
 
         // ── Data persistence (localStorage) ───────────────────────
+        // Reads transaction array from browser localStorage
         function loadData() {
             try {
                 const raw = localStorage.getItem(STORAGE_KEY);
@@ -451,6 +486,7 @@
             }
         }
 
+        // Writes transactions list to localStorage persistence
         function saveData() {
             try {
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
@@ -460,12 +496,14 @@
         }
 
         // ── Helpers ────────────────────────────────────────────────
+        // Formats float numeric value to Indian Rupee (₹) string format with commas
         function fmt(n) {
             return '₹' + Math.abs(n).toLocaleString('en-IN', {
                 minimumFractionDigits: 2, maximumFractionDigits: 2
             });
         }
 
+        // Switches current type toggle state between income & expense and updates button CSS states
         function setType(type) {
             currentType = type;
             document.getElementById('btn-income').className =
@@ -474,32 +512,36 @@
                 'type-btn' + (type === 'expense' ? ' active-expense' : '');
         }
 
-        // ── CRUD ───────────────────────────────────────────────────
+        // ── CRUD Operations ────────────────────────────────────────
+        // Collects form values, structures transaction item, updates state, and renders changes
         function addTransaction() {
             const desc = document.getElementById('et-desc').value.trim();
             const amt = parseFloat(document.getElementById('et-amount').value);
             const cat = document.getElementById('et-cat').value;
             const date = document.getElementById('et-date').value || new Date().toISOString().slice(0, 10);
 
+            // Validations
             if (!desc) { document.getElementById('et-desc').focus(); return; }
             if (isNaN(amt) || amt <= 0) { document.getElementById('et-amount').focus(); return; }
 
-            // Unshift so newest is first (Array method: unshift)
+            // Insert new transaction to the start of the list array
             transactions.unshift({ id: Date.now(), type: currentType, desc, amt, cat, date });
             saveData();
 
+            // Clear inputs
             document.getElementById('et-desc').value = '';
             document.getElementById('et-amount').value = '';
             renderAll();
         }
 
+        // Filters out specific transaction dictionary by id
         function deleteTransaction(id) {
-            // Array method: filter
             transactions = transactions.filter(t => t.id !== id);
             saveData();
             renderAll();
         }
 
+        // Erases all transactions after safety warning confirmation
         function clearAll() {
             if (!transactions.length) return;
             if (!confirm('Clear all transactions?')) return;
@@ -509,8 +551,8 @@
         }
 
         // ── Render: summary cards ──────────────────────────────────
+        // Calculates sums of income and expense to update summary boxes
         function renderSummary() {
-            // Array method: filter + reduce
             const income = transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amt, 0);
             const expense = transactions.filter(t => t.type === 'expense').reduce((s, t) => s + t.amt, 0);
             const bal = income - expense;
@@ -524,15 +566,16 @@
         }
 
         // ── Render: transaction list ───────────────────────────────
+        // Generates list rows dynamically based on the active type filter
         function renderList() {
             const filter = document.getElementById('filter-type').value;
             const listEl = document.getElementById('et-list');
 
-            // Array method: filter
             const filtered = filter === 'all'
                 ? transactions
                 : transactions.filter(t => t.type === filter);
 
+            // Handle empty states representation
             if (!filtered.length) {
                 listEl.innerHTML = `
         <div class="empty">
@@ -542,7 +585,7 @@
                 return;
             }
 
-            // Array method: map → join
+            // Map each transaction structure to HTML string template
             listEl.innerHTML = filtered.map(t => `
       <div class="item">
         <div class="item-icon ${t.type}">
@@ -562,10 +605,11 @@
         }
 
         // ── Render: doughnut chart ─────────────────────────────────
+        // Groups category totals for expenses and registers them in Chart.js
         function renderChart() {
             const expenses = transactions.filter(t => t.type === 'expense');
 
-            // Build category totals using reduce
+            // Reduce category sums
             const catMap = expenses.reduce((acc, t) => {
                 acc[t.cat] = (acc[t.cat] || 0) + t.amt;
                 return acc;
@@ -574,10 +618,12 @@
             const labels = Object.keys(catMap);
             const data = Object.values(catMap);
 
+            // Rebuild canvas context chart instance to clear old diagrams cache
             if (catChart) { catChart.destroy(); catChart = null; }
 
             if (!labels.length) return;
 
+            // Instantiate doughnut Chart configuration
             catChart = new Chart(document.getElementById('cat-chart'), {
                 type: 'doughnut',
                 data: {
@@ -587,7 +633,7 @@
                         backgroundColor: CAT_COLORS.slice(0, labels.length),
                         borderWidth: 0,
                         hoverOffset: 4
-                    }]
+                     }]
                 },
                 options: {
                     responsive: true,
@@ -614,11 +660,12 @@
         }
 
         // ── Init ───────────────────────────────────────────────────
+        // Set date element value format defaults to current date on startup
         document.getElementById('et-date').valueAsDate = new Date();
         loadData();
         renderAll();
 
-        // Allow Enter key to submit
+        // Allow pressing Enter key to quickly log transaction additions
         document.addEventListener('keydown', e => {
             if (e.key === 'Enter' && e.target.id !== 'et-cat') addTransaction();
         });

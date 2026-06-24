@@ -27,14 +27,21 @@ interface Collection {
   productIds?: number[];
 }
 
+/**
+ * Home Page Component.
+ * Fetches collections and products database assets from mock NextJS route APIs on mount, 
+ * rendering premium hero banners, product grids, testimonials, and brand story panels.
+ */
 export default function Home() {
-  const [collections, setCollections] = useState<Collection[]>([]);
-  const [trendingProducts, setTrendingProducts] = useState<Product[]>([]);
-  const [bestSellers, setBestSellers] = useState<Product[]>([]);
-  const [loadingCollections, setLoadingCollections] = useState(true);
-  const [loadingProducts, setLoadingProducts] = useState(true);
+  // State hooks mapping database payloads and loaders
+  const [collections, setCollections] = useState<Collection[]>([]); // Dynamic collections lists
+  const [trendingProducts, setTrendingProducts] = useState<Product[]>([]); // Sliced trending items list
+  const [bestSellers, setBestSellers] = useState<Product[]>([]); // Sliced best seller items list
+  const [loadingCollections, setLoadingCollections] = useState(true); // Collections load toggle
+  const [loadingProducts, setLoadingProducts] = useState(true); // Products load toggle
 
   useEffect(() => {
+    // 1. Fetch static collections arrays from custom NextJS API routes
     fetch('/api/collections')
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch collections');
@@ -49,6 +56,7 @@ export default function Home() {
         setLoadingCollections(false);
       });
 
+    // 2. Fetch full products catalog arrays and partition them by categories
     fetch('/api/products')
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch products');
@@ -56,7 +64,7 @@ export default function Home() {
       })
       .then((data) => {
         if (Array.isArray(data)) {
-          // Slice products for trending now and best sellers
+          // Partition list: trending products represent items 0-3, best sellers represent items 4-6
           setTrendingProducts(data.slice(0, 4));
           setBestSellers(data.slice(4, 7));
         }

@@ -1,3 +1,4 @@
+/* Custom variables for theme styling, defaulting to Light Mode */
 :root {
     --bg-color: #f4f4f4;
     --text-color: #333;
@@ -5,6 +6,7 @@
     --accent-color: #007bff;
 }
 
+/* Custom variable overrides when the dark-mode class is active on the body tag */
 body.dark-mode {
     --bg-color: #121212;
     --text-color: #ffffff;
@@ -12,18 +14,20 @@ body.dark-mode {
     --accent-color: #00d4ff;
 }
 
+/* Base style rules for the body, aligning the clock container in the exact center */
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Courier New', Courier, monospace; /* Monospace font prevents layout shifts when numbers change */
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease; /* Smooth transition when changing themes */
 }
 
+/* Main card wrapper for the clock display */
 .clock-container {
     text-align: center;
     background: var(--clock-bg);
@@ -32,19 +36,22 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
+/* Clock numbers container styling */
 #clock {
     font-size: 5rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
 }
 
+/* AM/PM indicator styling */
 #ampm {
     font-size: 1.5rem;
-    height: 1.5rem; /* Prevents layout jump */
+    height: 1.5rem; /* Prevents layout jump when text content changes between visible and hidden */
     color: var(--accent-color);
     margin-bottom: 1rem;
 }
 
+/* Controls section button styling */
 .controls button {
     padding: 10px 15px;
     margin: 5px;
@@ -56,6 +63,7 @@ body {
     font-weight: bold;
 }
 
+/* Add transparency hover effect on the buttons */
 .controls button:hover {
     opacity: 0.8;
 }

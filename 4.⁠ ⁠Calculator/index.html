@@ -1,15 +1,20 @@
 <!DOCTYPE html>
+<!-- Standard HTML5 structure declaration -->
 <html lang="en">
 <head>
+    <!-- Page metadata configuration for charset and viewports -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculator</title>
+    <!-- Connects the calculator custom stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<!-- Main container for the calculator body -->
 <div class="calculator">
 
+    <!-- Screen display input: readonly so that text is only input via screen buttons or keys -->
     <input
         type="text"
         id="display"
@@ -17,28 +22,34 @@
         placeholder="0"
     >
 
+    <!-- Keypad wrapper using Grid Layout -->
     <div class="buttons">
 
+        <!-- First row: Clear, Backspace, Modulo, and Division keys -->
         <button class="clear">C</button>
         <button class="delete">⌫</button>
         <button class="operator">%</button>
         <button class="operator">/</button>
 
+        <!-- Second row: Numbers 7, 8, 9, and Multiplication operator -->
         <button>7</button>
         <button>8</button>
         <button>9</button>
         <button class="operator">*</button>
 
+        <!-- Third row: Numbers 4, 5, 6, and Subtraction operator -->
         <button>4</button>
         <button>5</button>
         <button>6</button>
         <button class="operator">-</button>
 
+        <!-- Fourth row: Numbers 1, 2, 3, and Addition operator -->
         <button>1</button>
         <button>2</button>
         <button>3</button>
         <button class="operator">+</button>
 
+        <!-- Fifth row: Number 0, Decimal point, and Equals operator (Equal spans 2 columns) -->
         <button>0</button>
         <button>.</button>
         <button class="equal">=</button>
@@ -47,6 +58,7 @@
 
 </div>
 
+<!-- Reference to the JS logic file handling clicks and key presses -->
 <script src="script.js"></script>
 
 </body>

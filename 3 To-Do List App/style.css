@@ -1,16 +1,35 @@
+/* Base page styling centering the container box vertically and horizontally */
 body { font-family: sans-serif; display: flex; justify-content: center; padding: 50px; background: #f4f4f4; }
+
+/* The main container card with custom borders, rounded corners, and drop shadow */
 .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 350px; }
+
+/* Flex alignment of the input bar and its action button */
 .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
+
+/* Let input box take all remaining horizontal spacing */
 input { flex: 1; padding: 8px; }
+
+/* Resets list margins and list icons style */
 ul { list-style: none; padding: 0; }
+
+/* Styling for individual list items */
 li { 
     display: flex; 
-    justify-content: space-between; 
+    justify-content: space-between; /* Pushes text to the left and delete button to the right */
     padding: 10px; 
-    border-bottom: 1px solid #eee; 
-    align-items: center;
+    border-bottom: 1px solid #eee; /* Light divider line under each task */
+    align-items: center; /* Vertically centers text and button */
 }
+
+/* Strikethrough style rule applied when a task is completed */
 .completed { text-decoration: line-through; color: gray; }
+
+/* Base styling for interactive buttons */
 button { cursor: pointer; border: none; padding: 5px 10px; border-radius: 4px; }
+
+/* Color overrides for task addition button */
 #addBtn { background: #28a745; color: white; }
+
+/* Color overrides for task deletion buttons */
 .delete-btn { background: #dc3545; color: white; }

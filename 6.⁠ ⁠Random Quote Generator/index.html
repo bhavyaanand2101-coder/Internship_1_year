@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Standard HTML5 specification declaring English language support -->
 <html lang="en">
 
 <head>
@@ -7,6 +8,7 @@
     <title>Random Quote Generator</title>
 
     <style>
+        /* Global CSS reset to normalize spacing and borders */
         * {
             margin: 0;
             padding: 0;
@@ -14,15 +16,17 @@
             font-family: Arial, sans-serif;
         }
 
+        /* Displays the quote box card exactly at the center of the window background gradient */
         body {
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #667eea, #764ba2); /* Gradient from indigo-blue to purple */
             padding: 20px;
         }
 
+        /* The container card wrapper styles */
         .container {
             background: white;
             width: 100%;
@@ -30,7 +34,7 @@
             padding: 40px;
             border-radius: 20px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Deep shadow overlay */
         }
 
         h1 {
@@ -38,10 +42,12 @@
             color: #333;
         }
 
+        /* Padding vertical margins for the quote text */
         .quote-box {
             margin: 30px 0;
         }
 
+        /* Displays the quotation statement text styling */
         #quote {
             font-size: 1.5rem;
             line-height: 1.8;
@@ -49,11 +55,13 @@
             margin-bottom: 20px;
         }
 
+        /* Displays the quote author name in italics */
         #author {
             color: #666;
             font-style: italic;
         }
 
+        /* Buttons control grid using Flexbox */
         .buttons {
             display: flex;
             flex-wrap: wrap;
@@ -62,6 +70,7 @@
             margin-top: 25px;
         }
 
+        /* Standard interactive action button configuration */
         button {
             border: none;
             padding: 12px 20px;
@@ -72,26 +81,29 @@
             transition: 0.3s;
         }
 
+        /* Lift buttons slightly on mouse hover */
         button:hover {
             transform: translateY(-3px);
         }
 
+        /* Theme coloring configs for each button */
         #newQuote {
-            background: #4f46e5;
+            background: #4f46e5; /* Indigo */
         }
 
         #copyQuote {
-            background: #16a34a;
+            background: #16a34a; /* Green */
         }
 
         #shareQuote {
-            background: #0284c7;
+            background: #0284c7; /* Sky Blue */
         }
 
         #speakQuote {
-            background: #ea580c;
+            background: #ea580c; /* Orange */
         }
 
+        /* Small toast notification element style properties */
         .toast {
             position: fixed;
             bottom: 20px;
@@ -104,10 +116,12 @@
             transition: 0.3s;
         }
 
+        /* Toggles opacity to display the toast message block */
         .toast.show {
             opacity: 1;
         }
 
+        /* Loading indicator styling class */
         .loading {
             opacity: 0.6;
         }
@@ -116,14 +130,17 @@
 
 <body>
 
+    <!-- Main display card of Random Quote Generator -->
     <div class="container">
         <h1>✨ Random Quote Generator</h1>
 
+        <!-- Content panel displaying the randomized quote texts -->
         <div class="quote-box">
             <p id="quote">Click "New Quote" to begin</p>
             <h3 id="author"></h3>
         </div>
 
+        <!-- Row grid holding actions trigger elements -->
         <div class="buttons">
             <button id="newQuote">🔄 New Quote</button>
             <button id="copyQuote">📋 Copy</button>
@@ -132,13 +149,16 @@
         </div>
     </div>
 
+    <!-- Hidden floating alert popup displaying temporary state messages -->
     <div class="toast" id="toast"></div>
 
     <script>
+        // DOM element handles
         const quoteEl = document.getElementById("quote");
         const authorEl = document.getElementById("author");
         const toast = document.getElementById("toast");
 
+        // Local array of pre-defined quotes used in case network fails
         const fallbackQuotes = [
             {
                 quote: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
@@ -162,21 +182,25 @@
             }
         ];
 
+        // Triggers a brief bottom-right toast message notification panel
         function showToast(message) {
             toast.textContent = message;
             toast.classList.add("show");
 
+            // Hide the toast after 2 seconds
             setTimeout(() => {
                 toast.classList.remove("show");
             }, 2000);
         }
 
+        // Asynchronous function fetching a random quote from public dummyjson API
         async function getQuote() {
             try {
                 quoteEl.textContent = "Loading...";
                 quoteEl.classList.add("loading");
                 authorEl.textContent = "";
 
+                // Call the API endpoint
                 const response = await fetch(
                     "https://dummyjson.com/quotes/random"
                 );
@@ -187,11 +211,12 @@
 
                 const data = await response.json();
 
+                // Populate quote elements with successfully fetched JSON properties
                 quoteEl.textContent = `"${data.quote}"`;
                 authorEl.textContent = `— ${data.author}`;
 
             } catch (error) {
-
+                // Fallback option when network error occurs: pick one item from local fallback array randomly
                 const random =
                     fallbackQuotes[
                     Math.floor(
@@ -202,16 +227,19 @@
                 quoteEl.textContent = `"${random.quote}"`;
                 authorEl.textContent = `— ${random.author}`;
 
-                console.log("Using fallback quote");
+                console.log("Using fallback quote due to network or endpoint error");
             }
 
+            // Remove loading style
             quoteEl.classList.remove("loading");
         }
 
+        // Bind 'New Quote' button to getQuote handler
         document
             .getElementById("newQuote")
             .addEventListener("click", getQuote);
 
+        // Copy quote statement to clipboard on click using browser Navigator API
         document
             .getElementById("copyQuote")
             .addEventListener("click", async () => {
@@ -229,6 +257,7 @@
                 }
             });
 
+        // Open custom Twitter share panel popups containing the quote data encoded
         document
             .getElementById("shareQuote")
             .addEventListener("click", () => {
@@ -238,12 +267,14 @@
                     " " +
                     authorEl.textContent;
 
+                // Constructor URL for Twitter web intents
                 const twitterURL =
                     `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
 
                 window.open(twitterURL, "_blank");
             });
 
+        // Trigger TTS (text-to-speech) reading the quote out loud using Web Speech Synthesis API
         document
             .getElementById("speakQuote")
             .addEventListener("click", () => {
@@ -255,12 +286,15 @@
                         authorEl.textContent
                     );
 
+                // Speed and pitch properties customization
                 speech.rate = 1;
                 speech.pitch = 1;
 
+                // Speech synthesis dispatching
                 speechSynthesis.speak(speech);
             });
 
+        // Fetch quote automatically on page initialization
         getQuote();
     </script>
 

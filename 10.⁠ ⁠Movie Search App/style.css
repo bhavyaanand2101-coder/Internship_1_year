@@ -1,3 +1,4 @@
+/* Global box-sizing, padding, and margin resets for elements */
 *,
 *::before,
 *::after {
@@ -6,6 +7,7 @@
     padding: 0;
 }
 
+/* Custom CSS Variables representing CineSearch theme colors, borders, and border-radius dimensions */
 :root {
     --bg: #0b1120;
     --bg2: #111827;

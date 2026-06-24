@@ -1,12 +1,13 @@
 <!-- https://home.openweathermap.org/api_keys -->
  <!-- https://bhavyaanand2101-coder.github.io/ -->
 <!DOCTYPE html>
+<!-- Standard HTML5 declaration -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Lab 2 - Async Weather Tracker</title>
     <style>
-        /* KEEPING YOUR EXACT UI STYLE */
+        /* Base page layout styling with a dark-blue linear gradient background */
         body {
             background: linear-gradient(#1e3a8a, #0f172a); 
             color: white;
@@ -16,8 +17,10 @@
             padding: 20px;
             min-height: 100vh;
         }
+        /* Constrains dashboard content width */
         .container { width: 100%; max-width: 800px; }
         
+        /* Dashboard module cards with white background, rounded edges and light drop shadow */
         .card {
             background: white;
             color: #333;
@@ -27,9 +30,13 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
+        /* Displays search card and details card side-by-side on wider screens */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-
+        
+        /* Input text input layout settings */
         input { padding: 10px; width: 70%; border-radius: 5px; border: 1px solid #ccc; }
+        
+        /* Primary button styling */
         button { 
             padding: 10px; 
             background: #e67e22; 
@@ -39,6 +46,7 @@
             cursor: pointer; 
         }
 
+        /* Specific pill-shaped button styles for previous search entries */
         .hist-btn {
             background: #e67e22;
             color: white;
@@ -50,9 +58,11 @@
             cursor: pointer;
         }
 
+        /* Displays weather data points on key-value rows with bottom dividers */
         .row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
         .row b { color: #555; }
 
+        /* Dark console block styling displaying JavaScript execution event loop stages */
         .console {
             background: #0f172a;
             color: #94a3b8;
@@ -67,32 +77,31 @@
 <body>
 
     <div class="container">
-        <!-- Added <u> tag for underline -->
+        <!-- Main title text underlined -->
         <h1 style="text-align: center;">☀️ <u>Async Weather Tracker</u></h1>
 
         <div class="grid">
-            <!-- LEFT COLUMN -->
+            <!-- LEFT COLUMN: Search input field and list of past queries -->
             <div class="card">
                 <h3>Search City</h3>
                 <input type="text" id="cityInput" placeholder="Enter city name...">
                 <button id="searchBtn">Search</button>
                 
-                <hr> <!-- Added horizontal line -->
+                <hr> <!-- Divider line -->
                 <h4>Search History</h4>
                 <div id="historyList"></div>
             </div>
 
-            <!-- RIGHT COLUMN -->
+            <!-- RIGHT COLUMN: Output display for temperature, wind, humidity -->
             <div class="card">
                 <h3>Weather Info</h3>
                 <div id="weatherInfo">
-                    <!-- Added <i> for italics -->
                     <p style="text-align: center; color: #999;"><i>Search a city to see details</i></p>
                 </div>
             </div>
         </div>
 
-        <!-- BOTTOM CONSOLE -->
+        <!-- BOTTOM CONSOLE: Logs execution sequence showing sync, microtasks and macrotasks -->
         <div class="card">
             <h3>Console - Event Loop Analysis</h3>
             <hr>
@@ -101,53 +110,59 @@
     </div>
 
     <script>
-        // Simple function to display logs in our black box
+        // Appends a diagnostic message to the custom log box console
         function addLog(text) {
             var logBox = document.getElementById('logBox');
             logBox.innerHTML = logBox.innerHTML + "<div> > " + text + "</div>";
         }
 
-        // The Main Async function for fetching weather
+        // Asynchronous function retrieving weather parameters from OpenWeatherMap API
         async function getWeatherData(city) {
             var infoDiv = document.getElementById('weatherInfo');
             var logBox = document.getElementById('logBox');
             
+            // Validate input presence
             if (city == "") {
                 alert("Please enter a city!");
                 return;
             }
 
-            logBox.innerHTML = ""; // Clear console for new search
+            logBox.innerHTML = ""; // Clear event loop console on new search
 
-            // --- DEMONSTRATING EVENT LOOP ---
+            // --- DEMONSTRATING THE JAVASCRIPT EVENT LOOP EXECUTION ORDER ---
+            // 1. Synchronous operations run first in sequence
             addLog("1. Sync: Code Started");
 
-            // Macrotask (runs last)
+            // 2. Macrotasks (like setTimeout) are pushed to the Macrotask Queue and execute after Microtasks
             setTimeout(function() {
                 addLog("4. Macrotask: setTimeout finished");
             }, 0);
 
-            // Microtask (runs after sync code)
+            // 3. Microtasks (like Promise callbacks) are queued in the Microtask Queue and run immediately after sync code finishes
             Promise.resolve().then(function() {
                 addLog("3. Microtask: Promise finished");
             });
 
+            // 4. Synchronous operation continues
             addLog("2. Sync: Fetching from API...");
 
             try {
+                // OpenWeather API public authentication token and request URL endpoint config
                 var apiKey = "919d271dac1bb5318b47f53499249864";
                 var url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&appid=" + apiKey;
                 
-                // Using await for fetch
+                // Fetch URL resource asynchronously using 'await' to wait until promise resolves
                 var response = await fetch(url);
                 
+                // If query is unsuccessful (invalid city name)
                 if (!response.ok) {
                     throw new Error("City not found");
                 }
 
+                // Wait for response body decoding to JSON format
                 var data = await response.json();
 
-                // Updating UI with results
+                // Dynamically inject weather properties into info box
                 infoDiv.innerHTML = `
                     <div class="row"><b>City</b> <span>${data.name}</span></div>
                     <div class="row"><b>Temp</b> <span>${data.main.temp}°C</span></div>
@@ -155,40 +170,43 @@
                     <div class="row"><b>Wind Speed</b> <span>${data.wind.speed} m/s</span></div>
                 `;
 
+                // Add successfully searched city to search history panel
                 saveHistory(data.name);
                 addLog("5. Async: Weather data loaded");
 
             } catch (err) {
+                // Render error state inside container card
                 infoDiv.innerHTML = "<p style='color:red; text-align:center;'>Error: " + err.message + "</p>";
                 addLog("Error occurred: " + err.message);
             }
         }
 
-        // Function to save cities to Local Storage
+        // Stores unique queried city names to window localStorage persistence
         function saveHistory(cityName) {
             var history = JSON.parse(localStorage.getItem('myHistory')) || [];
             
-            // If city is not in list, add it
+            // Check if city name is already stored in history
             if (history.indexOf(cityName) === -1) {
                 history.push(cityName);
                 localStorage.setItem('myHistory', JSON.stringify(history));
-                showHistory();
+                showHistory(); // Refresh history pills panel
             }
         }
 
-        // Function to show history buttons
+        // Renders visual pills for previous query terms saved in LocalStorage
         function showHistory() {
+            // Default history terms on fresh page startup
             var history = JSON.parse(localStorage.getItem('myHistory')) || ["Delhi", "Mumbai", "London"];
             var historyList = document.getElementById('historyList');
             historyList.innerHTML = "";
 
-            // Standard for loop to create buttons
+            // Loop to render click triggers for history searches
             for (var i = 0; i < history.length; i++) {
                 var btn = document.createElement('button');
                 btn.className = "hist-btn";
                 btn.innerText = history[i];
                 
-                // Set click for each button
+                // Scoped click behavior configuration to retrieve weather of that city
                 let currentCity = history[i];
                 btn.onclick = function() {
                     getWeatherData(currentCity);
@@ -197,13 +215,13 @@
             }
         }
 
-        // Event listener for the Search button
+        // Attach click actions on the primary search button
         document.getElementById('searchBtn').onclick = function() {
             var inputVal = document.getElementById('cityInput').value;
             getWeatherData(inputVal);
         };
 
-        // Load history when page opens
+        // Run history display generation immediately on window load completion
         window.onload = showHistory;
 
     </script>

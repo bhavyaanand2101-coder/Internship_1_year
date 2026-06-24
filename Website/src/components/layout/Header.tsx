@@ -5,22 +5,29 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
+/**
+ * Header Navigation Component.
+ * Implements sticky positioning, light/dark theme toggles, dynamic search overlay forms, 
+ * real-time badge count updating for cart/wishlist items via custom window events, and responsive mobile nav toggle sheets.
+ */
 export default function Header() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
-  const [wishlistCount, setWishlistCount] = useState(0);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const pathname = usePathname(); // Retrieves current active route path
+  const router = useRouter(); // Router handler for trigger redirects
+  const [isOpen, setIsOpen] = useState(false); // Mobile toggle drawer state
+  const [cartCount, setCartCount] = useState(0); // Cart quantity badge count
+  const [wishlistCount, setWishlistCount] = useState(0); // Wishlist items count
+  const [searchOpen, setSearchOpen] = useState(false); // Controls search textfield expand overlay
+  const [searchQuery, setSearchQuery] = useState(''); // Text value in search field
+  const [theme, setTheme] = useState<'light' | 'dark'>('light'); // Theme selection indicator
 
+  // Synchronize site theme styling (using Tailwind dark: class selectors) with localStorage values on load
   useEffect(() => {
     try {
       const savedTheme = localStorage.getItem('cosostyle_theme') || 'light';
       Promise.resolve().then(() => {
         setTheme(savedTheme as 'light' | 'dark');
       });
+      // Toggle dark styling class at document document root
       if (savedTheme === 'dark') {
         document.documentElement.classList.add('dark');
       } else {
@@ -31,6 +38,7 @@ export default function Header() {
     }
   }, []);
 
+  // Switches theme selection state and writes choice to localStorage persistence cache
   const toggleTheme = () => {
     const nextTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(nextTheme);
@@ -46,20 +54,24 @@ export default function Header() {
     }
   };
 
+  // Triggers search routing query to `/search?q=query`
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchOpen(false);
+      setSearchOpen(false); // Reset search popup
       setSearchQuery('');
     }
   };
 
+  // Listens to global events to sync item counts instantly across components
   useEffect(() => {
     const updateCounts = () => {
       try {
         const cart = JSON.parse(localStorage.getItem('cosostyle_cart') || '[]');
         const wishlist = JSON.parse(localStorage.getItem('cosostyle_wishlist') || '[]');
+        
+        // Sum total quantities of items logged in the cart
         const totalItemsInCart = cart.reduce((sum: number, item: { quantity?: number }) => sum + (item.quantity || 1), 0);
         setCartCount(totalItemsInCart);
         setWishlistCount(wishlist.length);
@@ -68,13 +80,15 @@ export default function Header() {
       }
     };
 
-    updateCounts();
+    updateCounts(); // Run initial counts generation on mount
 
+    // Listeners reacting to cart/wishlist state changes across sibling card triggers
     window.addEventListener('cart-updated', updateCounts);
     window.addEventListener('wishlist-updated', updateCounts);
-    // Also listen to storage events for multi-tab updates
+    // React to storage changes made in alternate tab panes
     window.addEventListener('storage', updateCounts);
 
+    // Clean up event listeners on component unmount
     return () => {
       window.removeEventListener('cart-updated', updateCounts);
       window.removeEventListener('wishlist-updated', updateCounts);
@@ -85,6 +99,8 @@ export default function Header() {
   return (
     <header className="bg-white/80 dark:bg-black/80 backdrop-blur-md sticky top-0 z-50 transition-all duration-300 shadow-[0_2px_20px_rgba(0,0,0,0.02)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex h-16 items-center justify-between">
+        
+        {/* Branding Logo Block */}
         <div className="flex flex-shrink-0 items-center">
           <Link href="/" className="flex items-center space-x-2">
             <Image
@@ -99,6 +115,7 @@ export default function Header() {
           </Link>
         </div>
 
+        {/* Desktop Navigation Links */}
         <nav className="hidden md:flex md:items-center md:space-x-8">
           <Link
             href="/"
@@ -158,8 +175,10 @@ export default function Header() {
           </Link>
         </nav>
 
+        {/* Global Toolbar items (Search, Wishlist, Cart, Theme Toggler, Account, Mobile Menu) */}
         <div className="flex items-center space-x-5">
-          {/* Search Toggle/Field */}
+          
+          {/* Expanded Search Form overlay when toggled */}
           <div className="relative flex items-center">
             {searchOpen ? (
               <form onSubmit={handleSearchSubmit} className="absolute right-0 flex items-center bg-gray-50 dark:bg-zinc-900 rounded-full py-1 px-3.5 z-10 w-44 sm:w-56 transition-all duration-300">
@@ -181,7 +200,7 @@ export default function Header() {
                   onClick={() => setSearchOpen(false)} 
                   className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 ml-2"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
@@ -205,6 +224,7 @@ export default function Header() {
             )}
           </div>
 
+          {/* Wishlist Link & Counter badge */}
           <Link href="/wishlist" className="relative p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -215,7 +235,6 @@ export default function Header() {
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.36l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 12l-5.657-5.657z" />
             </svg>
-            {/* Wishlist count badge */}
             {wishlistCount > 0 && (
               <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-black dark:bg-white text-[9px] font-bold text-white dark:text-black shadow-sm transition-colors duration-300">
                 {wishlistCount}
@@ -223,6 +242,7 @@ export default function Header() {
             )}
           </Link>
 
+          {/* Cart Link & Counter badge */}
           <Link href="/cart" className="relative p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -233,7 +253,6 @@ export default function Header() {
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
-            {/* Cart count badge */}
             {cartCount > 0 && (
               <span className="absolute -top-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-black dark:bg-white text-[9px] font-bold text-white dark:text-black shadow-sm transition-colors duration-300">
                 {cartCount}
@@ -241,7 +260,7 @@ export default function Header() {
             )}
           </Link>
 
-          {/* Theme Toggler */}
+          {/* Theme Toggler trigger */}
           <button
             onClick={toggleTheme}
             className="p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors focus:outline-none"
@@ -258,6 +277,7 @@ export default function Header() {
             )}
           </button>
 
+          {/* User Account profile Link */}
           <Link href="/account" className="p-1 text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -270,7 +290,7 @@ export default function Header() {
             </svg>
           </Link>
 
-          {/* Mobile menu button */}
+          {/* Mobile responsive toggle trigger */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden p-1.5 rounded text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-50 dark:hover:bg-zinc-900 transition-colors"
@@ -289,7 +309,7 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile responsive slide-down menu sheet */}
       {isOpen && (
         <div className="md:hidden bg-white/95 dark:bg-black/95 backdrop-blur-md transition-colors duration-300">
           <div className="px-4 pt-2 pb-6 space-y-1 sm:px-6 border-t border-gray-100 dark:border-zinc-900">

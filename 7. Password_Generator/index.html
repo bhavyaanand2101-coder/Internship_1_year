@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Standard HTML5 specification declaring English language support -->
 <html lang="en">
 
 <head>
@@ -7,6 +8,7 @@
     <title>Password Generator</title>
 
     <style>
+        /* Reset margins, paddings, and default box sizing rules */
         * {
             margin: 0;
             padding: 0;
@@ -14,17 +16,19 @@
             font-family: Arial, sans-serif;
         }
 
+        /* Dark background theme and flex centering alignment rules */
         body {
-            background: #0f172a;
+            background: #0f172a; /* Slate 900 background */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
         }
 
+        /* Container card with layout properties, shadow padding and border radius */
         .container {
             width: 420px;
-            background: #1e293b;
+            background: #1e293b; /* Slate 800 background */
             padding: 25px;
             border-radius: 15px;
             color: white;
@@ -36,12 +40,14 @@
             margin-bottom: 20px;
         }
 
+        /* Display row for generated password field and Copy button */
         .password-box {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
         }
 
+        /* Readonly text input showing the output string */
         #password {
             flex: 1;
             padding: 12px;
@@ -51,6 +57,7 @@
             outline: none;
         }
 
+        /* Action triggers layout styling guidelines */
         button {
             cursor: pointer;
             border: none;
@@ -58,8 +65,9 @@
             transition: 0.3s;
         }
 
+        /* Style guidelines for Copy button */
         #copyBtn {
-            background: #22c55e;
+            background: #22c55e; /* Bright Green */
             color: white;
             padding: 12px 15px;
         }
@@ -68,14 +76,17 @@
             opacity: 0.9;
         }
 
+        /* Checkbox items container layout spacing */
         .option {
             margin: 12px 0;
         }
 
+        /* Slider range container block properties */
         .range-container {
             margin: 15px 0;
         }
 
+        /* Displays labels on a single row stretching slider parameters details */
         .range-container label {
             display: flex;
             justify-content: space-between;
@@ -86,11 +97,12 @@
             width: 100%;
         }
 
+        /* Large generator execution button styling */
         .generate-btn {
             width: 100%;
             padding: 14px;
             margin-top: 15px;
-            background: #3b82f6;
+            background: #3b82f6; /* Blue accent */
             color: white;
             font-size: 16px;
             font-weight: bold;
@@ -100,17 +112,20 @@
             background: #2563eb;
         }
 
+        /* Diagnostic message layout rules */
         #message {
             text-align: center;
             margin-top: 15px;
-            color: #facc15;
+            color: #facc15; /* Yellow */
             font-weight: bold;
         }
 
+        /* Password strength indicator widget spacing */
         .strength {
             margin-top: 15px;
         }
 
+        /* Background bar representing empty state */
         .strength-bar {
             width: 100%;
             height: 10px;
@@ -119,6 +134,7 @@
             overflow: hidden;
         }
 
+        /* Progress fill animation inside strength tracker */
         .strength-fill {
             height: 100%;
             width: 0%;
@@ -126,6 +142,7 @@
             transition: 0.3s;
         }
 
+        /* Text element for strength status */
         #strengthText {
             margin-top: 5px;
             font-size: 14px;
@@ -139,11 +156,13 @@
 
         <h1>🔐 Password Generator</h1>
 
+        <!-- Result container displaying computed passwords -->
         <div class="password-box">
             <input type="text" id="password" readonly>
             <button id="copyBtn">Copy</button>
         </div>
 
+        <!-- Slider widget controlling target character length -->
         <div class="range-container">
             <label>
                 <span>Password Length</span>
@@ -152,6 +171,7 @@
             <input type="range" id="length" min="4" max="50" value="12">
         </div>
 
+        <!-- Configurable checklist options for criteria elements -->
         <div class="option">
             <input type="checkbox" id="uppercase" checked>
             <label for="uppercase">Uppercase Letters (A-Z)</label>
@@ -172,10 +192,12 @@
             <label for="symbols">Symbols (!@#$%)</label>
         </div>
 
+        <!-- Generate password invocation trigger -->
         <button class="generate-btn" id="generateBtn">
             Generate Password
         </button>
 
+        <!-- Dynamic strength visualization feedback area -->
         <div class="strength">
             <div class="strength-bar">
                 <div class="strength-fill" id="strengthFill"></div>
@@ -183,11 +205,13 @@
             <p id="strengthText">Strength: Medium</p>
         </div>
 
+        <!-- System state logs feedback output text -->
         <p id="message"></p>
 
     </div>
 
     <script>
+        // DOM element selections
         const passwordInput = document.getElementById("password");
         const generateBtn = document.getElementById("generateBtn");
         const copyBtn = document.getElementById("copyBtn");
@@ -197,12 +221,14 @@
         const strengthText = document.getElementById("strengthText");
         const message = document.getElementById("message");
 
+        // Sync numeric character representation tag above slider on sliding action
         lengthSlider.addEventListener("input", () => {
             lengthValue.textContent = lengthSlider.value;
         });
 
+        // Main algorithm to assemble character categories and generate random output string
         function generatePassword() {
-
+            // Pools of characters sorted by types
             const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             const lowercase = "abcdefghijklmnopqrstuvwxyz";
             const numbers = "0123456789";
@@ -210,6 +236,7 @@
 
             let chars = "";
 
+            // Check checked inputs to add character types to pool
             if (document.getElementById("uppercase").checked)
                 chars += uppercase;
 
@@ -222,6 +249,7 @@
             if (document.getElementById("symbols").checked)
                 chars += symbols;
 
+            // Handle invalid zero selection state
             if (chars.length === 0) {
                 message.textContent =
                     "Select at least one character type!";
@@ -231,6 +259,7 @@
 
             let password = "";
 
+            // Iterative selection of a random character from pool to build the string
             for (let i = 0; i < lengthSlider.value; i++) {
                 const randomIndex =
                     Math.floor(Math.random() * chars.length);
@@ -238,22 +267,26 @@
                 password += chars[randomIndex];
             }
 
+            // Output generated password to display and update strength score visual feedback
             passwordInput.value = password;
             message.textContent = "";
 
             updateStrength(password);
         }
 
+        // Strength evaluation score calculator checking password attributes
         function updateStrength(password) {
 
             let score = 0;
 
+            // Increment score criteria
             if (password.length >= 8) score++;
             if (password.length >= 12) score++;
             if (/[A-Z]/.test(password)) score++;
             if (/[0-9]/.test(password)) score++;
             if (/[^A-Za-z0-9]/.test(password)) score++;
 
+            // Render strength states
             if (score <= 2) {
                 strengthFill.style.width = "30%";
                 strengthFill.style.background = "red";
@@ -271,8 +304,10 @@
             }
         }
 
+        // Attach action handlers for generate button
         generateBtn.addEventListener("click", generatePassword);
 
+        // Attach action handlers to copy the password to clipboard
         copyBtn.addEventListener("click", () => {
 
             if (passwordInput.value === "") {
@@ -283,6 +318,7 @@
 
             navigator.clipboard.writeText(passwordInput.value);
 
+            // Display success message and hide after 2 seconds
             message.textContent = "✅ Password copied!";
 
             setTimeout(() => {
@@ -290,6 +326,7 @@
             }, 2000);
         });
 
+        // Automatically trigger a password creation upon page loading completion
         generatePassword();
     </script>
 

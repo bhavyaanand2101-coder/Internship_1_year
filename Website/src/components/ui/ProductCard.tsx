@@ -65,22 +65,24 @@ interface CartItem {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const router = useRouter();
-  const [isInWishlist, setIsInWishlist] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [detailedProduct, setDetailedProduct] = useState<DetailedProduct | null>(null);
-  const [modalLoading, setModalLoading] = useState(false);
+  const router = useRouter(); // NextJS client-side router navigation
+  
+  // State definitions
+  const [isInWishlist, setIsInWishlist] = useState(false); // Flag tracking if this item is in the user's wishlist
+  const [isModalOpen, setIsModalOpen] = useState(false); // Controls display state of Quick View modal overlay
+  const [detailedProduct, setDetailedProduct] = useState<DetailedProduct | null>(null); // Holds detailed product specs fetched from API
+  const [modalLoading, setModalLoading] = useState(false); // Loading spinner state for details fetch
+ 
+  // Quick View Modal selections state
+  const [selectedSize, setSelectedSize] = useState<string | null>(null); // User chosen size variation
+  const [selectedColor, setSelectedColor] = useState<string | null>(null); // User chosen color variation
+  const [quantity, setQuantity] = useState(1); // User chosen checkout quantity count
+  const [activeImageIndex, setActiveImageIndex] = useState(0); // Currently active index in modal image carousel
 
-  // Modal selectors state
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [quantity, setQuantity] = useState(1);
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const discountPercent = product.discount ?? 0; // Discount rate mapping
+  const hasDiscount = product.originalPrice && product.originalPrice > product.price; // Checks if product price is currently discounted
 
-  const discountPercent = product.discount ?? 0;
-  const hasDiscount = product.originalPrice && product.originalPrice > product.price;
-
-  // Sync with LocalStorage wishlist on mount and product change
+  // Synchronization hook: checks on load if this product already resides in local storage wishlist cache
   useEffect(() => {
     try {
       const stored = localStorage.getItem('cosostyle_wishlist');
@@ -92,20 +94,23 @@ export default function ProductCard({ product }: ProductCardProps) {
     }
   }, [product.id]);
 
+  // Wishlist handler: inserts or deletes items from local storage array, updating badges accordingly
   const handleWishlistClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    e.stopPropagation();
+    e.stopPropagation(); // Avoid triggering route redirection on parent card wrapper click
     try {
       const stored = localStorage.getItem('cosostyle_wishlist');
       let wishlist: WishlistItem[] = stored ? JSON.parse(stored) : [];
       const isExist = wishlist.some((item) => item.id === product.id);
 
       if (isExist) {
+        // If it exists, filter out (remove) and update state
         wishlist = wishlist.filter((item) => item.id !== product.id);
         localStorage.setItem('cosostyle_wishlist', JSON.stringify(wishlist));
         setIsInWishlist(false);
         alert(`Removed "${product.name}" from wishlist.`);
       } else {
+        // If not found, insert item properties into wishlist collection
         wishlist.push({
           id: product.id,
           name: product.name,
@@ -120,25 +125,30 @@ export default function ProductCard({ product }: ProductCardProps) {
         setIsInWishlist(true);
         alert(`Added "${product.name}" to wishlist!`);
       }
+      
+      // Dispatch custom window event to notify Header component to update wishlist count badge
       window.dispatchEvent(new Event('wishlist-updated'));
     } catch (err) {
       console.error(err);
     }
   };
 
+  // Quick Add handler: instantly appends single product with default variations directly to LocalStorage cart
   const handleAddToCartClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     try {
       const stored = localStorage.getItem('cosostyle_cart');
       const cart: CartItem[] = stored ? JSON.parse(stored) : [];
+      
+      // Set defaults for size and color configurations
       const defaultSize = product.sizes && product.sizes.length > 0 ? product.sizes[0] : 'M';
       const defaultColor = product.colors && product.colors.length > 0 ? product.colors[0] : 'Default';
-      const cartItemId = `${product.id}-${defaultSize}-${defaultColor}`;
+      const cartItemId = `${product.id}-${defaultSize}-${defaultColor}`; // Unique key combining product with options
 
       const existingIndex = cart.findIndex((item) => item.cartItemId === cartItemId);
       if (existingIndex > -1) {
-        cart[existingIndex].quantity += 1;
+        cart[existingIndex].quantity += 1; // Increment count if item variation exists
       } else {
         cart.push({
           id: product.id,
@@ -152,6 +162,8 @@ export default function ProductCard({ product }: ProductCardProps) {
         });
       }
       localStorage.setItem('cosostyle_cart', JSON.stringify(cart));
+      
+      // Dispatch custom event to tell header component to refresh cart quantities
       window.dispatchEvent(new Event('cart-updated'));
       alert(`Added "${product.name}" to cart!`);
     } catch (err) {
@@ -159,12 +171,13 @@ export default function ProductCard({ product }: ProductCardProps) {
     }
   };
 
+  // Quick View triggers: fetches detailed description and specifications via client-side API
   const handleQuickViewClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsModalOpen(true);
     setModalLoading(true);
-    setQuantity(1);
+    setQuantity(1); // Reset options state
     setActiveImageIndex(0);
 
     fetch(`/api/products/${product.id}`)
@@ -174,11 +187,15 @@ export default function ProductCard({ product }: ProductCardProps) {
       })
       .then((data: DetailedProduct) => {
         setDetailedProduct(data);
+        
+        // Auto-select first size option as default
         if (data.sizes && data.sizes.length > 0) {
           setSelectedSize(data.sizes[0]);
         } else {
           setSelectedSize('M');
         }
+        
+        // Auto-select first color option as default
         if (data.colors && data.colors.length > 0) {
           setSelectedColor(data.colors[0]);
         } else {
@@ -192,6 +209,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       });
   };
 
+  // Closes details modal and resets selection states
   const handleModalClose = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -199,6 +217,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     setDetailedProduct(null);
   };
 
+  // Modal Add to Cart handler: appends configured quantities and variations to LocalStorage cart
   const handleModalAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -213,7 +232,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
       const existingIndex = cart.findIndex((item) => item.cartItemId === cartItemId);
       if (existingIndex > -1) {
-        cart[existingIndex].quantity += quantity;
+        cart[existingIndex].quantity += quantity; // Increment by chosen quantity
       } else {
         cart.push({
           id: detailedProduct.id,
@@ -227,6 +246,8 @@ export default function ProductCard({ product }: ProductCardProps) {
         });
       }
       localStorage.setItem('cosostyle_cart', JSON.stringify(cart));
+      
+      // Notify navigation bar to increment indicators
       window.dispatchEvent(new Event('cart-updated'));
       setIsModalOpen(false);
       setDetailedProduct(null);
@@ -236,6 +257,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     }
   };
 
+  // Instantly adds item to cart and forwards route directly to Checkout page
   const handleModalBuyNow = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -245,7 +267,9 @@ export default function ProductCard({ product }: ProductCardProps) {
     router.push('/checkout');
   };
 
+  // Redirects user to main product detail page depending on gender category classification
   const handleCardClick = (e: React.MouseEvent) => {
+    // Prevent redirect if user clicked child button overlays or if quick-view modal is open
     if ((e.target as HTMLElement).closest('button') || isModalOpen) {
       return;
     }
@@ -258,6 +282,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         : `/unisex/${product.id}`
     );
   };
+
 
   return (
     <>

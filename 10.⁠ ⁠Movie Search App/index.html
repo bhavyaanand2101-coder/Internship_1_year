@@ -1,20 +1,24 @@
 <!DOCTYPE html>
+<!-- Standard HTML5 specification declaring English language support -->
 <html lang="en">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CineSearch — Movie Discovery</title>
+    <!-- Connect Google Fonts preconnections and the Inter typography family stylesheet -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Connect Custom page styles -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+    <!-- Main Application context wrapper -->
     <div id="app">
 
-        <!-- ── Navbar ── -->
+        <!-- ── Navbar: Navigation header showing Logo and badge details ── -->
         <nav>
             <div class="nav-logo">
                 &#127916; Cine<span>Search</span>
@@ -22,16 +26,19 @@
             <span class="nav-badge">OMDB</span>
         </nav>
 
-        <!-- ── Search view ── -->
+        <!-- ── Search view container holding inputs and lists ── -->
         <div id="searchView">
 
+            <!-- Hero Section containing welcoming headlines and search bar inputs -->
             <div class="hero">
                 <div class="hero-eyebrow">&#9733; Movie Discovery</div>
                 <h1>Find your next<br><span>favourite film</span></h1>
                 <p>Search from millions of movies, get ratings, cast, plot and more — powered by OMDB API.</p>
 
+                <!-- Search Input Form Box wrapper -->
                 <div class="search-box">
                     <div class="search-icon">
+                        <!-- Search SVG Icon layout -->
                         <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"
                             viewBox="0 0 24 24">
                             <circle cx="11" cy="11" r="8" />
@@ -43,6 +50,7 @@
                     <button id="searchBtn">Search</button>
                 </div>
 
+                <!-- Quick tags for prompt selection of popular query terms -->
                 <div class="quick-tags">
                     <button class="quick-tag" data-q="Spider-Man">Spider-Man</button>
                     <button class="quick-tag" data-q="Avengers">Avengers</button>
@@ -52,13 +60,14 @@
                 </div>
             </div>
 
-            <!-- Stats bar -->
+            <!-- Stats bar: Shows count, query status, and sort option tools -->
             <div class="stats-bar" id="statsBar">
                 <div class="stat-item">
                     <div class="stat-dot"></div>
                     <strong id="statCount">0</strong> results found
                 </div>
                 <div class="stat-item">Showing: <strong id="statQuery">—</strong></div>
+                <!-- Dropdown tool sorting by year and title -->
                 <select class="sort-select" id="sortSel">
                     <option value="default">Sort: Default</option>
                     <option value="year_desc">Year: Newest</option>
@@ -69,8 +78,9 @@
 
             <div class="section-label" id="sectionLabel" style="display:none;">Results</div>
 
-            <!-- Movie grid (dynamic) -->
+            <!-- Movie grid populated dynamically by search scripts -->
             <div class="movie-grid" id="movieGrid">
+                <!-- Initial loading state layout -->
                 <div class="status">
                     <div class="spinner"></div>
                     <h3>Loading movies…</h3>
@@ -84,17 +94,19 @@
 
     <!-- ══════════════════════════════
      DETAIL MODAL
-    ══════════════════════════════ -->
+     ══════════════════════════════ -->
+    <!-- Modal panel overlay showing detailed info for a selected movie -->
     <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div class="modal" id="modal">
             <button class="modal-close" id="closeBtn" aria-label="Close">&#x2715;</button>
 
-            <!-- Blurred poster banner -->
+            <!-- Blurred poster banner background -->
             <div class="modal-banner">
                 <img class="banner-img" id="bannerImg" src="" alt="" />
                 <div class="modal-banner-overlay"></div>
             </div>
 
+            <!-- Modal Content details body -->
             <div class="modal-body">
                 <div class="modal-poster">
                     <img id="detailPoster" src="" alt="Poster" />
@@ -121,7 +133,7 @@
         </div>
     </div>
 
+    <!-- Connect local JavaScript handling API fetch, rendering grids and triggering modal details -->
     <script src="script.js"></script>
 </body>
-
 </html>

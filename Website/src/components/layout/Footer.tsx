@@ -2,11 +2,20 @@
 
 import Link from 'next/link';
 
+/**
+ * Footer Layout Component.
+ * Renders brand description blocks, navigation menus, interactive email newsletter forms, 
+ * social icon link grids, and dynamic copyright year displays.
+ */
 export default function Footer() {
   return (
     <footer className="bg-zinc-50 dark:bg-zinc-950 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        
+        {/* Four-Column responsive footer grid (Stacking on mobile, side-by-side on wide screens) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
+          
+          {/* Column 1: Brand description and social handles */}
           <div className="space-y-4">
             <h3 className="text-sm font-semibold tracking-widest text-black dark:text-white uppercase">
               CoSoStyle
@@ -34,6 +43,7 @@ export default function Footer() {
             </div>
           </div>
 
+          {/* Column 2: Shopping category routing navigation */}
           <div>
             <h4 className="text-[11px] font-semibold text-black dark:text-white uppercase tracking-widest mb-4">Shop</h4>
             <ul className="space-y-2.5 text-xs tracking-wider">
@@ -44,6 +54,7 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Column 3: Secondary informational/help routes */}
           <div>
             <h4 className="text-[11px] font-semibold text-black dark:text-white uppercase tracking-widest mb-4">Help</h4>
             <ul className="space-y-2.5 text-xs tracking-wider">
@@ -54,6 +65,7 @@ export default function Footer() {
             </ul>
           </div>
 
+          {/* Column 4: Newsletter subscription form */}
           <div>
             <h4 className="text-[11px] font-semibold text-black dark:text-white uppercase tracking-widest mb-4">Stay Updated</h4>
             <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
@@ -72,6 +84,7 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Divider line and dynamic Copyright date marker */}
         <div className="mt-16 pt-8 border-t border-gray-100 dark:border-zinc-900 text-center text-[10px] tracking-widest uppercase text-gray-400 dark:text-gray-500">
           © {new Date().getFullYear()} CoSoStyle. All rights reserved.
         </div>

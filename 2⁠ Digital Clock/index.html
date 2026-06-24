@@ -1,23 +1,33 @@
 <!DOCTYPE html>
+<!-- Indicates that this is an HTML5 document -->
 <html lang="en">
 <head>
+    <!-- Metadata representing the character encoding and viewport dimensions for responsiveness -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JS Digital Clock</title>
+    <!-- Connects the external CSS stylesheet for page layouts and themes -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- Main wrapper centered on the screen for the digital clock display and toggles -->
     <div class="clock-container">
+        <!-- Display region for the time (Hours, Minutes, Seconds) -->
         <div id="clock">00:00:00</div>
+        <!-- Display region showing AM or PM when in 12-hour format -->
         <div id="ampm"></div>
         
+        <!-- Controls area containing utility buttons for format and theme switching -->
         <div class="controls">
+            <!-- Button to alternate between 12-hour and 24-hour modes -->
             <button id="toggleFormat">Switch to 12h</button>
+            <!-- Button to alternate between Light and Dark layout modes -->
             <button id="toggleTheme">Dark Mode</button>
         </div>
     </div>
 
+    <!-- Integrates the JavaScript file containing logical time tracking and event handlers -->
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,38 +1,51 @@
 <!DOCTYPE html>
+<!-- Specifies the language of the document as English -->
 <html lang="en">
 <head>
+    <!-- Sets character encoding to UTF-8 for supporting multiple character sets -->
     <meta charset="UTF-8">
+    <!-- Ensures responsiveness, adjusting display size to match different devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bhavya Anand Portfolio</title>
+    <!-- Linking external CSS stylesheet containing custom styling -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Navbar -->
+    <!-- Navigation Bar: Contains logo and links to page sections -->
     <nav>
+        <!-- Logo or brand name of the portfolio owner -->
         <div class="logo">Bhavya Anand</div>
 
+        <!-- Unordered list for navigation menu items -->
         <ul>
+            <!-- Link to the Home/Hero section using anchor hash (#home) -->
             <li><a href="#home">Home</a></li>
+            <!-- Link to the About section -->
             <li><a href="#about">About</a></li>
+            <!-- Link to the Projects section -->
             <li><a href="#projects">Projects</a></li>
+            <!-- Link to the Contact section -->
             <li><a href="#contact">Contact</a></li>
         </ul>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero Section: The main banner seen upon page load -->
     <section id="home" class="hero">
         <div class="hero-content">
+            <!-- Main greeting heading -->
             <h1>Hello, I'm Bhavya Anand</h1>
+            <!-- Subheading showcasing roles or skills -->
             <p>Frontend Developer | Python Enthusiast</p>
 
+            <!-- Interactive button triggering the scrollToProjects JavaScript function -->
             <button onclick="scrollToProjects()">
                 View Projects
             </button>
         </div>
     </section>
 
-    <!-- About -->
+    <!-- About Section: Short description of the developer's background and stack -->
     <section id="about">
         <h2>About Me</h2>
 
@@ -44,23 +57,27 @@
         </p>
     </section>
 
-    <!-- Projects -->
+    <!-- Projects Section: Displays cards for showcased works -->
     <section id="projects">
 
         <h2>Projects</h2>
 
+        <!-- Grid container holding individual project card items -->
         <div class="project-container">
 
+            <!-- Card item for Weather App project -->
             <div class="card">
                 <h3>Weather App</h3>
                 <p>Weather forecasting using API.</p>
             </div>
 
+            <!-- Card item for Expense Tracker project -->
             <div class="card">
                 <h3>Expense Tracker</h3>
                 <p>Track expenses and income.</p>
             </div>
 
+            <!-- Card item for Portfolio Website project -->
             <div class="card">
                 <h3>Portfolio Website</h3>
                 <p>Responsive personal portfolio.</p>
@@ -70,18 +87,22 @@
 
     </section>
 
-    <!-- Contact -->
+    <!-- Contact Section: A simple form for sending messages -->
     <section id="contact">
 
         <h2>Contact Me</h2>
 
         <form>
+            <!-- Input field for the user's name -->
             <input type="text" placeholder="Your Name">
 
+            <!-- Input field for the user's email -->
             <input type="email" placeholder="Your Email">
 
+            <!-- Text area for writing the custom message -->
             <textarea placeholder="Message"></textarea>
 
+            <!-- Button that submits the form, handled via script.js listener -->
             <button type="submit">
                 Send Message
             </button>
@@ -89,6 +110,7 @@
 
     </section>
 
+    <!-- Linking external JavaScript file for dynamic page behavior -->
     <script src="script.js"></script>
 
 </body>

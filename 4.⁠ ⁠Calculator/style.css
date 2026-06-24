@@ -1,3 +1,4 @@
+/* Standard global reset to clean default margin, padding, and layout sizing */
 *{
     margin:0;
     padding:0;
@@ -5,14 +6,16 @@
     font-family:Arial,sans-serif;
 }
 
+/* Base styles centering the calculator on the dark screen background */
 body{
     height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    background:#121212;
+    background:#121212; /* Dark theme background */
 }
 
+/* Calculator card background and borders */
 .calculator{
     background:#1e1e1e;
     padding:20px;
@@ -20,11 +23,12 @@ body{
     width:350px;
 }
 
+/* Display output region text styling */
 #display{
     width:100%;
     height:70px;
     font-size:2rem;
-    text-align:right;
+    text-align:right; /* Align characters to the right side of the screen */
     padding:10px;
     border:none;
     border-radius:10px;
@@ -33,12 +37,14 @@ body{
     color:white;
 }
 
+/* Keypad layout container splitting keys into 4 grid columns */
 .buttons{
     display:grid;
     grid-template-columns:repeat(4,1fr);
-    gap:10px;
+    gap:10px; /* Space between buttons */
 }
 
+/* Base style guidelines for all keypad keys */
 button{
     height:60px;
     border:none;
@@ -48,26 +54,31 @@ button{
     transition:0.2s;
 }
 
+/* Interactive hover animation to slightly scale up buttons */
 button:hover{
     transform:scale(1.05);
 }
 
+/* Mathematical operator button styles (yellow color accent) */
 .operator{
     background:#ff9500;
     color:white;
 }
 
+/* Equals button stretch layout and color rules */
 .equal{
     background:#28a745;
     color:white;
-    grid-column:span 2;
+    grid-column:span 2; /* Span across two columns in the final row */
 }
 
+/* Clear button styling */
 .clear{
     background:#dc3545;
     color:white;
 }
 
+/* Delete button styling */
 .delete{
     background:#6c757d;
     color:white;

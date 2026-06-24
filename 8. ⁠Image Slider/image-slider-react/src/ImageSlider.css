@@ -1,35 +1,40 @@
+/* Outer slider viewport wrapper style rules */
 .slider {
-    position: relative;
+    position: relative; /* Context positioning for absolute children buttons & indicators */
     width: 900px;
     max-width: 90%;
     margin: 50px auto;
-    overflow: hidden;
+    overflow: hidden; /* Hides non-active slides that extend outside this container */
     border-radius: 15px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
 
+/* Container laying out slide elements horizontally side-by-side */
 .slides {
     display: flex;
-    transition: transform 0.5s ease-in-out;
+    transition: transform 0.5s ease-in-out; /* Smooth scrolling sliding motion animation */
 }
 
+/* Individual slide styling rules stretching to take full viewport width */
 .slide {
     min-width: 100%;
 }
 
+/* Image scaling properties inside the viewport */
 .slide img {
     width: 100%;
     height: 500px;
-    object-fit: cover;
+    object-fit: cover; /* Crops image maintaining ratio to fill container */
     display: block;
 }
 
+/* Viewport floating direction controller buttons basic styles */
 .btn {
     position: absolute;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-50%); /* Centered vertically on the slider card */
     border: none;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
     color: white;
     font-size: 28px;
     cursor: pointer;
@@ -37,18 +42,22 @@
     border-radius: 50%;
 }
 
+/* Shifts left arrow button to sit inside the container */
 .prev {
     left: 15px;
 }
 
+/* Shifts right arrow button to sit inside the container */
 .next {
     right: 15px;
 }
 
+/* Darker button background on hover */
 .btn:hover {
     background: rgba(0, 0, 0, 0.8);
 }
 
+/* Bottom dots indicators flex box container alignment */
 .indicators {
     position: absolute;
     bottom: 15px;
@@ -58,6 +67,7 @@
     gap: 10px;
 }
 
+/* Interactive navigation dot styles representing each image */
 .dot {
     width: 14px;
     height: 14px;
@@ -66,6 +76,7 @@
     cursor: pointer;
 }
 
+/* Highlights active slide dot */
 .dot.active {
     background: white;
 }

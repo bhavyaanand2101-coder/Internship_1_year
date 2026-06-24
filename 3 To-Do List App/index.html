@@ -1,22 +1,31 @@
 <!DOCTYPE html>
+<!-- Standard HTML5 document tag specifying English language -->
 <html lang="en">
 <head>
+    <!-- Metadata representing character encoding and responsive width settings -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JS To-Do App</title>
+    <!-- Connects the external CSS stylesheet containing page layouts, list items, and button colors -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+    <!-- Main container card holding the application elements -->
     <div class="container">
         <h1>To-Do List</h1>
+        <!-- Group container for input field and add button -->
         <div class="input-group">
+            <!-- Text field where user types their next task name -->
             <input type="text" id="todoInput" placeholder="Add a new task...">
+            <!-- Button triggering addition of task to the list -->
             <button id="addBtn">Add</button>
         </div>
+        <!-- Unordered list that gets dynamically populated with task items by script.js -->
         <ul id="todoList"></ul>
     </div>
 
+    <!-- Integrates the JavaScript logic for item management, local storage, and rendering -->
     <script src="script.js"></script>
 </body>
 </html>
