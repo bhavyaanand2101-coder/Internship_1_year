@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gourmet Finder - Discover Delicious Recipes</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Glassmorphic Grid Background Effects -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <span class="logo-emoji">🍳</span> GourmetFinder
+            </a>
+            <button id="favsToggleBtn" class="favs-toggle-btn">
+                <i class="fa-solid fa-bookmark"></i> Bookmarks 
+                <span id="favsBadge" class="favs-badge">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="main-content">
+        <!-- Hero Search Section -->
+        <header class="hero-section">
+            <h1>Find Your Next <br><span class="gradient-text">Culinary Masterpiece</span></h1>
+            <p>Search over thousands of delicious recipes from around the globe. Discover, save, and cook step-by-step.</p>
+            
+            <div class="search-box-wrapper">
+                <div class="search-input-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search for meals, ingredients, or cuisines...">
+                </div>
+                <div class="button-group">
+                    <button id="searchBtn" class="btn-primary">
+                        <span>Search</span>
+                    </button>
+                    <button id="randomBtn" class="btn-secondary" title="Get a random recipe">
+                        <i class="fa-solid fa-dice"></i> <span>Surprise Me</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Category Filter Section -->
+        <section class="filters-section">
+            <h3 class="section-title">Popular Categories</h3>
+            <div id="categoriesContainer" class="categories-list">
+                <!-- Dynamic categories or static fallback categories will go here -->
+                <button class="category-pill active" data-category="All">All</button>
+                <button class="category-pill" data-category="Beef">Beef</button>
+                <button class="category-pill" data-category="Chicken">Chicken</button>
+                <button class="category-pill" data-category="Dessert">Dessert</button>
+                <button class="category-pill" data-category="Pasta">Pasta</button>
+                <button class="category-pill" data-category="Seafood">Seafood</button>
+                <button class="category-pill" data-category="Vegetarian">Vegetarian</button>
+            </div>
+        </section>
+
+        <!-- Results Message / Loader -->
+        <div id="message" class="message-container"></div>
+
+        <!-- Recipes Container -->
+        <section class="recipes-section">
+            <div id="recipeContainer" class="recipes-grid">
+                <!-- Recipe cards injected dynamically -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Bookmarks Sidebar Drawer -->
+    <div id="favsDrawerBackdrop" class="drawer-backdrop"></div>
+    <div id="favsDrawer" class="favs-drawer">
+        <div class="drawer-header">
+            <h3><i class="fa-solid fa-bookmark text-primary"></i> Saved Recipes</h3>
+            <button id="closeDrawerBtn" class="close-drawer-btn">&times;</button>
+        </div>
+        <div id="favsListContainer" class="favs-list">
+            <!-- Saved recipes lists go here -->
+            <div class="empty-favs">
+                <i class="fa-regular fa-bookmark"></i>
+                <p>No saved recipes yet. Click the bookmark icon on any recipe to save it!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Recipe Modal -->
+    <div id="recipeModal" class="modal">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <button class="close-modal-btn" id="closeModalBtn">&times;</button>
+
+            <!-- Modal Header Media Panel -->
+            <div class="modal-media-header">
+                <img id="recipeImage" src="" alt="Recipe Image">
+                <div class="modal-header-overlay">
+                    <div class="tags-row">
+                        <span id="recipeCategory" class="badge badge-category">Category</span>
+                        <span id="recipeArea" class="badge badge-cuisine">Cuisine</span>
+                    </div>
+                    <h2 id="recipeTitle">Recipe Name</h2>
+                    <button id="modalFavBtn" class="btn-fav-toggle">
+                        <i class="fa-regular fa-bookmark"></i> Add to Bookmarks
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body Navigation & Content -->
+            <div class="modal-body">
+                <!-- Tabs -->
+                <div class="modal-tabs">
+                    <button class="tab-btn active" data-tab="ingredients">
+                        <i class="fa-solid fa-basket-shopping"></i> Ingredients
+                    </button>
+                    <button class="tab-btn" data-tab="instructions">
+                        <i class="fa-solid fa-kitchen-cooker"></i> Instructions
+                    </button>
+                    <button class="tab-btn" data-tab="video">
+                        <i class="fa-brands fa-youtube"></i> Video Tutorial
+                    </button>
+                </div>
+
+                <!-- Tab Panels -->
+                <div class="tab-panels-container">
+                    <!-- Ingredients Panel -->
+                    <div id="tab-ingredients" class="tab-panel active">
+                        <div class="panel-header">
+                            <p class="panel-subtitle">Check off ingredients as you prepare them:</p>
+                        </div>
+                        <ul id="ingredientsList" class="checklist-grid">
+                            <!-- Injected dynamically -->
+                        </ul>
+                    </div>
+
+                    <!-- Instructions Panel -->
+                    <div id="tab-instructions" class="tab-panel">
+                        <div class="panel-header">
+                            <p class="panel-subtitle">Follow these culinary instructions step-by-step:</p>
+                        </div>
+                        <div id="recipeInstructions" class="instructions-text">
+                            <!-- Injected dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Video Panel -->
+                    <div id="tab-video" class="tab-panel">
+                        <div class="panel-header">
+                            <p class="panel-subtitle">Watch the recipe preparation walkthrough:</p>
+                        </div>
+                        <div id="videoContainer" class="video-container">
+                            <!-- YouTube Embed iframe injected here dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p class="footer-title">🍳 GourmetFinder</p>
+            <p>Discover, cook, and share delicious recipes from around the world.</p>
+            <div class="footer-divider"></div>
+            <p class="footer-copyright">
+                &copy; 2026 GourmetFinder. Powered by TheMealDB API.
+            </p>
+        </div>
+    </footer>
+
+    <!-- External JavaScript -->
+    <script src="script.js"></script>
+</body>
+
+</html>
