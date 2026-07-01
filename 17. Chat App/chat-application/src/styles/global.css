@@ -1,0 +1,35 @@
+/* global.css - WhatsApp Visual Theme styling definitions */
+
+:root {
+  --wa-green: #008069;
+  --wa-green-dark: #005c4b;
+  --wa-bg-light: #efeae2;
+  --wa-bubble-out: #d9fdd3;
+  --wa-bubble-in: #ffffff;
+  --wa-text: #111b21;
+  --wa-text-muted: #667781;
+  --wa-active-chat: #f0f2f5;
+  --wa-search-bg: #f0f2f5;
+  --wa-border: #e9edef;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #f0f2f5;
+    color: var(--wa-text);
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+h1 {
+    padding: 30px;
+}

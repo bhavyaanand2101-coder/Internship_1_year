@@ -1,0 +1,30 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Helper to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Helper to check if user owns the resource
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Profile photos storage rules
+    match /profiles/{fileName} {
+      allow read: if isAuthenticated();
+      // Allow writes if user is updating their own profile avatar
+      allow write: if isAuthenticated() && fileName.startsWith(request.auth.uid);
+    }
+
+    // Chat image attachment storage rules
+    match /chats/{conversationId}/{fileName} {
+      // Allow read/write if user is participant in the conversation
+      // conversationId format: uid1_uid2
+      allow read, write: if isAuthenticated() && conversationId.matches('.*' + request.auth.uid + '.*');
+    }
+  }
+}
