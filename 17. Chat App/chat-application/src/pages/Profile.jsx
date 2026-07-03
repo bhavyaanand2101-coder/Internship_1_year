@@ -2,6 +2,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { uploadProfilePhoto } from "../services/chatService";
+import { toast } from "react-hot-toast";
+import { 
+    MdArrowBack, 
+    MdCameraAlt, 
+    MdPerson, 
+    MdEmail, 
+    MdLogout, 
+    MdSave 
+} from "react-icons/md";
 
 function Profile() {
     const { user, userData, updateProfileData, logout } = useAuth();
@@ -11,28 +20,23 @@ function Profile() {
     const [file, setFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(userData?.photoURL || user?.photoURL || "");
     const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState("");
-    const [error, setError] = useState("");
 
     const handleFileChange = (e) => {
         const selected = e.target.files[0];
         if (selected) {
             if (!selected.type.startsWith("image/")) {
-                return setError("Select an image file only.");
+                return toast.error("Please select an image file only.");
             }
             setFile(selected);
             setPreviewUrl(URL.createObjectURL(selected));
-            setError("");
         }
     };
 
     const handleUpdate = async (e) => {
         e.preventDefault();
-        setSuccess("");
-        setError("");
 
         if (!displayName.trim()) {
-            return setError("Display name is required.");
+            return toast.error("Display name is required.");
         }
 
         try {
@@ -44,10 +48,10 @@ function Profile() {
             }
 
             await updateProfileData(displayName.trim(), photoURL);
-            setSuccess("Profile updated successfully!");
+            toast.success("Profile updated successfully!");
             setFile(null);
         } catch (err) {
-            setError(err.message);
+            toast.error("Failed to update profile: " + err.message);
         } finally {
             setLoading(false);
         }
@@ -56,147 +60,247 @@ function Profile() {
     const handleLogout = async () => {
         try {
             await logout();
+            toast.success("Logged out successfully.");
             navigate("/login");
         } catch (err) {
-            setError("Logout failed.");
+            toast.error("Logout failed.");
         }
     };
 
     return (
         <div
             style={{
-                maxWidth: "400px",
-                margin: "50px auto",
-                padding: "30px",
-                border: "1px solid var(--wa-border)",
-                borderRadius: "10px",
-                backgroundColor: "#fff",
-                color: "var(--wa-text)",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: "calc(100vh - 60px)",
+                padding: "20px",
+                backgroundColor: "var(--bg-app)",
+                transition: "background-color 0.3s ease",
             }}
         >
-            <h2 style={{ textAlign: "center", color: "var(--wa-green-dark)", margin: "0 0 20px 0" }}>Profile Settings</h2>
-
-            <form onSubmit={handleUpdate} style={{ marginTop: "20px" }}>
-                {/* Avatar Preview */}
-                <div style={{ textAlign: "center", marginBottom: "20px" }}>
-                    <img
-                        src={previewUrl || "https://api.dicebear.com/7.x/adventurer/svg?seed=placeholder"}
-                        alt="Avatar"
-                        style={{
-                            width: "100px",
-                            height: "100px",
-                            borderRadius: "50%",
-                            objectFit: "cover",
-                            border: "3px solid var(--wa-green)",
-                            marginBottom: "10px",
-                        }}
-                    />
-                    <div>
-                        <label
-                            style={{
-                                color: "var(--wa-green)",
-                                cursor: "pointer",
-                                fontSize: "14px",
-                                textDecoration: "none",
-                                fontWeight: "600",
-                            }}
-                        >
-                            Change Photo
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleFileChange}
-                                style={{ display: "none" }}
-                            />
-                        </label>
-                    </div>
-                </div>
-
-                {/* Display Name Input */}
-                <div style={{ marginBottom: "15px" }}>
-                    <label style={{ fontSize: "13px", color: "var(--wa-text-muted)", display: "block", marginBottom: "4px" }}>
-                        Display Name
-                    </label>
-                    <input
-                        type="text"
-                        value={displayName}
-                        onChange={(e) => setDisplayName(e.target.value)}
-                        style={{
-                            width: "100%",
-                            padding: "10px",
-                            border: "1px solid var(--wa-border)",
-                            borderRadius: "4px",
-                            boxSizing: "border-box",
-                            outline: "none",
-                            fontSize: "14px",
-                        }}
-                        required
-                    />
-                </div>
-
-                {/* Email Read-only */}
-                <div style={{ marginBottom: "20px" }}>
-                    <label style={{ fontSize: "13px", color: "var(--wa-text-muted)", display: "block", marginBottom: "4px" }}>
-                        Email (Read Only)
-                    </label>
-                    <input
-                        type="email"
-                        value={user?.email || ""}
-                        disabled
-                        style={{
-                            width: "100%",
-                            padding: "10px",
-                            border: "1px solid var(--wa-border)",
-                            borderRadius: "4px",
-                            backgroundColor: "var(--wa-search-bg)",
-                            cursor: "not-allowed",
-                            boxSizing: "border-box",
-                            color: "var(--wa-text-muted)",
-                            fontSize: "14px",
-                        }}
-                    />
-                </div>
-
-                {error && <p style={{ color: "red", fontSize: "14px", margin: "10px 0" }}>{error}</p>}
-                {success && <p style={{ color: "green", fontSize: "14px", margin: "10px 0" }}>{success}</p>}
-
-                <button
-                    type="submit"
-                    disabled={loading}
-                    style={{
-                        width: "100%",
-                        padding: "12px",
-                        background: "var(--wa-green)",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                        fontWeight: "600",
-                        fontSize: "15px",
-                    }}
-                >
-                    {loading ? "Saving..." : "Save Changes"}
-                </button>
-            </form>
-
-            <button
-                onClick={handleLogout}
+            <div
+                className="glass-panel animate-fade-in"
                 style={{
                     width: "100%",
-                    padding: "12px",
-                    marginTop: "15px",
-                    background: "#8596a0",
-                    color: "#fff",
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                    fontWeight: "600",
-                    fontSize: "15px",
+                    maxWidth: "440px",
+                    padding: "36px 30px",
+                    borderRadius: "16px",
+                    boxShadow: "0 8px 32px var(--color-shadow)",
+                    color: "var(--color-text)",
+                    border: "1px solid var(--color-border)",
+                    transition: "all 0.3s ease",
                 }}
             >
-                Logout
-            </button>
+                {/* Back button and title */}
+                <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "30px" }}>
+                    <button
+                        onClick={() => navigate("/chat")}
+                        style={{
+                            background: "none",
+                            border: "none",
+                            color: "var(--color-text-muted)",
+                            fontSize: "22px",
+                            cursor: "pointer",
+                            padding: "4px",
+                            display: "flex",
+                            alignItems: "center",
+                        }}
+                        title="Back to Chat"
+                    >
+                        <MdArrowBack />
+                    </button>
+                    <h2 style={{ fontSize: "22px", fontWeight: "700", color: "var(--color-accent)", margin: 0 }}>
+                        Profile Settings
+                    </h2>
+                </div>
+
+                <form onSubmit={handleUpdate}>
+                    {/* Large Photo Preview and Uploader */}
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "26px" }}>
+                        <div style={{ position: "relative" }}>
+                            <img
+                                src={previewUrl || "https://api.dicebear.com/7.x/adventurer/svg?seed=placeholder"}
+                                alt="Avatar Preview"
+                                style={{
+                                    width: "110px",
+                                    height: "110px",
+                                    borderRadius: "50%",
+                                    objectFit: "cover",
+                                    border: "3.5px solid var(--color-accent)",
+                                    backgroundColor: "var(--bg-panel)",
+                                }}
+                            />
+                            <label
+                                style={{
+                                    position: "absolute",
+                                    bottom: "4px",
+                                    right: "4px",
+                                    backgroundColor: "var(--color-accent)",
+                                    color: "white",
+                                    width: "32px",
+                                    height: "32px",
+                                    borderRadius: "50%",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    cursor: "pointer",
+                                    boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+                                }}
+                                title="Change Photo"
+                            >
+                                <MdCameraAlt style={{ fontSize: "16px" }} />
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                    style={{ display: "none" }}
+                                />
+                            </label>
+                        </div>
+                    </div>
+
+                    {/* Display Name Input */}
+                    <div style={{ marginBottom: "18px" }}>
+                        <label 
+                            style={{ 
+                                fontSize: "12.5px", 
+                                color: "var(--color-accent)", 
+                                fontWeight: "600", 
+                                display: "block", 
+                                marginBottom: "6px" 
+                            }}
+                        >
+                            Display Name
+                        </label>
+                        <div style={{ position: "relative" }}>
+                            <MdPerson
+                                style={{
+                                    position: "absolute",
+                                    left: "14px",
+                                    top: "50%",
+                                    transform: "translateY(-50%)",
+                                    color: "var(--color-text-muted)",
+                                    fontSize: "18px",
+                                }}
+                            />
+                            <input
+                                type="text"
+                                value={displayName}
+                                onChange={(e) => setDisplayName(e.target.value)}
+                                className="custom-input"
+                                style={{
+                                    width: "100%",
+                                    padding: "12px 16px 12px 42px",
+                                    boxSizing: "border-box",
+                                    fontSize: "14px",
+                                    height: "46px",
+                                }}
+                                required
+                            />
+                        </div>
+                    </div>
+
+                    {/* Email Read-only Info */}
+                    <div style={{ marginBottom: "26px" }}>
+                        <label 
+                            style={{ 
+                                fontSize: "12.5px", 
+                                color: "var(--color-text-muted)", 
+                                fontWeight: "600", 
+                                display: "block", 
+                                marginBottom: "6px" 
+                            }}
+                        >
+                            Email Address (Read Only)
+                        </label>
+                        <div style={{ position: "relative" }}>
+                            <MdEmail
+                                style={{
+                                    position: "absolute",
+                                    left: "14px",
+                                    top: "50%",
+                                    transform: "translateY(-50%)",
+                                    color: "var(--color-text-muted)",
+                                    fontSize: "18px",
+                                }}
+                            />
+                            <input
+                                type="email"
+                                value={user?.email || ""}
+                                disabled
+                                className="custom-input"
+                                style={{
+                                    width: "100%",
+                                    padding: "12px 16px 12px 42px",
+                                    boxSizing: "border-box",
+                                    fontSize: "14px",
+                                    height: "46px",
+                                    backgroundColor: "var(--bg-sidebar-search)",
+                                    color: "var(--color-text-muted)",
+                                    cursor: "not-allowed",
+                                    border: "1px solid var(--color-border)",
+                                }}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Actions Row */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            style={{
+                                width: "100%",
+                                height: "46px",
+                                background: "var(--color-accent)",
+                                color: "#fff",
+                                border: "none",
+                                borderRadius: "8px",
+                                fontWeight: "600",
+                                fontSize: "15px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: "8px",
+                                boxShadow: "0 4px 12px rgba(0, 168, 132, 0.25)",
+                            }}
+                        >
+                            <MdSave style={{ fontSize: "18px" }} />
+                            {loading ? "Saving Changes..." : "Save Changes"}
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={handleLogout}
+                            style={{
+                                width: "100%",
+                                height: "46px",
+                                background: "transparent",
+                                color: "#ef4444",
+                                border: "1px solid #ef4444",
+                                borderRadius: "8px",
+                                fontWeight: "600",
+                                fontSize: "15px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                gap: "8px",
+                                transition: "all 0.2s ease",
+                            }}
+                            onMouseOver={(e) => {
+                                e.currentTarget.style.backgroundColor = "rgba(239, 68, 68, 0.06)";
+                            }}
+                            onMouseOut={(e) => {
+                                e.currentTarget.style.backgroundColor = "transparent";
+                            }}
+                        >
+                            <MdLogout style={{ fontSize: "18px" }} />
+                            Logout Session
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }

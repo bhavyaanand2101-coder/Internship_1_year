@@ -1,6 +1,94 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { editMessage, deleteMessage } from "../../services/chatService";
 import { formatMessageTime } from "../../utils/helpers";
+import { toast } from "react-hot-toast";
+import { 
+    MdPlayArrow, 
+    MdPause, 
+    MdEdit, 
+    MdDelete, 
+    MdReply, 
+    MdCheck 
+} from "react-icons/md";
+import { BsCheck, BsCheckAll } from "react-icons/bs";
+
+// Custom Audio Player Sub-component
+function VoiceMessagePlayer({ audioUrl }) {
+    const [playing, setPlaying] = useState(false);
+    const [duration, setDuration] = useState(0);
+    const [currentTime, setCurrentTime] = useState(0);
+    const audioRef = useRef(null);
+
+    const togglePlay = () => {
+        if (!audioRef.current) return;
+        if (playing) {
+            audioRef.current.pause();
+        } else {
+            audioRef.current.play().catch(e => console.warn(e));
+        }
+        setPlaying(!playing);
+    };
+
+    const handleTimeUpdate = () => {
+        if (audioRef.current) {
+            setCurrentTime(audioRef.current.currentTime);
+        }
+    };
+
+    const handleLoadedMetadata = () => {
+        if (audioRef.current) {
+            setDuration(audioRef.current.duration);
+        }
+    };
+
+    const handleAudioEnded = () => {
+        setPlaying(false);
+        setCurrentTime(0);
+    };
+
+    const handleProgressClick = (e) => {
+        if (!audioRef.current || !duration) return;
+        const rect = e.currentTarget.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const width = rect.width;
+        const percentage = clickX / width;
+        const nextTime = percentage * duration;
+        audioRef.current.currentTime = nextTime;
+        setCurrentTime(nextTime);
+    };
+
+    const formatTime = (timeSecs) => {
+        if (isNaN(timeSecs)) return "0:00";
+        const mins = Math.floor(timeSecs / 60);
+        const secs = Math.floor(timeSecs % 60);
+        return `${mins}:${secs.toString().padStart(2, "0")}`;
+    };
+
+    return (
+        <div className="audio-player-container">
+            <audio
+                ref={audioRef}
+                src={audioUrl}
+                onTimeUpdate={handleTimeUpdate}
+                onLoadedMetadata={handleLoadedMetadata}
+                onEnded={handleAudioEnded}
+                preload="metadata"
+            />
+            <button type="button" onClick={togglePlay} className="audio-controls">
+                {playing ? <MdPause size={20} /> : <MdPlayArrow size={20} />}
+            </button>
+            <div onClick={handleProgressClick} className="audio-progress-bar">
+                <div 
+                    className="audio-progress-filled" 
+                    style={{ width: `${duration ? (currentTime / duration) * 100 : 0}%` }}
+                />
+            </div>
+            <span className="audio-time-label">
+                {playing ? formatTime(currentTime) : formatTime(duration)}
+            </span>
+        </div>
+    );
+}
 
 function Message({ message, isMe, searchText, onReply, onImageClick }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -17,8 +105,8 @@ function Message({ message, isMe, searchText, onReply, onImageClick }) {
                 <mark
                     key={index}
                     style={{
-                        backgroundColor: "#ffe066",
-                        color: "black",
+                        backgroundColor: "#facc15",
+                        color: "#000000",
                         padding: "0 2px",
                         borderRadius: "2px",
                     }}
@@ -42,8 +130,9 @@ function Message({ message, isMe, searchText, onReply, onImageClick }) {
             setLoading(true);
             await editMessage(message.id, editText);
             setIsEditing(false);
+            toast.success("Message edited");
         } catch (err) {
-            alert("Failed to edit message.");
+            toast.error("Failed to edit message.");
         } finally {
             setLoading(false);
         }
@@ -54,10 +143,19 @@ function Message({ message, isMe, searchText, onReply, onImageClick }) {
         if (window.confirm("Delete this message?")) {
             try {
                 await deleteMessage(message.id);
+                toast.success("Message deleted");
             } catch (err) {
-                alert("Failed to delete message.");
+                toast.error("Failed to delete message.");
             }
         }
+    };
+
+    const renderStatusTicks = () => {
+        if (!isMe || message.deleted) return null;
+        if (message.status === "read") {
+            return <BsCheckAll style={{ color: "#53bdeb", fontSize: "16px", marginLeft: "4px" }} />;
+        }
+        return <BsCheck style={{ color: "var(--color-text-muted)", fontSize: "16px", marginLeft: "4px" }} />;
     };
 
     return (
@@ -67,19 +165,15 @@ function Message({ message, isMe, searchText, onReply, onImageClick }) {
             style={{
                 display: "flex",
                 justifyContent: isMe ? "flex-end" : "flex-start",
-                marginBottom: "8px",
+                marginBottom: "4px",
                 width: "100%",
+                padding: "0 8px",
             }}
         >
             <div
+                className={`chat-bubble ${isMe ? "sender" : "receiver"}`}
                 style={{
-                    backgroundColor: isMe ? "var(--wa-bubble-out)" : "var(--wa-bubble-in)",
-                    color: "var(--wa-text)",
-                    padding: "8px 12px",
-                    borderRadius: "8px",
-                    maxWidth: "65%",
-                    boxShadow: "0 1px 1px rgba(0,0,0,0.12)",
-                    boxSizing: "border-box",
+                    color: "var(--color-text)",
                     position: "relative",
                     display: "flex",
                     flexDirection: "column",
@@ -87,7 +181,15 @@ function Message({ message, isMe, searchText, onReply, onImageClick }) {
             >
                 {/* Sender Name for incoming messages */}
                 {!isMe && !message.deleted && (
-                    <span style={{ fontSize: "12px", fontWeight: "bold", color: "var(--wa-green-dark)", marginBottom: "4px" }}>
+                    <span 
+                        style={{ 
+                            fontSize: "12px", 
+                            fontWeight: "600", 
+                            color: "var(--color-accent-dark)", 
+                            marginBottom: "4px",
+                            display: "block" 
+                        }}
+                    >
                         {message.senderName}
                     </span>
                 )}
@@ -96,16 +198,16 @@ function Message({ message, isMe, searchText, onReply, onImageClick }) {
                 {message.replyTo && !message.deleted && (
                     <div
                         style={{
-                            background: "rgba(0,0,0,0.04)",
-                            padding: "6px 8px",
-                            borderLeft: "3.5px solid var(--wa-green)",
+                            background: "rgba(0,0,0,0.05)",
+                            padding: "6px 10px",
+                            borderLeft: "3.5px solid var(--color-accent)",
                             borderRadius: "4px",
                             marginBottom: "6px",
-                            fontSize: "12px",
+                            fontSize: "11.5px",
                         }}
                     >
-                        <div style={{ fontWeight: "bold", color: "var(--wa-green-dark)" }}>{message.replyTo.senderName}</div>
-                        <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "var(--wa-text-muted)" }}>
+                        <div style={{ fontWeight: "600", color: "var(--color-accent-dark)" }}>{message.replyTo.senderName}</div>
+                        <div style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "var(--color-text-muted)" }}>
                             {message.replyTo.image ? "📷 Image" : message.replyTo.text}
                         </div>
                     </div>
@@ -113,23 +215,31 @@ function Message({ message, isMe, searchText, onReply, onImageClick }) {
 
                 {/* Image message */}
                 {message.image && !message.deleted && (
-                    <img
-                        src={message.image}
-                        alt="Shared image"
-                        onClick={onImageClick}
-                        style={{
-                            maxWidth: "100%",
-                            maxHeight: "220px",
-                            borderRadius: "4px",
-                            marginBottom: "4px",
-                            cursor: "pointer",
-                        }}
-                    />
+                    <div style={{ position: "relative", marginBottom: "4px" }}>
+                        <img
+                            src={message.image}
+                            alt="Shared media"
+                            onClick={onImageClick}
+                            style={{
+                                maxWidth: "100%",
+                                maxHeight: "240px",
+                                borderRadius: "6px",
+                                cursor: "pointer",
+                                objectFit: "cover",
+                                border: "1px solid var(--color-border)",
+                            }}
+                        />
+                    </div>
+                )}
+
+                {/* Custom Audio Player for voice notes */}
+                {(message.mediaType === "audio" || message.audio) && !message.deleted && (
+                    <VoiceMessagePlayer audioUrl={message.audio || message.text} />
                 )}
 
                 {/* Text editor or display content */}
                 {isEditing ? (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginTop: "4px" }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "6px", marginTop: "4px", minWidth: "200px" }}>
                         <textarea
                             value={editText}
                             onChange={(e) => setEditText(e.target.value)}
@@ -137,27 +247,44 @@ function Message({ message, isMe, searchText, onReply, onImageClick }) {
                                 width: "100%",
                                 minHeight: "50px",
                                 boxSizing: "border-box",
-                                padding: "6px",
-                                fontSize: "14px",
-                                border: "1px solid var(--wa-border)",
-                                borderRadius: "4px",
+                                padding: "8px",
+                                fontSize: "13.5px",
+                                border: "1px solid var(--color-border)",
+                                borderRadius: "6px",
                                 outline: "none",
+                                backgroundColor: "var(--bg-panel)",
+                                color: "var(--color-text)",
                             }}
                             disabled={loading}
                         />
-                        <div style={{ display: "flex", gap: "6px", justifyContent: "flex-end" }}>
-                            <button onClick={() => setIsEditing(false)} disabled={loading} style={{ fontSize: "11px", cursor: "pointer", border: "none", background: "none" }}>Cancel</button>
-                            <button onClick={handleSave} disabled={loading} style={{ fontSize: "11px", cursor: "pointer", border: "none", background: "none", fontWeight: "bold", color: "var(--wa-green)" }}>Save</button>
+                        <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
+                            <button 
+                                onClick={() => setIsEditing(false)} 
+                                disabled={loading} 
+                                style={{ fontSize: "11px", cursor: "pointer", border: "none", background: "none", color: "var(--color-text-muted)" }}
+                            >
+                                Cancel
+                            </button>
+                            <button 
+                                onClick={handleSave} 
+                                disabled={loading} 
+                                style={{ fontSize: "11px", cursor: "pointer", border: "none", background: "none", fontWeight: "600", color: "var(--color-accent)" }}
+                            >
+                                Save
+                            </button>
                         </div>
                     </div>
                 ) : (
-                    <div style={{ fontSize: "14.2px", wordBreak: "break-word", whiteSpace: "pre-wrap", paddingRight: "30px" }}>
-                        {message.deleted ? (
-                            <span style={{ fontStyle: "italic", opacity: 0.6 }}>{message.text}</span>
-                        ) : (
-                            highlightText(message.text || "", searchText)
-                        )}
-                    </div>
+                    // Regular text message body
+                    !(message.mediaType === "audio" || message.audio) && (
+                        <div style={{ fontSize: "14px", wordBreak: "break-word", whiteSpace: "pre-wrap", paddingRight: "40px", marginBottom: "4px" }}>
+                            {message.deleted ? (
+                                <span style={{ fontStyle: "italic", opacity: 0.65 }}>🚫 This message was deleted</span>
+                            ) : (
+                                highlightText(message.text || "", searchText)
+                            )}
+                        </div>
+                    )
                 )}
 
                 {/* Bubble Footer details */}
@@ -166,50 +293,59 @@ function Message({ message, isMe, searchText, onReply, onImageClick }) {
                         display: "flex",
                         justifyContent: "flex-end",
                         alignItems: "center",
-                        gap: "4px",
+                        gap: "2px",
                         fontSize: "10px",
-                        color: "var(--wa-text-muted)",
+                        color: "var(--color-text-muted)",
                         marginTop: "2px",
                         alignSelf: "flex-end",
-                        position: "absolute",
-                        bottom: "4px",
-                        right: "8px",
                     }}
                 >
-                    {message.edited && !message.deleted && <span style={{ fontStyle: "italic" }}>edited</span>}
+                    {message.edited && !message.deleted && <span style={{ fontStyle: "italic", marginRight: "3px" }}>edited</span>}
                     <span>
                         {message.createdAt ? formatMessageTime(message.createdAt) : "Sending..."}
                     </span>
-                    {isMe && !message.deleted && (
-                        <span style={{ fontSize: "11px", color: message.status === "read" ? "#53bdeb" : "inherit" }}>
-                            {message.status === "read" ? "✓✓" : "✓"}
-                        </span>
-                    )}
+                    {renderStatusTicks()}
                 </div>
 
                 {/* Small inline hover options */}
                 {showActions && !message.deleted && !isEditing && (
                     <div
+                        className="animate-fade-in"
                         style={{
                             position: "absolute",
-                            top: "-22px",
+                            top: "-26px",
                             right: isMe ? "0" : "auto",
                             left: isMe ? "auto" : "0",
-                            backgroundColor: "#fff",
-                            border: "1px solid var(--wa-border)",
-                            borderRadius: "4px",
+                            backgroundColor: "var(--bg-panel)",
+                            border: "1px solid var(--color-border)",
+                            borderRadius: "6px",
                             display: "flex",
-                            gap: "4px",
-                            padding: "2px 6px",
+                            gap: "8px",
+                            padding: "3px 8px",
                             zIndex: 10,
-                            boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+                            boxShadow: "0 2px 8px var(--color-shadow)",
                         }}
                     >
-                        <button onClick={onReply} style={{ background: "none", border: "none", fontSize: "11px", cursor: "pointer", color: "var(--wa-text-muted)" }}>Reply</button>
+                        <button 
+                            onClick={onReply} 
+                            style={{ background: "none", border: "none", fontSize: "11px", cursor: "pointer", color: "var(--color-text-muted)", display: "flex", alignItems: "center", gap: "2px" }}
+                        >
+                            <MdReply /> Reply
+                        </button>
                         {isMe && (
                             <>
-                                <button onClick={() => setIsEditing(true)} style={{ background: "none", border: "none", fontSize: "11px", cursor: "pointer", color: "var(--wa-text-muted)" }}>Edit</button>
-                                <button onClick={handleDelete} style={{ background: "none", border: "none", fontSize: "11px", cursor: "pointer", color: "var(--wa-text-muted)" }}>Delete</button>
+                                <button 
+                                    onClick={() => setIsEditing(true)} 
+                                    style={{ background: "none", border: "none", fontSize: "11px", cursor: "pointer", color: "var(--color-text-muted)" }}
+                                >
+                                    Edit
+                                </button>
+                                <button 
+                                    onClick={handleDelete} 
+                                    style={{ background: "none", border: "none", fontSize: "11px", cursor: "pointer", color: "var(--color-text-muted)" }}
+                                >
+                                    Delete
+                                </button>
                             </>
                         )}
                     </div>

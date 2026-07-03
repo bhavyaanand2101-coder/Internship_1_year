@@ -1,0 +1,834 @@
+[
+  {
+    "id": 1,
+    "title": "Senior Frontend Developer",
+    "company": "Google",
+    "location": "Mountain View, CA",
+    "salary": "$140,000 - $180,000",
+    "experience": "5+ years",
+    "employmentType": "Full Time",
+    "skills": ["React", "TypeScript", "HTML5", "CSS3", "Vite", "Web Performance"],
+    "description": "We are looking for a Senior Frontend Developer to lead the design and development of next-generation search UI controls. You will collaborate with design teams and product owners to create premium user experiences.",
+    "requirements": [
+      "B.S. in Computer Science or equivalent practical experience.",
+      "Professional software development experience building consumer-facing web products.",
+      "Expert knowledge of React, modern JavaScript frameworks, and CSS architecture."
+    ],
+    "responsibilities": [
+      "Build highly responsive, accessible (A11y), and semantic web user interfaces.",
+      "Collaborate with backend engineers to define efficient GraphQL and REST APIs.",
+      "Mentor junior team members and conduct constructive code reviews."
+    ],
+    "benefits": ["Top-tier health care coverage", "Generous equity packages (GSUs)", "On-site gourmet meals and gyms", "Unlimited Paid Time Off (PTO)"],
+    "logo": "https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=100&h=100&fit=crop&q=80",
+    "postedAt": "1 day ago",
+    "category": "Software Development",
+    "remote": false
+  },
+  {
+    "id": 2,
+    "title": "Software Development Engineer II (React)",
+    "company": "Amazon",
+    "location": "Seattle, WA",
+    "salary": "$130,000 - $165,000",
+    "experience": "3 - 5 years",
+    "employmentType": "Full Time",
+    "skills": ["React", "JavaScript", "AWS", "Redux Toolkit", "RESTful APIs"],
+    "description": "Amazon Web Services is looking for a Frontend Engineer to help build dynamic administration dashboards for serverless cloud offerings. Your work will empower millions of developers worldwide.",
+    "requirements": [
+      "3+ years of professional web development experience.",
+      "Strong understanding of React state management and asynchronous data flows.",
+      "Familiarity with cloud hosting services (AWS Amplify, S3, CloudFront)."
+    ],
+    "responsibilities": [
+      "Own frontend features from inception to deployment.",
+      "Optimize web portal performance for low-bandwidth and high-latency clients.",
+      "Write high-quality unit and integration tests."
+    ],
+    "benefits": ["Competitive base salary and sign-on bonus", "Comprehensive dental and vision insurance", "401(k) matching", "Flexible hybrid work arrangements"],
+    "logo": "https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?w=100&h=100&fit=crop&q=80",
+    "postedAt": "2 days ago",
+    "category": "Software Development",
+    "remote": false
+  },
+  {
+    "id": 3,
+    "title": "Lead UI / UX Designer",
+    "company": "Figma",
+    "location": "San Francisco, CA",
+    "salary": "$150,000 - $190,000",
+    "experience": "6+ years",
+    "employmentType": "Full Time",
+    "skills": ["Figma", "User Research", "Interaction Design", "Prototyping", "Design Systems"],
+    "description": "Figma is seeking a Lead UI/UX Designer to own the evolution of our design system. You will research and design innovative vector editing tools and collaborative multiplayer features.",
+    "requirements": [
+      "Portfolio demonstrating complex interaction design systems and research methodologies.",
+      "Experience conducting user interviews and usability tests.",
+      "Understanding of frontend styling capabilities (CSS Variables, Flexbox, CSS Grid)."
+    ],
+    "responsibilities": [
+      "Establish and distribute visual guidelines, layout templates, and icon libraries.",
+      "Deliver pixel-perfect visual mockups, wireframes, and animated prototypes.",
+      "Work closely with engineers to ensure design specifications are accurately met."
+    ],
+    "benefits": ["Equity ownership in Figma", "Wellness and fitness monthly stipends", "Home office setup reimbursement", "Quarterly mental health recharge days"],
+    "logo": "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=100&h=100&fit=crop&q=80",
+    "postedAt": "3 days ago",
+    "category": "UI/UX",
+    "remote": false
+  },
+  {
+    "id": 4,
+    "title": "UI / UX Designer (Internship)",
+    "company": "Adobe",
+    "location": "San Jose, CA",
+    "salary": "$35 - $45 / hour",
+    "experience": "0 - 1 years",
+    "employmentType": "Internship",
+    "skills": ["Adobe XD", "Illustrator", "Wireframing", "Typography", "Color Theory"],
+    "description": "Adobe Creative Cloud is looking for a creative UI/UX intern for Fall 2026. You will work alongside senior designers to refine user flows, draft vector icons, and document research assets.",
+    "requirements": [
+      "Currently enrolled in or recently graduated from a Design, HCI, or related degree.",
+      "Proficient with design applications (XD, Figma, Sketch).",
+      "Eager to learn, receive feedback, and iterate rapidly on layouts."
+    ],
+    "responsibilities": [
+      "Create alternative layout structures and user flows for creative panels.",
+      "Participate in design critique sessions and document specifications.",
+      "Assist in preparing asset exports for desktop and mobile releases."
+    ],
+    "benefits": ["Paid mentorship from design industry veterans", "Adobe Creative Cloud free subscription", "Intern housing allowance support", "Regular community networking events"],
+    "logo": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100&h=100&fit=crop&q=80",
+    "postedAt": "4 days ago",
+    "category": "UI/UX",
+    "remote": false
+  },
+  {
+    "id": 5,
+    "title": "Data Scientist - Personalization",
+    "company": "Netflix",
+    "location": "Los Gatos, CA",
+    "salary": "$170,000 - $220,000",
+    "experience": "4+ years",
+    "employmentType": "Full Time",
+    "skills": ["Python", "Machine Learning", "SQL", "Spark", "A/B Testing"],
+    "description": "We want an analytical Data Scientist to join our recommendation systems squad. You will design, build, and evaluate machine learning models that decide what shows users see on their homepages.",
+    "requirements": [
+      "Master's or Ph.D. in Statistics, Computer Science, Economics, or Quantitative field.",
+      "Deep understanding of probability theory, statistics, and machine learning models.",
+      "Expert SQL query construction and scripting in Python/R."
+    ],
+    "responsibilities": [
+      "Build recommendation pipelines using collaborative filtering and neural models.",
+      "Conduct high-velocity A/B testing models on algorithmic parameters.",
+      "Present analysis results and dashboard models to product management."
+    ],
+    "benefits": ["Top of market base salary", "Generous Netflix stock purchase plans", "100% covered health, dental, and vision", "Flexible vacation policy"],
+    "logo": "https://images.unsplash.com/photo-1557683316-973673baf926?w=100&h=100&fit=crop&q=80",
+    "postedAt": "5 days ago",
+    "category": "Data Science",
+    "remote": false
+  },
+  {
+    "id": 6,
+    "title": "Data Analyst (Contract)",
+    "company": "Meta",
+    "location": "Remote",
+    "salary": "$60 - $80 / hour",
+    "experience": "2+ years",
+    "employmentType": "Contract",
+    "skills": ["Tableau", "SQL", "Excel", "Data Visualization", "Python"],
+    "description": "Meta is hiring a contract Data Analyst to work with our Ads Integrity group. You will write complex queries to find anomalies, inspect bad actor trends, and construct visual dashboards.",
+    "requirements": [
+      "2+ years of experience in data analytics or business intelligence.",
+      "Advanced SQL skills (Window functions, CTEs, complex Joins).",
+      "Familiarity with visual analytics software like Tableau or PowerBI."
+    ],
+    "responsibilities": [
+      "Extract and clean data streams from massive data warehouses.",
+      "Build, test, and maintain reporting dashboards for security leaders.",
+      "Document metrics calculations and summarize report sheets."
+    ],
+    "benefits": ["Premium hourly contract pay", "Access to state-of-the-art work hardware", "Accrued paid sick leave benefits", "Fully remote flexibility"],
+    "logo": "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=100&h=100&fit=crop&q=80",
+    "postedAt": "6 days ago",
+    "category": "Data Science",
+    "remote": true
+  },
+  {
+    "id": 7,
+    "title": "Digital Marketing Manager",
+    "company": "TikTok",
+    "location": "Los Angeles, CA",
+    "salary": "$90,000 - $125,000",
+    "experience": "4+ years",
+    "employmentType": "Full Time",
+    "skills": ["SEO", "Google Analytics", "Paid Ads", "Content Strategy", "Social Media"],
+    "description": "We are seeking an energetic Digital Marketing Manager to guide our customer growth programs. You will run multi-channel campaigns, oversee budget allocations, and analyze conversions.",
+    "requirements": [
+      "Bachelor's degree in Marketing, Communications, or Business Administration.",
+      "Proven track record managing paid advertising budgets ($50k+/month).",
+      "Expert knowledge of search engine optimization (SEO) algorithms."
+    ],
+    "responsibilities": [
+      "Design, build, and optimize paid acquisition campaigns across channels.",
+      "Create monthly performance dashboards covering ROI, CAC, and LTV.",
+      "Collaborate with content teams to deliver ads graphics and copywriting."
+    ],
+    "benefits": ["Competitive base salary + performance bonuses", "Comprehensive health and retirement matching", "Free lunch vouchers and gym membership discounts", "Annual learning development credits"],
+    "logo": "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=100&h=100&fit=crop&q=80",
+    "postedAt": "1 week ago",
+    "category": "Marketing",
+    "remote": false
+  },
+  {
+    "id": 8,
+    "title": "Financial Analyst - Strategic Planning",
+    "company": "Microsoft",
+    "location": "Redmond, WA",
+    "salary": "$95,000 - $130,000",
+    "experience": "3+ years",
+    "employmentType": "Full Time",
+    "skills": ["Excel", "Financial Modeling", "Corporate Finance", "SQL", "PowerBI"],
+    "description": "Microsoft is seeking a Financial Analyst to join our Gaming division (Xbox). You will evaluate investments, draft financial projections, and report performance to division leadership.",
+    "requirements": [
+      "B.S. in Finance, Accounting, Economics, or related fields.",
+      "Strong skills building corporate financial models and formulas in Excel.",
+      "Solid knowledge of corporate valuation and accounting principles."
+    ],
+    "responsibilities": [
+      "Track and model monthly operating budgets, revenues, and costs.",
+      "Perform pricing elasticity and investment ROI simulations.",
+      "Prepare presentation decks for executive review boards."
+    ],
+    "benefits": ["Competitive compensation and stock options", "401(k) matching up to 50%", "On-campus child care resources", "Excellent paid parental leave plans"],
+    "logo": "https://images.unsplash.com/photo-1625014020903-e329f586c990?w=100&h=100&fit=crop&q=80",
+    "postedAt": "1 week ago",
+    "category": "Finance",
+    "remote": false
+  },
+  {
+    "id": 9,
+    "title": "Technical Recruiter",
+    "company": "Meta",
+    "location": "Menlo Park, CA",
+    "salary": "$85,000 - $115,000",
+    "experience": "2+ years",
+    "employmentType": "Full Time",
+    "skills": ["Sourcing", "Applicant Tracking", "Technical Recruiting", "LinkedIn Recruiter", "Negotiation"],
+    "description": "Meta is hiring a Technical Recruiter to build engineering teams. You will source candidate profiles, coordinate testing systems, and handle salary negotiation packages.",
+    "requirements": [
+      "2+ years of experience sourcing software engineers and product managers.",
+      "Proficient using applicant tracking databases (ATS) and LinkedIn Recruiter.",
+      "Stellar written communication skills and active outbound outreach experience."
+    ],
+    "responsibilities": [
+      "Maintain active, diverse candidate streams for product squads.",
+      "Own candidate interactions from initial screen to offer signing.",
+      "Collaborate with engineering directors to define hiring targets."
+    ],
+    "benefits": ["Lucrative commission bonuses for hires", "Meta wellness and health plans", "Metrolink travel subsidy passes", "20 paid days off annually"],
+    "logo": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100&h=100&fit=crop&q=80",
+    "postedAt": "Yesterday",
+    "category": "Human Resources",
+    "remote": false
+  },
+  {
+    "id": 10,
+    "title": "Human Resources Coordinator",
+    "company": "Spotify",
+    "location": "New York, NY",
+    "salary": "$65,000 - $85,000",
+    "experience": "1 - 3 years",
+    "employmentType": "Full Time",
+    "skills": ["HRIS", "Onboarding", "Employee Relations", "Excel", "Event Planning"],
+    "description": "Join Spotify's HR team as a Coordinator! You will facilitate new-hire integrations, organize company benefits seminars, and manage employee records databases.",
+    "requirements": [
+      "1+ years of general HR administrative or operations experience.",
+      "Experience navigating Human Resource Information Systems (HRIS).",
+      "Highly organized personality with strong attention to details."
+    ],
+    "responsibilities": [
+      "Coordinate weekly employee onboarding programs.",
+      "Resolve general benefits and payroll inquiries.",
+      "Maintain and audit digital personnel folders and records."
+    ],
+    "benefits": ["Free Spotify Premium accounts for life", "Premium global medical insurance", "6 months fully paid global parental leave", "Modern offices in Manhattan"],
+    "logo": "https://images.unsplash.com/photo-1614680376593-902f74fa0d41?w=100&h=100&fit=crop&q=80",
+    "postedAt": "3 days ago",
+    "category": "Human Resources",
+    "remote": false
+  },
+  {
+    "id": 11,
+    "title": "Frontend Developer (Internship)",
+    "company": "Slack",
+    "location": "Remote",
+    "salary": "$40 - $50 / hour",
+    "experience": "0 - 1 years",
+    "employmentType": "Internship",
+    "skills": ["HTML5", "CSS3", "JavaScript", "React", "Git"],
+    "description": "Slack is searching for a Frontend Intern to support web accessibility. You will write code targeting color adjustments, screen reader descriptors, and key bindings.",
+    "requirements": [
+      "Currently pursuing a degree in CS, IT, Web Design, or similar.",
+      "Basic understanding of modern HTML, CSS semantics, and Javascript.",
+      "Familiarity with Git repository workflows."
+    ],
+    "responsibilities": [
+      "Diagnose and fix basic web access bugs.",
+      "Write standard, clean frontend components.",
+      "Document testing scenarios for screen readers."
+    ],
+    "benefits": ["Competitive internship hourly pay", "Provided MacBook Pro laptop", "Slack free team plan subscriptions", "Flexible remote coordinates"],
+    "logo": "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=100&h=100&fit=crop&q=80",
+    "postedAt": "4 days ago",
+    "category": "Software Development",
+    "remote": true
+  },
+  {
+    "id": 12,
+    "title": "Machine Learning Research Engineer",
+    "company": "OpenAI",
+    "location": "San Francisco, CA",
+    "salary": "$190,000 - $250,000",
+    "experience": "4+ years",
+    "employmentType": "Full Time",
+    "skills": ["PyTorch", "Python", "Transformers", "CUDA", "Reinforcement Learning"],
+    "description": "We are seeking a Machine Learning Engineer to refine Large Language Models. You will optimize tensor layout patterns, implement attention algorithms, and construct datasets.",
+    "requirements": [
+      "Strong coding proficiency in Python and C++.",
+      "Deep mathematical understanding of deep learning models.",
+      "Experience optimizing large PyTorch models."
+    ],
+    "responsibilities": [
+      "Train model layers across huge distributed systems.",
+      "Implement novel inference accelerators and custom kernels.",
+      "Evaluate model performance metrics and behaviors."
+    ],
+    "benefits": ["Lucrative startup equity options", "Unlimited sick leave and holidays", "Fully paid health premiums", "San Francisco downtown meals"],
+    "logo": "https://images.unsplash.com/photo-1677442136019-21780efad99a?w=100&h=100&fit=crop&q=80",
+    "postedAt": "Just now",
+    "category": "Software Development",
+    "remote": false
+  },
+  {
+    "id": 13,
+    "title": "Staff Product Designer",
+    "company": "Stripe",
+    "location": "Remote",
+    "salary": "$160,000 - $210,000",
+    "experience": "7+ years",
+    "employmentType": "Full Time",
+    "skills": ["Product Design", "Design Systems", "Prototyping", "User Journeys", "API Usability"],
+    "description": "Stripe is looking for a Staff Product Designer to reinvent developer dashboard portals. You will build clean visual layouts that simplify massive datasets, currencies, and charts.",
+    "requirements": [
+      "7+ years designing enterprise applications or visual developer products.",
+      "Proficient designer with strong typography, spacing, and grid skills.",
+      "Capable of writing basic code blocks to test layout patterns."
+    ],
+    "responsibilities": [
+      "Lead UX redesigns for core payment dashboards.",
+      "Synthesize layout prototypes to present to engineering boards.",
+      "Mentor and guide visual guidelines across Stripe products."
+    ],
+    "benefits": ["Stripe stock offerings", "Health saving account (HSA) subsidies", "Work from anywhere stipends ($2k/year)", "Generous learning allocations"],
+    "logo": "https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=100&h=100&fit=crop&q=80",
+    "postedAt": "1 day ago",
+    "category": "UI/UX",
+    "remote": true
+  },
+  {
+    "id": 14,
+    "title": "Growth Marketing Analyst",
+    "company": "Uber",
+    "location": "New York, NY",
+    "salary": "$80,000 - $110,000",
+    "experience": "2 - 4 years",
+    "employmentType": "Full Time",
+    "skills": ["Google Ads", "SQL", "Excel", "Data Attribution", "A/B Testing"],
+    "description": "Optimize driver and rider acquisition pipelines. You will coordinate localized paid search campaigns, oversee growth budgets, and run analytical funnels.",
+    "requirements": [
+      "2+ years analyzing mobile growth performance metrics (CPI, CPA, ROAS).",
+      "Comfortable querying customer tables using basic SQL statements.",
+      "Experience setting up Google Tag Manager and Firebase Analytics."
+    ],
+    "responsibilities": [
+      "Manage paid Google/Apple ads campaigns across cities.",
+      "Coordinate landing page conversion tests with design teams.",
+      "Deliver performance reports to the marketing director weekly."
+    ],
+    "benefits": ["Competitive salary + Uber credits monthly", "401(k) retirement options", "Premium medical coverage", "Gym membership discounts"],
+    "logo": "https://images.unsplash.com/photo-1549576490-b0b4831ef60a?w=100&h=100&fit=crop&q=80",
+    "postedAt": "2 days ago",
+    "category": "Marketing",
+    "remote": false
+  },
+  {
+    "id": 15,
+    "title": "Corporate Controller",
+    "company": "Netflix",
+    "location": "Los Gatos, CA",
+    "salary": "$160,000 - $205,000",
+    "experience": "6+ years",
+    "employmentType": "Full Time",
+    "skills": ["Corporate Accounting", "SOX", "General Ledger", "Auditing", "Excel"],
+    "description": "We are seeking a Corporate Controller to manage accounting operations, general ledgers, tax compliance filings, and external auditing programs.",
+    "requirements": [
+      "CPA license and degree in Accounting or Finance.",
+      "6+ years of corporate accounting experience, preferably in tech or media.",
+      "Familiarity with SOX compliance codes and SEC filing guidelines."
+    ],
+    "responsibilities": [
+      "Prepare monthly corporate balance sheets and income reports.",
+      "Manage relations with internal and external audit partners.",
+      "Implement ledger recording software tools."
+    ],
+    "benefits": ["Top of market pay scale", "Netflix stock options benefits", "Comprehensive medical and wellness plans", "Flexible vacation schedules"],
+    "logo": "https://images.unsplash.com/photo-1557683316-973673baf926?w=100&h=100&fit=crop&q=80",
+    "postedAt": "3 days ago",
+    "category": "Finance",
+    "remote": false
+  },
+  {
+    "id": 16,
+    "title": "Backend Software Engineer",
+    "company": "Spotify",
+    "location": "Stockholm, Sweden",
+    "salary": "$110,000 - $145,000",
+    "experience": "3+ years",
+    "employmentType": "Full Time",
+    "skills": ["Java", "Docker", "Kubernetes", "Microservices", "gRPC"],
+    "description": "Spotify's infrastructure squad is looking for a backend engineer to design microservices that serve billions of audio stream handshakes daily with extremely low latency.",
+    "requirements": [
+      "Strong skills compiling Java or Go in enterprise platforms.",
+      "Familiarity constructing and orchestrating Docker containers.",
+      "Knowledge of relational database queries and cache strategies (Redis)."
+    ],
+    "responsibilities": [
+      "Refactor backend services to improve system uptime.",
+      "Collaborate with client engineers to verify API structures.",
+      "Manage cloud platform resource limits using Kubernetes configurations."
+    ],
+    "benefits": ["Spotify lifetime accounts", "Stock options and health packages", "Relocation assistance to Sweden", "Stockholm commuter ticket programs"],
+    "logo": "https://images.unsplash.com/photo-1614680376593-902f74fa0d41?w=100&h=100&fit=crop&q=80",
+    "postedAt": "4 days ago",
+    "category": "Software Development",
+    "remote": false
+  },
+  {
+    "id": 17,
+    "title": "Data Analyst (Internship)",
+    "company": "Amazon",
+    "location": "Boston, MA",
+    "salary": "$30 - $40 / hour",
+    "experience": "0 - 1 years",
+    "employmentType": "Internship",
+    "skills": ["SQL", "Excel", "Data Visualization", "R", "Statistics"],
+    "description": "Amazon Logistics is recruiting a Data Analyst Intern. You will query shipping networks databases, clean reports, and construct tables analyzing travel durations.",
+    "requirements": [
+      "Enrolled in a related quantitative bachelor's program.",
+      "Capable of writing SQL queries (Select, Join, Group By).",
+      "Strong analytical mind with solid understanding of statistical models."
+    ],
+    "responsibilities": [
+      "Analyze shipping durations across depots.",
+      "Build Excel metrics sheets and clean dashboards.",
+      "Present data analysis reports to supervisors."
+    ],
+    "benefits": ["Competitive internship hourly pay", "MacBook Pro hardware provided", "Amazon shipping discount vouchers", "Networking sessions"],
+    "logo": "https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?w=100&h=100&fit=crop&q=80",
+    "postedAt": "Yesterday",
+    "category": "Data Science",
+    "remote": false
+  },
+  {
+    "id": 18,
+    "title": "Senior Product Analyst",
+    "company": "Airbnb",
+    "location": "San Francisco, CA",
+    "salary": "$145,000 - $185,000",
+    "experience": "5+ years",
+    "employmentType": "Full Time",
+    "skills": ["SQL", "A/B Testing", "Python", "Mixpanel", "Data Analysis"],
+    "description": "Evaluate checkout experience conversions. You will construct testing structures, identify user drop-off flows, and present user growth strategies.",
+    "requirements": [
+      "5+ years analyzing product checkout funnels.",
+      "Strong SQL query formulation and A/B test setups.",
+      "Ability to write Python pandas scripting to compile tables."
+    ],
+    "responsibilities": [
+      "Set up tracking metrics for checkout UI panels.",
+      "Formulate recommendations to reduce booking failures.",
+      "Design metrics graphs using Mixpanel."
+    ],
+    "benefits": ["Airbnb booking credits ($2k/year)", "Healthcare subsidies coverage", "Work from anywhere flexibility", "Menlo Park offices access"],
+    "logo": "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=100&h=100&fit=crop&q=80",
+    "postedAt": "2 weeks ago",
+    "category": "Data Science",
+    "remote": false
+  },
+  {
+    "id": 19,
+    "title": "Marketing Associate (Contract)",
+    "company": "Canva",
+    "location": "Remote",
+    "salary": "$30 - $45 / hour",
+    "experience": "1+ years",
+    "employmentType": "Contract",
+    "skills": ["Copywriting", "Social Media", "Canva", "Email Campaigns", "Content Strategy"],
+    "description": "Design email campaigns and draft copywriting copy highlighting design resources. You will schedule weekly posts, track reviews, and manage subscriber mail lists.",
+    "requirements": [
+      "1+ years writing customer-facing copy.",
+      "Experienced using Canva to design email blocks.",
+      "Familiar with email platforms like Mailchimp or HubSpot."
+    ],
+    "responsibilities": [
+      "Draft promotional copy for newsletters.",
+      "Schedule social posts across platforms.",
+      "Review campaign email open and conversion statistics."
+    ],
+    "benefits": ["Premium contract hourly pay", "Canva Pro free access", "Flexible work layout hours", "Monthly learning allowances"],
+    "logo": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100&h=100&fit=crop&q=80",
+    "postedAt": "1 week ago",
+    "category": "Marketing",
+    "remote": true
+  },
+  {
+    "id": 20,
+    "title": "HR Manager",
+    "company": "Adobe",
+    "location": "Remote",
+    "salary": "$110,000 - $145,000",
+    "experience": "5+ years",
+    "employmentType": "Full Time",
+    "skills": ["Employee Relations", "Compensation Plans", "HRIS", "Compliance", "Performance Reviews"],
+    "description": "Adobe is seeking an HR Manager to manage compliance structures, employee conflict resolution procedures, and compensation evaluations for remote divisions.",
+    "requirements": [
+      "5+ years of human resource management experience.",
+      "Strong familiarity with state labor codes and standards.",
+      "Excellent communication and counseling capabilities."
+    ],
+    "responsibilities": [
+      "Manage remote employee conflict resolutions.",
+      "Audit state labor tax filings.",
+      "Analyze division performance evaluations quarterly."
+    ],
+    "benefits": ["Adobe wellness premium packages", "Equity stock allocations options", "Home workspace setup grants", "Adobe Cloud premium access"],
+    "logo": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100&h=100&fit=crop&q=80",
+    "postedAt": "2 weeks ago",
+    "category": "Human Resources",
+    "remote": true
+  },
+  {
+    "id": 21,
+    "title": "Creative Content Designer",
+    "company": "Netflix",
+    "location": "Hollywood, CA",
+    "salary": "$95,000 - $130,000",
+    "experience": "3+ years",
+    "employmentType": "Full Time",
+    "skills": ["Illustrator", "Photoshop", "Motion Design", "Visual Arts", "Branding"],
+    "description": "Create promotional graphics highlighting series launches. You will design visual key arts, edit trailer blocks, and design show posters.",
+    "requirements": [
+      "Degree in Graphic Design, Visual Arts, or similar portfolio.",
+      "3+ years creating visual arts assets inside agencies.",
+      "Proficient using Adobe Illustrator, Photoshop, and After Effects."
+    ],
+    "responsibilities": [
+      "Deliver series teaser graphics assets.",
+      "Collaborate with writers to sync copy layouts.",
+      "Establish show branding guidelines folders."
+    ],
+    "benefits": ["Top of market base compensation", "Netflix stock buy programs", "Hollywood studios access vouchers", "Medical premium coverages"],
+    "logo": "https://images.unsplash.com/photo-1557683316-973673baf926?w=100&h=100&fit=crop&q=80",
+    "postedAt": "3 days ago",
+    "category": "UI/UX",
+    "remote": false
+  },
+  {
+    "id": 22,
+    "title": "Backend Engineer (Node.js)",
+    "company": "GitHub",
+    "location": "Remote",
+    "salary": "$125,000 - $160,000",
+    "experience": "4+ years",
+    "employmentType": "Full Time",
+    "skills": ["Node.js", "Express", "TypeScript", "PostgreSQL", "Redis"],
+    "description": "GitHub is searching for a Backend Developer to join our integrations squad. You will optimize API controllers, manage database indices, and design cache algorithms.",
+    "requirements": [
+      "4+ years compiling server applications using Node.js.",
+      "Expert knowledge of SQL queries and transactional structures.",
+      "Solid knowledge of asynchronous queue workers (BullMQ, Redis)."
+    ],
+    "responsibilities": [
+      "Refactor repository webhook processing engines.",
+      "Construct relational database models in PostgreSQL.",
+      "Deliver unit tests covering key integrations."
+    ],
+    "benefits": ["GitHub stock bonuses", "MacBook Pro hardware kit", "Co-working membership subsidies", "Home internet reimbursement"],
+    "logo": "https://images.unsplash.com/photo-1618401471353-b98aedd07871?w=100&h=100&fit=crop&q=80",
+    "postedAt": "Just now",
+    "category": "Software Development",
+    "remote": true
+  },
+  {
+    "id": 23,
+    "title": "Staff ML Infrastructure Engineer",
+    "company": "Meta",
+    "location": "Menlo Park, CA",
+    "salary": "$180,000 - $230,000",
+    "experience": "6+ years",
+    "employmentType": "Full Time",
+    "skills": ["PyTorch", "Python", "Kubernetes", "CUDA", "Model Serving"],
+    "description": "Manage computing resources allocations. You will build container scripts scaling deep learning clusters over hundreds of GPUs.",
+    "requirements": [
+      "6+ years compiling computing scripts inside large tech teams.",
+      "Deep understanding of server architectures and cluster environments.",
+      "Proficient using Kubernetes configurations."
+    ],
+    "responsibilities": [
+      "Manage GPU node resource allocations.",
+      "Refactor deep learning pipelines scripts.",
+      "Audit model inference latencies graphs."
+    ],
+    "benefits": ["Meta equity allocations options", "Metrolink travel subsidy passes", "Top medical premium coverage", "Metra shuttle tickets"],
+    "logo": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100&h=100&fit=crop&q=80",
+    "postedAt": "Yesterday",
+    "category": "Software Development",
+    "remote": false
+  },
+  {
+    "id": 24,
+    "title": "Lead Product Analyst",
+    "company": "Adobe",
+    "location": "San Jose, CA",
+    "salary": "$140,000 - $175,000",
+    "experience": "5+ years",
+    "employmentType": "Full Time",
+    "skills": ["SQL", "Python", "Tableau", "Excel", "A/B Testing"],
+    "description": "Analyze creative application subscription flows. You will isolate customer drop-off steps, design tracking systems, and compile growth indicators.",
+    "requirements": [
+      "5+ years compiling business intelligence statistics.",
+      "Expert SQL query formulations and datasets tables cleaning.",
+      "Familiarity with visual reporting toolkits like Tableau."
+    ],
+    "responsibilities": [
+      "Audit subscription billing drop-off points.",
+      "Deliver dashboard graphs detailing churn metrics.",
+      "Formulate recommendations to reduce transaction failures."
+    ],
+    "benefits": ["Adobe wellness health premium", "San Jose headquarters gyms", "Stock options benefits packages", "Annual learning allocations"],
+    "logo": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100&h=100&fit=crop&q=80",
+    "postedAt": "Yesterday",
+    "category": "Data Science",
+    "remote": false
+  },
+  {
+    "id": 25,
+    "title": "Corporate Recruiter (Contract)",
+    "company": "Amazon",
+    "location": "Boston, MA",
+    "salary": "$45 - $60 / hour",
+    "experience": "2+ years",
+    "employmentType": "Contract",
+    "skills": ["Recruiting", "Sourcing", "LinkedIn Recruiter", "ATS", "Onboarding"],
+    "description": "Manage recruitment outreach programs for Amazon logistics hubs. You will screen applicants, schedule interviews, and draft onboarding booklets.",
+    "requirements": [
+      "2+ years administrative recruiting experience.",
+      "Proficient using applicant tracking tools and databases.",
+      "Excellent communication and candidate interface skills."
+    ],
+    "responsibilities": [
+      "Review weekly applicant spreadsheets.",
+      "Schedule interviews calendars for managers.",
+      "Draft standard offer letter packs."
+    ],
+    "benefits": ["Competitive contract pay rates", "Boston offices workspace access", "Accrued sick leave credits", "Amazon vouchers packs"],
+    "logo": "https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?w=100&h=100&fit=crop&q=80",
+    "postedAt": "3 days ago",
+    "category": "Human Resources",
+    "remote": false
+  },
+  {
+    "id": 26,
+    "title": "Investment Analyst",
+    "company": "Google",
+    "location": "Mountain View, CA",
+    "salary": "$110,000 - $145,000",
+    "experience": "2 - 4 years",
+    "employmentType": "Full Time",
+    "skills": ["Corporate Finance", "Financial Modeling", "Excel", "Data Attribution", "PowerBI"],
+    "description": "Evaluate strategic investments acquisitions. You will compile business statistics, construct financial reports, and model transaction payouts.",
+    "requirements": [
+      "Degree in Finance, Economics, or matching quant fields.",
+      "2+ years modeling financial records spreadsheets.",
+      "Strong valuation and market metrics analysis skills."
+    ],
+    "responsibilities": [
+      "Compile market metrics spreadsheets.",
+      "Perform investment payout models.",
+      "Deliver valuation report files."
+    ],
+    "benefits": ["Google equity options packs", "Gourmet lunch cafes access", "On-site wellness systems", "Metrolink travel passes"],
+    "logo": "https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=100&h=100&fit=crop&q=80",
+    "postedAt": "4 days ago",
+    "category": "Finance",
+    "remote": false
+  },
+  {
+    "id": 27,
+    "title": "Creative Content Designer (Contract)",
+    "company": "Figma",
+    "location": "Remote",
+    "salary": "$40 - $55 / hour",
+    "experience": "2+ years",
+    "employmentType": "Contract",
+    "skills": ["Figma", "Illustrator", "Content Strategy", "Digital Art", "Social Media"],
+    "description": "Create creative templates highlighting Figma additions. You will compile UI kits, design visual vectors, and draft vector panels.",
+    "requirements": [
+      "2+ years visual graphic design experience.",
+      "Proficient using Figma vectors tools and Illustrator.",
+      "Strong portfolio demonstrating layout grids balance."
+    ],
+    "responsibilities": [
+      "Deliver weekly UI template files.",
+      "Draft promotional graphics vectors.",
+      "Participate in design sync calls."
+    ],
+    "benefits": ["Figma Pro accounts subscription", "Home network stipend options", "Flexible project deadlines", "Design community invites"],
+    "logo": "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=100&h=100&fit=crop&q=80",
+    "postedAt": "1 week ago",
+    "category": "UI/UX",
+    "remote": true
+  },
+  {
+    "id": 28,
+    "title": "Staff Product Designer",
+    "company": "Meta",
+    "location": "Menlo Park, CA",
+    "salary": "$170,000 - $215,000",
+    "experience": "6+ years",
+    "employmentType": "Full Time",
+    "skills": ["Product Design", "Design Systems", "Prototyping", "UX", "HTML/CSS"],
+    "description": "Meta is searching for a Staff UX Designer to refine interface blocks. You will guide typography choices, construct mockup grids, and test animations.",
+    "requirements": [
+      "6+ years designing commercial software interfaces.",
+      "Stellar layout design skills with typography balancing.",
+      "Familiarity compiling layout prototypes in HTML."
+    ],
+    "responsibilities": [
+      "Manage interface systems libraries.",
+      "Redesign settings pages user flows.",
+      "Conduct usability tests loops."
+    ],
+    "benefits": ["Meta options stock benefits", "Metrolink travel passes options", "Excellent parental leave plans", "Menlo Park gyms access"],
+    "logo": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100&h=100&fit=crop&q=80",
+    "postedAt": "2 weeks ago",
+    "category": "UI/UX",
+    "remote": false
+  },
+  {
+    "id": 29,
+    "title": "Lead Data Scientist",
+    "company": "Amazon",
+    "location": "Seattle, WA",
+    "salary": "$165,000 - $210,000",
+    "experience": "6+ years",
+    "employmentType": "Full Time",
+    "skills": ["Machine Learning", "Python", "SQL", "Big Data", "AWS"],
+    "description": "Lead algorithms modeling driver optimization networks. You will supervise team members, configure cloud servers, and review research papers.",
+    "requirements": [
+      "Degree in Machine Learning, Statistics, or similar.",
+      "6+ years modeling customer analytics files.",
+      "Familiarity with cloud distributed databases systems."
+    ],
+    "responsibilities": [
+      "Supervise ML engineers projects.",
+      "Refactor network routing datasets.",
+      "Present research charts to directors."
+    ],
+    "benefits": ["Amazon GSU shares awards", "Comprehensive medical options", "401(k) retirement matching", "Hybrid work layout support"],
+    "logo": "https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?w=100&h=100&fit=crop&q=80",
+    "postedAt": "2 days ago",
+    "category": "Data Science",
+    "remote": false
+  },
+  {
+    "id": 30,
+    "title": "Growth Marketing Specialist",
+    "company": "Spotify",
+    "location": "Remote",
+    "salary": "$85,000 - $115,000",
+    "experience": "3+ years",
+    "employmentType": "Full Time",
+    "skills": ["A/B Testing", "Mixpanel", "SQL", "Paid Search", "Growth Hacking"],
+    "description": "Optimize Spotify premium subscription funnels. You will monitor customer sign-up events, design campaign promotions, and compile customer segments.",
+    "requirements": [
+      "3+ years tracking mobile customer conversions statistics.",
+      "Proficient using Mixpanel analytics tools.",
+      "Basic SQL query composition skills."
+    ],
+    "responsibilities": [
+      "Manage premium discount campaign parameters.",
+      "Identify user subscription drop-off points.",
+      "Document target customer test runs reports."
+    ],
+    "benefits": ["Spotify lifetime free accounts", "Remote work allowance ($100/month)", "Health premiums coverage packs", "Mental recharge weekends"],
+    "logo": "https://images.unsplash.com/photo-1614680376593-902f74fa0d41?w=100&h=100&fit=crop&q=80",
+    "postedAt": "1 week ago",
+    "category": "Marketing",
+    "remote": true
+  },
+  {
+    "id": 31,
+    "title": "Financial Manager",
+    "company": "Meta",
+    "location": "Menlo Park, CA",
+    "salary": "$135,000 - $170,000",
+    "experience": "5+ years",
+    "employmentType": "Full Time",
+    "skills": ["Corporate Finance", "Excel", "SQL", "Corporate Accounting", "SOX"],
+    "description": "Manage accounting operations and budget tracking pipelines. You will supervise analysts, review audit reports, and model tax filings.",
+    "requirements": [
+      "CPA certification and degree in Accounting or Finance.",
+      "5+ years of strategic finance planning experience.",
+      "Familiarity with financial reporting regulations."
+    ],
+    "responsibilities": [
+      "Manage ledger recording procedures.",
+      "Perform corporate budget evaluations.",
+      "Resolve finance audit queries files."
+    ],
+    "benefits": ["Meta options stock benefits", "Metrolink travel passes options", "Excellent parental leave plans", "Menlo Park gyms access"],
+    "logo": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=100&h=100&fit=crop&q=80",
+    "postedAt": "1 week ago",
+    "category": "Finance",
+    "remote": false
+  },
+  {
+    "id": 32,
+    "title": "Staff Recruiter",
+    "company": "Google",
+    "location": "Mountain View, CA",
+    "salary": "$115,000 - $150,000",
+    "experience": "5+ years",
+    "employmentType": "Full Time",
+    "skills": ["Recruiting", "Sourcing", "LinkedIn Recruiter", "Negotiation", "Compliance"],
+    "description": "Lead outreach recruitments for technical research divisions. You will coordinate interviews boards, manage candidate pipelines, and review package negotiations.",
+    "requirements": [
+      "5+ years of recruitment coordination experience.",
+      "Advanced LinkedIn Recruiter sourcing credentials.",
+      "Excellent communication and candidate support skills."
+    ],
+    "responsibilities": [
+      "Maintain active candidate pipelines sheets.",
+      "Audit interview boards calendars inputs.",
+      "Finalize offer salary configurations packages."
+    ],
+    "benefits": ["Google equity options options", "Gourmet cafeterias access pass", "Excellent health insurance packs", "Metrolink travel passes options"],
+    "logo": "https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=100&h=100&fit=crop&q=80",
+    "postedAt": "3 days ago",
+    "category": "Human Resources",
+    "remote": false
+  }
+]

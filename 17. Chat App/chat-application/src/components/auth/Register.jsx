@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { toast } from "react-hot-toast";
+import { MdPerson, MdEmail, MdLock } from "react-icons/md";
 
 function Register() {
     const navigate = useNavigate();
@@ -32,6 +34,7 @@ function Register() {
         try {
             setLoading(true);
             await register(email, password, displayName);
+            toast.success("Account created successfully!");
             navigate("/chat");
         } catch (err) {
             let errorMsg = err.message;
@@ -39,6 +42,7 @@ function Register() {
                 errorMsg = "An account with this email already exists.";
             }
             setError(errorMsg);
+            toast.error(errorMsg);
         } finally {
             setLoading(false);
         }
@@ -47,118 +51,190 @@ function Register() {
     return (
         <div
             style={{
-                maxWidth: "400px",
-                margin: "80px auto",
-                padding: "30px",
-                border: "1px solid var(--wa-border)",
-                borderRadius: "10px",
-                backgroundColor: "#fff",
-                color: "var(--wa-text)",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                minHeight: "calc(100vh - 60px)",
+                padding: "20px",
+                backgroundColor: "var(--bg-app)",
+                transition: "background-color 0.3s ease",
             }}
         >
-            <h2 style={{ textAlign: "center", color: "var(--wa-green-dark)" }}>Create Account</h2>
-
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    placeholder="Display Name (Optional)"
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    style={{
-                        width: "100%",
-                        padding: "12px",
-                        marginTop: "15px",
-                        boxSizing: "border-box",
-                        border: "1px solid var(--wa-border)",
-                        borderRadius: "4px",
-                        outline: "none",
-                    }}
-                />
-
-                <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    style={{
-                        width: "100%",
-                        padding: "12px",
-                        marginTop: "15px",
-                        boxSizing: "border-box",
-                        border: "1px solid var(--wa-border)",
-                        borderRadius: "4px",
-                        outline: "none",
-                    }}
-                    required
-                />
-
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    style={{
-                        width: "100%",
-                        padding: "12px",
-                        marginTop: "15px",
-                        boxSizing: "border-box",
-                        border: "1px solid var(--wa-border)",
-                        borderRadius: "4px",
-                        outline: "none",
-                    }}
-                    required
-                />
-
-                <input
-                    type="password"
-                    placeholder="Confirm Password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    style={{
-                        width: "100%",
-                        padding: "12px",
-                        marginTop: "15px",
-                        boxSizing: "border-box",
-                        border: "1px solid var(--wa-border)",
-                        borderRadius: "4px",
-                        outline: "none",
-                    }}
-                    required
-                />
-
-                {error && (
-                    <p style={{ color: "red", marginTop: "10px", fontSize: "14px" }}>
-                        {error}
+            <div
+                className="glass-panel animate-fade-in"
+                style={{
+                    width: "100%",
+                    maxWidth: "420px",
+                    padding: "36px 30px",
+                    borderRadius: "16px",
+                    boxShadow: "0 8px 32px var(--color-shadow)",
+                    color: "var(--color-text)",
+                    border: "1px solid var(--color-border)",
+                    transition: "all 0.3s ease",
+                }}
+            >
+                <div style={{ textAlign: "center", marginBottom: "26px" }}>
+                    <h2 style={{ fontSize: "28px", fontWeight: "700", color: "var(--color-accent)", margin: "0 0 8px 0" }}>
+                        Create Account
+                    </h2>
+                    <p style={{ fontSize: "14px", color: "var(--color-text-muted)", margin: 0 }}>
+                        Join WaveChat and start messaging in real time
                     </p>
-                )}
+                </div>
 
-                <button
-                    type="submit"
-                    disabled={loading}
-                    style={{
-                        width: "100%",
-                        padding: "12px",
-                        marginTop: "20px",
-                        background: "var(--wa-green)",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                        fontWeight: "600",
-                        fontSize: "15px",
-                    }}
-                >
-                    {loading ? "Creating..." : "Register"}
-                </button>
-            </form>
+                <form onSubmit={handleSubmit}>
+                    {/* Display Name */}
+                    <div style={{ marginBottom: "16px", position: "relative" }}>
+                        <MdPerson
+                            style={{
+                                position: "absolute",
+                                left: "14px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                                color: "var(--color-text-muted)",
+                                fontSize: "18px",
+                            }}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Display Name (Optional)"
+                            value={displayName}
+                            onChange={(e) => setDisplayName(e.target.value)}
+                            className="custom-input"
+                            style={{
+                                width: "100%",
+                                padding: "12px 16px 12px 42px",
+                                boxSizing: "border-box",
+                                fontSize: "14px",
+                                height: "46px",
+                            }}
+                        />
+                    </div>
 
-            <p style={{ marginTop: "20px", textAlign: "center", fontSize: "14px" }}>
-                Already have an account?{" "}
-                <Link to="/login" style={{ color: "var(--wa-green)", fontWeight: "600", textDecoration: "none" }}>
-                    Login
-                </Link>
-            </p>
+                    {/* Email */}
+                    <div style={{ marginBottom: "16px", position: "relative" }}>
+                        <MdEmail
+                            style={{
+                                position: "absolute",
+                                left: "14px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                                color: "var(--color-text-muted)",
+                                fontSize: "18px",
+                            }}
+                        />
+                        <input
+                            type="email"
+                            placeholder="Email Address"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="custom-input"
+                            style={{
+                                width: "100%",
+                                padding: "12px 16px 12px 42px",
+                                boxSizing: "border-box",
+                                fontSize: "14px",
+                                height: "46px",
+                            }}
+                            required
+                        />
+                    </div>
+
+                    {/* Password */}
+                    <div style={{ marginBottom: "16px", position: "relative" }}>
+                        <MdLock
+                            style={{
+                                position: "absolute",
+                                left: "14px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                                color: "var(--color-text-muted)",
+                                fontSize: "18px",
+                            }}
+                        />
+                        <input
+                            type="password"
+                            placeholder="Password (Min. 6 chars)"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="custom-input"
+                            style={{
+                                width: "100%",
+                                padding: "12px 16px 12px 42px",
+                                boxSizing: "border-box",
+                                fontSize: "14px",
+                                height: "46px",
+                            }}
+                            required
+                        />
+                    </div>
+
+                    {/* Confirm Password */}
+                    <div style={{ marginBottom: "20px", position: "relative" }}>
+                        <MdLock
+                            style={{
+                                position: "absolute",
+                                left: "14px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                                color: "var(--color-text-muted)",
+                                fontSize: "18px",
+                            }}
+                        />
+                        <input
+                            type="password"
+                            placeholder="Confirm Password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            className="custom-input"
+                            style={{
+                                width: "100%",
+                                padding: "12px 16px 12px 42px",
+                                boxSizing: "border-box",
+                                fontSize: "14px",
+                                height: "46px",
+                            }}
+                            required
+                        />
+                    </div>
+
+                    {error && (
+                        <p style={{ color: "#ef4444", margin: "0 0 16px 0", fontSize: "13px", textAlign: "center", fontWeight: "500" }}>
+                            {error}
+                        </p>
+                    )}
+
+                    {/* Submit Button */}
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        style={{
+                            width: "100%",
+                            height: "46px",
+                            background: "var(--color-accent)",
+                            color: "#fff",
+                            border: "none",
+                            borderRadius: "8px",
+                            fontWeight: "600",
+                            fontSize: "15px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            boxShadow: "0 4px 12px rgba(0, 168, 132, 0.2)",
+                            marginBottom: "20px",
+                        }}
+                    >
+                        {loading ? "Creating Account..." : "Register"}
+                    </button>
+                </form>
+
+                <p style={{ margin: 0, textAlign: "center", fontSize: "14px", color: "var(--color-text-muted)" }}>
+                    Already have an account?{" "}
+                    <Link to="/login" style={{ color: "var(--color-accent)", fontWeight: "600", textDecoration: "none" }}>
+                        Login
+                    </Link>
+                </p>
+            </div>
         </div>
     );
 }

@@ -9,6 +9,17 @@ import {
 import { formatLastSeen } from "../../utils/helpers";
 import MessageList from "./MessageList";
 import ChatInput from "./ChatInput";
+import CallingModal from "./CallingModal";
+import { toast } from "react-hot-toast";
+import { 
+    MdArrowBack, 
+    MdSearch, 
+    MdVideocam, 
+    MdCall, 
+    MdMoreVert, 
+    MdClose 
+} from "react-icons/md";
+import { IoChatbubblesOutline } from "react-icons/io5";
 
 function ChatBox({ activePartner, onBack }) {
     const { user } = useAuth();
@@ -27,6 +38,9 @@ function ChatBox({ activePartner, onBack }) {
 
     // Zoom Image Preview state
     const [zoomImageSrc, setZoomImageSrc] = useState(null);
+
+    // Simulated calling states
+    const [callingType, setCallingType] = useState(null); // 'voice', 'video', or null
 
     // Track total messages to play notification alert sounds on arrivals
     const [messageCount, setMessageCount] = useState(0);
@@ -72,6 +86,7 @@ function ChatBox({ activePartner, onBack }) {
         setFilePreview("");
         setSearchText("");
         setShowSearch(false);
+        setCallingType(null);
         isFirstLoad.current = true;
     }, [activePartner, user]);
 
@@ -90,8 +105,8 @@ function ChatBox({ activePartner, onBack }) {
     }, [activePartner, user]);
 
     // Send message submit trigger
-    const handleSendMessage = async (text) => {
-        if (!activePartner || (!text.trim() && !attachedFile)) return;
+    const handleSendMessage = async (text, audioFile = null) => {
+        if (!activePartner || (!text.trim() && !attachedFile && !audioFile)) return;
 
         try {
             await setTypingStatus(user.uid, activePartner.uid, false);
@@ -101,6 +116,7 @@ function ChatBox({ activePartner, onBack }) {
                 receiverId: activePartner.uid,
                 text,
                 imageFile: attachedFile,
+                audioFile: audioFile,
                 replyTo,
             });
 
@@ -109,7 +125,7 @@ function ChatBox({ activePartner, onBack }) {
             setFilePreview("");
             setReplyTo(null);
         } catch (err) {
-            alert(err.message || "Failed to send message.");
+            toast.error(err.message || "Failed to send message.");
         }
     };
 
@@ -150,16 +166,42 @@ function ChatBox({ activePartner, onBack }) {
                     justifyContent: "center",
                     alignItems: "center",
                     height: "100%",
-                    color: "var(--wa-text-muted)",
-                    backgroundColor: "var(--wa-search-bg)",
+                    color: "var(--color-text-muted)",
+                    backgroundColor: "var(--bg-app)",
+                    textAlign: "center",
+                    padding: "24px",
+                    transition: "all var(--transition-speed)",
                 }}
             >
-                <div style={{ textAlign: "center" }}>
-                    <h3 style={{ color: "var(--wa-text)", fontWeight: "400", fontSize: "28px", margin: "0 0 10px 0" }}>
-                        WhatsApp for Web
+                <div 
+                    className="glass-panel animate-fade-in"
+                    style={{
+                        padding: "40px 30px",
+                        borderRadius: "16px",
+                        boxShadow: "0 8px 24px var(--color-shadow)",
+                        maxWidth: "460px",
+                        border: "1px solid var(--color-border)",
+                    }}
+                >
+                    <div 
+                        style={{ 
+                            width: "72px", 
+                            height: "72px", 
+                            borderRadius: "50%", 
+                            backgroundColor: "rgba(0,168,132,0.08)", 
+                            display: "flex", 
+                            alignItems: "center", 
+                            justifyContent: "center",
+                            margin: "0 auto 20px auto"
+                        }}
+                    >
+                        <IoChatbubblesOutline style={{ fontSize: "36px", color: "var(--color-accent)" }} />
+                    </div>
+                    <h3 style={{ color: "var(--color-text)", fontWeight: "600", fontSize: "24px", margin: "0 0 12px 0" }}>
+                        WaveChat Web App
                     </h3>
-                    <p style={{ margin: 0, fontSize: "14px" }}>
-                        Select a contact in the sidebar list to start chatting.
+                    <p style={{ margin: 0, fontSize: "14px", lineHeight: "1.5" }}>
+                        Select a contact card from the list or search for users in the sidebar to start exchanging real-time messages.
                     </p>
                 </div>
             </div>
@@ -173,22 +215,25 @@ function ChatBox({ activePartner, onBack }) {
                 display: "flex",
                 flexDirection: "column",
                 height: "100%",
-                backgroundColor: "var(--wa-bg-light)",
+                backgroundColor: "var(--bg-chat-body)",
                 position: "relative",
+                transition: "all var(--transition-speed)",
             }}
         >
             {/* Header */}
             <div
                 style={{
-                    padding: "10px 20px",
-                    borderBottom: "1px solid var(--wa-border)",
+                    padding: "10px 16px",
+                    borderBottom: "1px solid var(--color-border)",
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    backgroundColor: "#fff",
+                    backgroundColor: "var(--bg-chat-header)",
+                    height: "60px",
+                    zIndex: 10,
                 }}
             >
-                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0 }}>
                     {/* Back Button for mobile view */}
                     <button
                         onClick={onBack}
@@ -198,51 +243,78 @@ function ChatBox({ activePartner, onBack }) {
                             cursor: "pointer",
                             fontSize: "20px",
                             padding: "4px",
-                            display: window.innerWidth <= 768 ? "block" : "none",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: "var(--color-text-muted)",
+                            marginRight: "4px",
                         }}
                     >
-                        ⬅
+                        <MdArrowBack />
                     </button>
 
                     <img
                         src={activePartner.photoURL || "https://api.dicebear.com/7.x/adventurer/svg?seed=placeholder"}
-                        alt="Avatar"
+                        alt={activePartner.displayName}
                         style={{
                             width: "40px",
                             height: "40px",
                             borderRadius: "50%",
                             objectFit: "cover",
+                            backgroundColor: "var(--bg-panel)",
+                            border: "1px solid var(--color-border)",
                         }}
                     />
 
-                    <div>
-                        <h4 style={{ margin: 0, fontSize: "16px", fontWeight: "500", color: "var(--wa-text)" }}>
+                    <div style={{ minWidth: 0 }}>
+                        <h4 
+                            style={{ 
+                                margin: 0, 
+                                fontSize: "15px", 
+                                fontWeight: "500", 
+                                color: "var(--color-text)",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis"
+                            }}
+                        >
                             {activePartner.displayName}
                         </h4>
-                        <span style={{ fontSize: "12px", color: activePartner.online ? "var(--wa-green)" : "var(--wa-text-muted)" }}>
-                            {activePartner.online ? "online" : `last seen ${formatLastSeen(activePartner.lastSeen)}`}
+                        <span 
+                            style={{ 
+                                fontSize: "11.5px", 
+                                color: partnerTyping ? "var(--color-accent)" : "var(--color-text-muted)",
+                                fontWeight: partnerTyping ? "600" : "400"
+                            }}
+                        >
+                            {partnerTyping 
+                                ? "typing..." 
+                                : activePartner.online 
+                                    ? "online" 
+                                    : `last seen ${formatLastSeen(activePartner.lastSeen)}`
+                            }
                         </span>
                     </div>
                 </div>
 
-                {/* Message Search box */}
-                <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                    {showSearch && (
-                        <input
-                            type="text"
-                            placeholder="Search messages"
-                            value={searchText}
-                            onChange={(e) => setSearchText(e.target.value)}
-                            style={{
-                                padding: "6px 10px",
-                                border: "1px solid var(--wa-border)",
-                                borderRadius: "6px",
-                                fontSize: "13px",
-                                outline: "none",
-                                backgroundColor: "var(--wa-search-bg)",
-                            }}
-                        />
-                    )}
+                {/* Header Action Menu icons */}
+                <div style={{ display: "flex", alignItems: "center", gap: "16px", flexShrink: 0 }}>
+                    <button
+                        onClick={() => setCallingType("voice")}
+                        style={{ background: "none", border: "none", color: "var(--color-text-muted)", fontSize: "20px", padding: "4px" }}
+                        title="Simulate Voice Call"
+                    >
+                        <MdCall />
+                    </button>
+
+                    <button
+                        onClick={() => setCallingType("video")}
+                        style={{ background: "none", border: "none", color: "var(--color-text-muted)", fontSize: "22px", padding: "4px" }}
+                        title="Simulate Video Call"
+                    >
+                        <MdVideocam />
+                    </button>
+
                     <button
                         onClick={() => {
                             setShowSearch(!showSearch);
@@ -252,78 +324,133 @@ function ChatBox({ activePartner, onBack }) {
                             background: "none",
                             border: "none",
                             cursor: "pointer",
-                            fontSize: "16px",
-                            color: "var(--wa-text-muted)",
-                            padding: "6px",
-                            borderRadius: "50%",
+                            fontSize: "20px",
+                            color: showSearch ? "var(--color-accent)" : "var(--color-text-muted)",
+                            padding: "4px",
                         }}
                         title="Search messages"
                     >
-                        🔍
+                        <MdSearch />
+                    </button>
+
+                    <button
+                        style={{ background: "none", border: "none", color: "var(--color-text-muted)", fontSize: "20px", padding: "4px" }}
+                    >
+                        <MdMoreVert />
                     </button>
                 </div>
             </div>
 
-            {/* Messages Scroll Panel */}
-            <MessageList
-                myUid={user.uid}
-                partnerUid={activePartner.uid}
-                searchText={searchText}
-                onReplySelect={(msg) => setReplyTo(msg)}
-                onImageSelect={(src) => setZoomImageSrc(src)}
-                onMessagesChange={handleMessagesUpdate}
-            />
-
-            {/* Typing status bar */}
-            {partnerTyping && (
-                <div style={{ padding: "4px 20px", fontSize: "13px", color: "var(--wa-green)", fontStyle: "italic", backgroundColor: "rgba(255,255,255,0.7)" }}>
-                    {activePartner.displayName} is typing...
+            {/* Inline Keyword message search panel */}
+            {showSearch && (
+                <div
+                    className="animate-fade-in"
+                    style={{
+                        padding: "8px 16px",
+                        backgroundColor: "var(--bg-chat-header)",
+                        borderBottom: "1px solid var(--color-border)",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                        zIndex: 5,
+                    }}
+                >
+                    <input
+                        type="text"
+                        placeholder="Search text in messages..."
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value)}
+                        className="custom-input"
+                        style={{
+                            flex: 1,
+                            padding: "6px 12px",
+                            fontSize: "13px",
+                            height: "32px",
+                        }}
+                        autoFocus
+                    />
+                    <button
+                        onClick={() => {
+                            setShowSearch(false);
+                            setSearchText("");
+                        }}
+                        style={{
+                            background: "none",
+                            border: "none",
+                            fontSize: "18px",
+                            color: "var(--color-text-muted)",
+                            display: "flex",
+                            alignItems: "center",
+                        }}
+                    >
+                        <MdClose />
+                    </button>
                 </div>
             )}
 
-            {/* Reply Preview Bar */}
+            {/* Messages Area Panel */}
+            <div className="chat-wallpaper-doodle" style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
+                <MessageList
+                    myUid={user.uid}
+                    partnerUid={activePartner.uid}
+                    searchText={searchText}
+                    onReplySelect={(msg) => setReplyTo(msg)}
+                    onImageSelect={(src) => setZoomImageSrc(src)}
+                    onMessagesChange={handleMessagesUpdate}
+                />
+            </div>
+
+            {/* Reply Context Reference Banner */}
             {replyTo && (
                 <div
                     style={{
-                        padding: "8px 20px",
-                        backgroundColor: "#f0f2f5",
-                        borderTop: "1px solid var(--wa-border)",
-                        borderLeft: "4px solid var(--wa-green)",
+                        padding: "8px 16px",
+                        backgroundColor: "var(--bg-chat-header)",
+                        borderTop: "1px solid var(--color-border)",
+                        borderLeft: "4px solid var(--color-accent)",
                         display: "flex",
                         justifyContent: "space-between",
                         alignItems: "center",
                     }}
                 >
-                    <div style={{ fontSize: "13px" }}>
-                        <span style={{ fontWeight: "bold", color: "var(--wa-green-dark)" }}>Reply to {replyTo.senderName}: </span>
-                        <span style={{ color: "var(--wa-text-muted)" }}>{replyTo.image ? "📷 Image" : replyTo.text}</span>
+                    <div style={{ fontSize: "13px", minWidth: 0 }}>
+                        <span style={{ fontWeight: "600", color: "var(--color-accent)" }}>Reply to {replyTo.senderName}: </span>
+                        <span style={{ color: "var(--color-text-muted)", overflow: "hidden", textOverflow: "ellipsis", display: "inline-block", maxWidth: "250px", verticalAlign: "middle" }}>
+                            {replyTo.image ? "📷 Image" : replyTo.text}
+                        </span>
                     </div>
                     <button
                         onClick={() => setReplyTo(null)}
-                        style={{ background: "none", border: "none", cursor: "pointer", fontSize: "14px", color: "var(--wa-text-muted)" }}
+                        style={{ background: "none", border: "none", cursor: "pointer", fontSize: "16px", color: "var(--color-text-muted)", display: "flex" }}
                     >
-                        ✕
+                        <MdClose />
                     </button>
                 </div>
             )}
 
-            {/* Image Preview attachment row */}
+            {/* Attachment File Preview Area */}
             {filePreview && (
                 <div
                     style={{
-                        padding: "10px 20px",
-                        backgroundColor: "#f0f2f5",
-                        borderTop: "1px solid var(--wa-border)",
+                        padding: "10px 16px",
+                        backgroundColor: "var(--bg-chat-header)",
+                        borderTop: "1px solid var(--color-border)",
                         display: "flex",
                         alignItems: "center",
-                        gap: "10px",
+                        gap: "12px",
                     }}
                 >
-                    <div style={{ position: "relative" }}>
+                    <div style={{ position: "relative", width: "50px", height: "50px" }}>
                         <img
                             src={filePreview}
-                            alt="Attach preview"
-                            style={{ width: "50px", height: "50px", objectFit: "cover", borderRadius: "4px", border: "1px solid var(--wa-border)" }}
+                            alt="Attach Preview"
+                            style={{ 
+                                width: "100%", 
+                                height: "100%", 
+                                objectFit: "cover", 
+                                borderRadius: "6px", 
+                                border: "1px solid var(--color-border)" 
+                            }}
                         />
                         <button
                             onClick={handleRemoveFilePreview}
@@ -331,7 +458,7 @@ function ChatBox({ activePartner, onBack }) {
                                 position: "absolute",
                                 top: "-6px",
                                 right: "-6px",
-                                background: "red",
+                                background: "#ef4444",
                                 color: "white",
                                 border: "none",
                                 borderRadius: "50%",
@@ -342,16 +469,17 @@ function ChatBox({ activePartner, onBack }) {
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
+                                boxShadow: "0 1px 3px rgba(0,0,0,0.15)",
                             }}
                         >
                             ✕
                         </button>
                     </div>
-                    <span style={{ fontSize: "13px", color: "var(--wa-text-muted)" }}>Image ready to send.</span>
+                    <span style={{ fontSize: "13px", color: "var(--color-text-muted)" }}>Image ready to send.</span>
                 </div>
             )}
 
-            {/* Input Bar */}
+            {/* Input Controller Area */}
             <ChatInput
                 onSendMessage={handleSendMessage}
                 onAttachFile={handleAttachFile}
@@ -375,33 +503,46 @@ function ChatBox({ activePartner, onBack }) {
                         zIndex: 1000,
                     }}
                 >
-                    <div style={{ position: "relative", maxWidth: "90vw", maxHeight: "90vh" }}>
+                    <div 
+                        onClick={(e) => e.stopPropagation()}
+                        style={{ position: "relative", maxWidth: "90vw", maxHeight: "90vh", display: "flex", flexDirection: "column", alignItems: "center" }}
+                    >
                         <img
                             src={zoomImageSrc}
-                            alt="Preview"
-                            style={{ maxWidth: "100%", maxHeight: "80vh", borderRadius: "4px" }}
+                            alt="Zoom Shared"
+                            style={{ maxWidth: "100%", maxHeight: "80vh", borderRadius: "8px", boxShadow: "0 8px 32px rgba(0,0,0,0.5)" }}
                         />
-                        <div style={{ textAlign: "center", marginTop: "15px" }}>
+                        <div style={{ textAlign: "center", marginTop: "16px" }}>
                             <a
                                 href={zoomImageSrc}
                                 download="shared_image.jpg"
                                 target="_blank"
                                 rel="noreferrer"
                                 style={{
-                                    backgroundColor: "var(--wa-green)",
+                                    backgroundColor: "var(--color-accent)",
                                     color: "white",
-                                    padding: "8px 16px",
-                                    borderRadius: "4px",
+                                    padding: "8px 20px",
+                                    borderRadius: "20px",
                                     textDecoration: "none",
-                                    fontSize: "14px",
-                                    fontWeight: "bold",
+                                    fontSize: "13px",
+                                    fontWeight: "600",
+                                    boxShadow: "0 4px 12px rgba(0, 168, 132, 0.3)",
                                 }}
                             >
-                                Download Image
+                                Download Original
                             </a>
                         </div>
                     </div>
                 </div>
+            )}
+
+            {/* Calling simulated Overlay modal */}
+            {callingType && (
+                <CallingModal
+                    partner={activePartner}
+                    isVideo={callingType === "video"}
+                    onClose={() => setCallingType(null)}
+                />
             )}
         </div>
     );

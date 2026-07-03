@@ -24,21 +24,22 @@ export const getConversationId = (uid1, uid2) => {
     return [uid1, uid2].sort().join("_");
 };
 
-// Send a chat message (text, image, reply)
 export const sendMessage = async ({
     senderId,
     senderName,
     receiverId,
     text = "",
     imageFile = null,
+    audioFile = null,
     replyTo = null,
 }) => {
-    if (!text.trim() && !imageFile) {
+    if (!text.trim() && !imageFile && !audioFile) {
         throw new Error("Cannot send empty message.");
     }
 
     const conversationId = getConversationId(senderId, receiverId);
     let imageUrl = null;
+    let audioUrl = null;
 
     // 1. Upload image if present
     if (imageFile) {
@@ -47,7 +48,14 @@ export const sendMessage = async ({
         imageUrl = await getDownloadURL(snapshot.ref);
     }
 
-    // 2. Add message document to Firestore
+    // 2. Upload audio if present
+    if (audioFile) {
+        const storageRef = ref(storage, `chats/${conversationId}/${Date.now()}_voice.mp3`);
+        const snapshot = await uploadBytes(storageRef, audioFile);
+        audioUrl = await getDownloadURL(snapshot.ref);
+    }
+
+    // 3. Add message document to Firestore
     const messageData = {
         conversationId,
         senderId,
@@ -55,6 +63,8 @@ export const sendMessage = async ({
         receiverId,
         text: text.trim(),
         image: imageUrl,
+        audio: audioUrl,
+        mediaType: audioFile ? "audio" : null,
         createdAt: serverTimestamp(),
         edited: false,
         deleted: false,

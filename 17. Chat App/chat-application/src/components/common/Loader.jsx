@@ -14,21 +14,22 @@ const containerStyle = {
     alignItems: "center",
     height: "100vh",
     width: "100%",
-    backgroundColor: "var(--bg)",
+    backgroundColor: "var(--bg-app)",
+    transition: "background-color 0.3s ease",
 };
 
 const spinnerStyle = {
     width: "48px",
     height: "48px",
-    border: "5px solid var(--border)",
-    borderBottomColor: "var(--accent)",
+    border: "4px solid var(--color-border)",
+    borderBottomColor: "var(--color-accent)",
     borderRadius: "50%",
     display: "inline-block",
     boxSizing: "border-box",
     animation: "rotation 1s linear infinite",
 };
 
-// Add raw keyframes to document head for ease of inclusion
+// Add keyframes to document head
 if (typeof document !== "undefined") {
     const style = document.createElement("style");
     style.innerHTML = `

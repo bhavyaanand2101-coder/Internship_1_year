@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 
 import Navbar from "./components/layout/Navbar";
 
@@ -12,8 +14,32 @@ import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 
 function App() {
+  // Sync Dark Theme preference on load
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (savedTheme === "dark" || (!savedTheme && prefersDark)) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, []);
+
   return (
     <>
+      <Toaster 
+        position="top-center" 
+        toastOptions={{
+          className: "glass-panel",
+          style: {
+            background: "var(--bg-panel)",
+            color: "var(--color-text)",
+            border: "1px solid var(--color-border)",
+            fontSize: "14px",
+            borderRadius: "10px",
+          }
+        }}
+      />
       <Navbar />
 
       <Routes>
