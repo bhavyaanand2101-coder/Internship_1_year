@@ -1,62 +1,60 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AppProvider } from './context/AppContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ToastContainer from './components/Toast';
+
+// Pages
 import Home from './pages/Home';
 import Shop from './pages/Shop';
+import Wishlist from './pages/Wishlist';
+import ProductDetails from './pages/ProductDetails';
+import Checkout from './pages/Checkout';
+import OrderConfirmation from './pages/OrderConfirmation';
+import Dashboard from './pages/Dashboard';
+import Auth from './pages/Auth';
+import About from './pages/About';
+import Contact from './pages/Contact';
+import Faq from './pages/Faq';
+import Blog from './pages/Blog';
+import BlogDetails from './pages/BlogDetails';
+import Policy from './pages/Policy';
+import Admin from './pages/Admin';
+import NotFound from './pages/NotFound';
 
-// 1. THIS IS THE CRUCIAL PART: The Wishlist UI component code written inline 
-// so you don't have to worry about broken folder or file imports!
-function WishlistComponent() {
-  return (
-    <div className="w-full bg-black min-h-[60vh] flex flex-col justify-start pt-16 pb-24">
-      <div className="max-w-7xl mx-auto px-6 w-full">
-        {/* Header Block Section */}
-        <div className="border-b border-neutral-900 pb-6 mb-16">
-          <div className="flex items-center gap-3 mb-2">
-            <span className="w-1 h-3.5 bg-brand-red inline-block"></span>
-            <span className="text-[10px] font-bold text-brand-red tracking-widest uppercase">SAVED FOR LATER</span>
-          </div>
-          <h1 className="text-white text-5xl md:text-6xl font-black font-impact tracking-tight uppercase">
-            WISHLIST
-          </h1>
-        </div>
-
-        {/* Empty State Box Layout */}
-        <div className="w-full border border-neutral-900 bg-black py-24 flex flex-col items-center justify-center text-center px-4">
-          <h3 className="text-white font-black font-impact tracking-widest text-2xl uppercase mb-6">
-            NOTHING SAVED YET
-          </h3>
-          <a 
-            href="/shop" 
-            className="bg-brand-red hover:bg-red-700 text-white font-black text-xs tracking-widest px-8 py-3.5 uppercase transition-colors duration-200"
-          >
-            DISCOVER TEES
-          </a>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// 2. Main Application App shell execution mapping router layout trees
 export default function App() {
   return (
-    <Router>
-      <div className="flex flex-col min-h-screen bg-black text-white antialiased">
-        <Navbar />
-        
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/shop" element={<Shop />} />
-            {/* 3. Forces the page route context to render the exact design variant requested */}
-            <Route path="/wishlist" element={<WishlistComponent />} />
-          </Routes>
-        </main>
+    <AppProvider>
+      <Router>
+        <div className="flex flex-col min-h-screen bg-black text-white antialiased">
+          <Navbar />
+          
+          <main className="flex-grow">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/shop" element={<Shop />} />
+              <Route path="/product/:id" element={<ProductDetails />} />
+              <Route path="/wishlist" element={<Wishlist />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/order-confirmation/:id" element={<OrderConfirmation />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/faq" element={<Faq />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:id" element={<BlogDetails />} />
+              <Route path="/policy/:type" element={<Policy />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
 
-        <Footer />
-      </div>
-    </Router>
+          <Footer />
+        </div>
+      </Router>
+      <ToastContainer />
+    </AppProvider>
   );
 }

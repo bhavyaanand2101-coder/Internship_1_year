@@ -1,33 +1,81 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useWishlist } from '../context/AppContext';
+import ProductCard from '../components/ProductCard';
+import { api } from '../lib/api';
+import SEO from '../components/SEO';
 
 export default function Wishlist() {
+  const { wishlist } = useWishlist();
+  
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadWishlistProducts() {
+      try {
+        setLoading(true);
+        const catalog = await api.getProducts();
+        // Filter catalog items to those included in local wishlist state
+        const saved = catalog.filter((item) => wishlist.includes(item.id));
+        setProducts(saved);
+      } catch (err) {
+        console.error('Failed to load wishlist items:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadWishlistProducts();
+  }, [wishlist]);
+
   return (
-    <div className="w-full bg-black min-h-[75vh] flex flex-col justify-start pt-16 pb-24">
-      <div className="max-w-7xl mx-auto px-6 w-full">
-        {/* Header Block Section */}
-        <div className="border-b border-neutral-900 pb-6 mb-16">
-          <div className="flex items-center gap-3 mb-2">
-            <span className="w-1 h-3.5 bg-brand-red inline-block"></span>
-            <span className="text-[10px] font-bold text-brand-red tracking-widest uppercase">SAVED FOR LATER</span>
+    <div className="w-full bg-black min-h-screen py-16 animate-fade-in">
+      <SEO title="My Wishlist" description="View and manage your favorite saved CosoStyle tees." />
+
+      <div className="max-w-7xl mx-auto px-4">
+        
+        {/* Header Block */}
+        <div className="pb-6 mb-12 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 border-b border-neutral-950">
+          <div>
+            <span className="text-[10px] text-brand-red font-black tracking-widest uppercase block mb-1">SAVED ARTICLES</span>
+            <h1 className="text-white text-5xl font-black font-impact tracking-tight uppercase">
+              MY WISHLIST
+            </h1>
           </div>
-          <h1 className="text-white text-5xl md:text-6xl font-black font-impact tracking-tight uppercase">
-            WISHLIST
-          </h1>
+          <span className="text-neutral-500 text-xs font-bold uppercase tracking-wider">
+            {wishlist.length} ITEMS SAVED
+          </span>
         </div>
 
-        {/* Empty State Box Layout */}
-        <div className="w-full border border-neutral-900 bg-black py-24 flex flex-col items-center justify-center text-center px-4">
-          <h3 className="text-white font-black font-impact tracking-widest text-2xl uppercase mb-6">
-            NOTHING SAVED YET
-          </h3>
-          <Link 
-            to="/shop" 
-            className="bg-brand-red hover:bg-red-700 text-white font-black text-xs tracking-widest px-8 py-3.5 uppercase transition-colors duration-200"
-          >
-            DISCOVER TEES
-          </Link>
-        </div>
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 animate-pulse">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="aspect-[3/4] bg-neutral-950 rounded-luxury" />
+            ))}
+          </div>
+        ) : products.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
+            {products.map((item) => (
+              <ProductCard key={item.id} {...item} />
+            ))}
+          </div>
+        ) : (
+          <div className="w-full text-center py-24 border border-dashed border-neutral-900 rounded-luxury flex flex-col justify-center items-center gap-4">
+            <span className="text-xs font-bold tracking-widest text-neutral-600 uppercase">
+              YOUR WISHLIST REGISTER IS EMPTY
+            </span>
+            <p className="text-neutral-500 text-[10px] uppercase max-w-xs leading-relaxed font-semibold">
+              Browse the catalog to save limited items before drop allocations sell out.
+            </p>
+            <Link
+              to="/shop"
+              className="bg-brand-red hover:bg-red-700 text-white font-black text-[10px] tracking-widest px-8 py-3.5 uppercase transition rounded-full mt-4"
+            >
+              SHOP CATALOG DROP
+            </Link>
+          </div>
+        )}
+
       </div>
     </div>
   );

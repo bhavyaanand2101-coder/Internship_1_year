@@ -2,8 +2,11 @@
 
 @theme {
   --color-brand-red: #E31B23;
+  --color-brandRed: #E31B23;
   --color-brand-black: #0A0A0A;
+  --color-brandBlack: #0A0A0A;
   --color-brand-card-bg: #121212;
+  --color-brandCardBg: #121212;
   --font-impact: "Impact", "Haettenschweiler", "Arial Narrow Bold", sans-serif;
 }
 
@@ -17,6 +20,18 @@
   display: flex;
   width: max-content;
   animation: marquee 25s linear infinite;
+}
+
+@utility rounded-luxury {
+  border-radius: 16px;
+}
+
+@utility shadow-luxury {
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.4);
+}
+
+@utility transition-luxury {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 body {

@@ -1,0 +1,13 @@
+[
+  {
+    "_id": "1783321217047849",
+    "id": 1783321217047,
+    "createdAt": "2026-07-06T07:00:17.047Z",
+    "name": "Bhavya",
+    "email": "testuser@gmail.com",
+    "password": "$2a$10$r9BTyVJQRS5qVZG6rJMLg.sCslkENyPKCP1e8VTeTpN/8KCb4KCs.",
+    "role": "user",
+    "addresses": [],
+    "phone": ""
+  }
+]

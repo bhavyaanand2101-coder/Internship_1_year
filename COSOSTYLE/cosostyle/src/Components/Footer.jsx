@@ -38,12 +38,14 @@ export default function Footer() {
 
         {/* Customer Experience Help Support Hyperlinks Context Layout */}
         <div className="md:col-span-4 col-span-6">
-          <h4 className="text-brandRed font-bold text-xs tracking-widest uppercase mb-4">HELP</h4>
+          <h4 className="text-brandRed font-bold text-xs tracking-widest uppercase mb-4">HELP & LEGAL</h4>
           <ul className="text-xs text-neutral-400 space-y-3 font-medium">
-            <li><a href="#" className="hover:text-white transition">Shipping</a></li>
-            <li><a href="#" className="hover:text-white transition">Returns</a></li>
-            <li><a href="#" className="hover:text-white transition">Size Guide</a></li>
-            <li><a href="#" className="hover:text-white transition">Contact</a></li>
+            <li><Link to="/policy/shipping" className="hover:text-white transition">Shipping Policy</Link></li>
+            <li><Link to="/policy/returns" className="hover:text-white transition">Return Policy</Link></li>
+            <li><Link to="/policy/privacy" className="hover:text-white transition">Privacy Policy</Link></li>
+            <li><Link to="/policy/terms" className="hover:text-white transition">Terms & Conditions</Link></li>
+            <li><Link to="/faq" className="hover:text-white transition">FAQ Hub</Link></li>
+            <li><Link to="/contact" className="hover:text-white transition">Contact Studio</Link></li>
           </ul>
         </div>
       </div>
