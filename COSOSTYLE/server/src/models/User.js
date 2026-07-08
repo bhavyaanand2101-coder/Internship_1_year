@@ -20,7 +20,11 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: { type: String, default: 'user' },
   phone: { type: String, default: '' },
+  avatar: { type: String, default: '' },
   addresses: [addressSchema],
+  wishlist: [{ type: Number }], // Product IDs
+  loyaltyPoints: { type: Number, default: 0 },
+  referralCode: { type: String, default: '' },
   createdAt: { type: Date, default: Date.now }
 });
 

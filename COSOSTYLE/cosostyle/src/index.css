@@ -34,12 +34,64 @@
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+:root {
+  --color-bg-primary: #000000;
+  --color-text-primary: #ffffff;
+  --color-card-bg: #0A0A0C;
+  --color-border-subtle: #121214;
+  --color-navbar-bg: rgba(0, 0, 0, 0.85);
+  --color-dropdown-bg: #0F0F11;
+  --color-input-bg: #000000;
+  --color-input-border: #1a1a1f;
+  --color-text-muted: #a3a3a3;
+  --color-manifesto-bg: #050507;
+}
+
+html.light {
+  --color-bg-primary: #f8fafc;
+  --color-text-primary: #0f172a;
+  --color-card-bg: #ffffff;
+  --color-border-subtle: #e2e8f0;
+  --color-navbar-bg: rgba(255, 255, 255, 0.85);
+  --color-dropdown-bg: #ffffff;
+  --color-input-bg: #ffffff;
+  --color-input-border: #cbd5e1;
+  --color-text-muted: #475569;
+  --color-manifesto-bg: #f1f5f9;
+}
+
 body {
-  background-color: #000000;
-  color: #ffffff;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   margin: 0;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Global utility theme adaptations */
+.bg-black {
+  background-color: var(--color-bg-primary) !important;
+}
+
+.text-white {
+  color: var(--color-text-primary) !important;
+}
+
+.bg-\[\#0A0A0C\], .bg-\[\#0A0A0C\]\/40, .bg-\[\#0C0C0F\], .bg-\[\#0F0F11\], .bg-\[\#050507\]\/40, .bg-\[\#050507\]\/60, .bg-brand-card-bg {
+  background-color: var(--color-card-bg) !important;
+}
+
+.border-neutral-900, .border-neutral-950, .border-neutral-800, .border-neutral-900\/40, .border-neutral-900\/60 {
+  border-color: var(--color-border-subtle) !important;
+}
+
+.text-neutral-400, .text-neutral-500 {
+  color: var(--color-text-muted) !important;
+}
+
+.bg-\[\#050507\], .bg-\[\#050507\]\/20 {
+  background-color: var(--color-manifesto-bg) !important;
 }
 
 /* Custom sleek scrollbar */
@@ -47,7 +99,7 @@ body {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #000;
+  background: var(--color-bg-primary);
 }
 ::-webkit-scrollbar-thumb {
   background: #222;

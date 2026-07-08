@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, Search, Clock, ArrowRight } from 'lucide-react';
-import { PRODUCTS } from '../lib/mockApi';
+import { api } from '../lib/api';
 
 export default function SearchOverlay({ isOpen, onClose }) {
   const [query, setQuery] = useState('');
+  const [products, setProducts] = useState([]);
   const [history, setHistory] = useState(() => {
     const saved = localStorage.getItem('coso_search_history');
     return saved ? JSON.parse(saved) : [];
@@ -13,6 +14,21 @@ export default function SearchOverlay({ isOpen, onClose }) {
   const navigate = useNavigate();
 
   const trendingSearches = ['oversized', 'classic', 'shadow', 'heavyweight', 'drop 01'];
+
+  // Load live products on open
+  useEffect(() => {
+    async function loadSearchProducts() {
+      if (isOpen) {
+        try {
+          const list = await api.getProducts();
+          setProducts(list);
+        } catch (err) {
+          console.error('Failed to load search catalog:', err);
+        }
+      }
+    }
+    loadSearchProducts();
+  }, [isOpen]);
 
   // Handle focus
   useEffect(() => {
@@ -58,7 +74,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
   };
 
   // Live filter suggestions (max 4 matches)
-  const suggestions = PRODUCTS.filter((p) =>
+  const suggestions = products.filter((p) =>
     p.title.toLowerCase().includes(query.toLowerCase()) ||
     p.category.toLowerCase().includes(query.toLowerCase())
   ).slice(0, 4);
@@ -115,7 +131,7 @@ export default function SearchOverlay({ isOpen, onClose }) {
                           {product.title}
                         </p>
                         <p className="text-[10px] text-neutral-500 font-semibold mt-0.5 uppercase">
-                          {product.category} • ${product.price.toFixed(2)}
+                          {product.category} • ₹{product.price.toFixed(2)}
                         </p>
                       </div>
                       <ArrowRight size={12} className="text-neutral-600 group-hover:text-white transition group-hover:translate-x-1" />

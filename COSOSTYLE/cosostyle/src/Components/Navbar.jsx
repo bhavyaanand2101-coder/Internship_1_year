@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { Search, Heart, ShoppingBag, User, X, Trash2, Plus, Minus } from 'lucide-react';
+import { Search, Heart, ShoppingBag, User, X, Trash2, Plus, Minus, Sun, Moon } from 'lucide-react';
 import { useAuth, useCart, useWishlist } from '../context/AppContext';
 import SearchOverlay from './SearchOverlay';
 
@@ -14,16 +14,43 @@ export default function Navbar() {
   const [isSearchOverlayOpen, setIsSearchOverlayOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
+  const [theme, setTheme] = useState(() => localStorage.getItem('coso_theme') || 'dark');
+
+  useEffect(() => {
+    const root = window.document.documentElement;
+    if (theme === 'light') {
+      root.classList.add('light');
+    } else {
+      root.classList.remove('light');
+    }
+    localStorage.setItem('coso_theme', theme);
+  }, [theme]);
+
+  useEffect(() => {
+    const handleOpenCart = () => setIsBagOpen(true);
+    const handleCloseCart = () => setIsBagOpen(false);
+    window.addEventListener('coso:opencart', handleOpenCart);
+    window.addEventListener('coso:closecart', handleCloseCart);
+    return () => {
+      window.removeEventListener('coso:opencart', handleOpenCart);
+      window.removeEventListener('coso:closecart', handleCloseCart);
+    };
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
+  
   const navigate = useNavigate();
 
   const bannerItems = [
     "100% PURE COTTON",
-    "FREE SHIPPING OVER $80",
+    "FREE SHIPPING OVER ₹999",
     "NEW DROP",
     "LIMITED INVENTORY"
   ];
 
-  const MarqueeTrack = () => (
+  const renderMarqueeTrack = () => (
     <div className="flex items-center gap-16 shrink-0 pr-16">
       {bannerItems.map((item, idx) => (
         <span key={idx} className="flex items-center gap-16 whitespace-nowrap">
@@ -41,8 +68,8 @@ export default function Navbar() {
         {/* Infinite Moving Announcement Ribbon */}
         <div className="w-full bg-brand-red text-white py-2 text-[11px] font-black tracking-widest uppercase overflow-hidden flex select-none">
           <div className="animate-marquee flex">
-            <MarqueeTrack />
-            <MarqueeTrack />
+            {renderMarqueeTrack()}
+            {renderMarqueeTrack()}
           </div>
         </div>
 
@@ -88,6 +115,15 @@ export default function Navbar() {
           {/* Utility Icon Actions Row */}
           <div className="flex items-center gap-5 text-white relative h-10">
             
+            {/* Theme Toggle Button */}
+            <button 
+              onClick={toggleTheme} 
+              className="hover:text-brand-red text-white transition-colors duration-200 cursor-pointer block p-1"
+              title="Toggle Theme"
+            >
+              {theme === 'light' ? <Moon size={18} strokeWidth={2.5} /> : <Sun size={18} strokeWidth={2.5} />}
+            </button>
+
             {/* Search Trigger Button */}
             <button 
               onClick={() => setIsSearchOverlayOpen(true)} 
@@ -284,7 +320,7 @@ export default function Navbar() {
                             </button>
                           </div>
                           <span className="text-white font-bold text-xs">
-                            ${(item.price * item.quantity).toFixed(2)}
+                            ₹{(item.price * item.quantity).toFixed(2)}
                           </span>
                         </div>
                       </div>
@@ -296,10 +332,10 @@ export default function Navbar() {
                 <div className="border-t border-neutral-900 pt-6 space-y-4">
                   <div className="flex justify-between items-center text-xs font-bold tracking-widest uppercase">
                     <span className="text-neutral-500">SUBTOTAL</span>
-                    <span className="text-white">${cartSubtotal.toFixed(2)}</span>
+                    <span className="text-white">₹{cartSubtotal.toFixed(2)}</span>
                   </div>
                   <p className="text-[10px] text-neutral-500 font-semibold tracking-wide">
-                    Shipping & taxes calculated at checkout. Free shipping over $80.
+                    Shipping & taxes calculated at checkout. Free shipping over ₹999.
                   </p>
                   <button 
                     onClick={() => {

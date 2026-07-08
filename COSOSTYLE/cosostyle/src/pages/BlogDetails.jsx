@@ -1,12 +1,42 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { BLOG_POSTS } from '../lib/mockApi';
+import { api } from '../lib/api';
 import SEO from '../components/SEO';
 
 export default function BlogDetails() {
   const { id } = useParams();
-  const postId = parseInt(id);
-  const post = BLOG_POSTS.find((p) => p.id === postId);
+  const [post, setPost] = useState(null);
+  const [otherPosts, setOtherPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadPostDetails() {
+      try {
+        setLoading(true);
+        const data = await api.getBlog(id);
+        setPost(data);
+
+        // Load other posts for recommendation
+        const allBlogs = await api.getBlogs();
+        const others = allBlogs.filter((p) => (p._id || p.id) !== id).slice(0, 2);
+        setOtherPosts(others);
+      } catch (err) {
+        console.error('Failed to load blog details:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadPostDetails();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="w-full bg-black min-h-[70vh] flex justify-center items-center">
+        <SEO title="Loading Article" />
+        <div className="w-8 h-8 border-2 border-brand-red border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   if (!post) {
     return (
@@ -27,9 +57,6 @@ export default function BlogDetails() {
       </div>
     );
   }
-
-  // Find other posts for recommendation
-  const otherPosts = BLOG_POSTS.filter((p) => p.id !== post.id).slice(0, 2);
 
   return (
     <div className="w-full bg-black min-h-screen py-12 md:py-20">
@@ -82,8 +109,8 @@ export default function BlogDetails() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {otherPosts.map((op) => (
                 <Link
-                  to={`/blog/${op.id}`}
-                  key={op.id}
+                  to={`/blog/${op._id || op.id}`}
+                  key={op._id || op.id}
                   className="group flex flex-col border border-neutral-905 bg-neutral-950/20 hover:border-neutral-700 transition"
                 >
                   <div className="aspect-video w-full overflow-hidden bg-neutral-950">

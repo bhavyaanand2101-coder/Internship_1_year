@@ -4,6 +4,10 @@ import { AppProvider } from './context/AppContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ToastContainer from './components/Toast';
+import CompareDrawer from './components/CompareDrawer';
+import AiAssistant from './components/AiAssistant';
+import AbandonedCartTracker from './components/AbandonedCartTracker';
+import WhatsAppButton from './components/WhatsAppButton';
 
 // Pages
 import Home from './pages/Home';
@@ -53,8 +57,12 @@ export default function App() {
 
           <Footer />
         </div>
+        <ToastContainer />
+        <CompareDrawer />
+        <AiAssistant />
+        <WhatsAppButton />
+        <AbandonedCartTracker />
       </Router>
-      <ToastContainer />
     </AppProvider>
   );
 }

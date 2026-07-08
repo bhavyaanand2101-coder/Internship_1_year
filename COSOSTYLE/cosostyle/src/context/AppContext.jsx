@@ -8,6 +8,8 @@ export function AppProvider({ children }) {
   const [user, setUser] = useState(null);
   const [addresses, setAddresses] = useState([]);
   const [authLoading, setAuthLoading] = useState(true);
+  const [loyaltyPoints, setLoyaltyPoints] = useState(0);
+  const [referralCode, setReferralCode] = useState('');
 
   // --- CART STATE ---
   const [cart, setCart] = useState(() => {
@@ -45,8 +47,9 @@ export function AppProvider({ children }) {
           const profile = await api.getProfile();
           setUser(profile);
           setAddresses(profile.addresses || []);
+          setLoyaltyPoints(profile.loyaltyPoints || 0);
+          setReferralCode(profile.referralCode || '');
         } catch (err) {
-          // Token expired or invalid
           localStorage.removeItem('coso_token');
           setUser(null);
         }
@@ -98,6 +101,8 @@ export function AppProvider({ children }) {
       localStorage.setItem('coso_token', res.token);
       setUser(res.user);
       setAddresses(res.user.addresses || []);
+      setLoyaltyPoints(res.user.loyaltyPoints || 0);
+      setReferralCode(res.user.referralCode || '');
       addToast(`Welcome back, ${res.user.name}!`, 'success');
       return res.user;
     } catch (err) {
@@ -112,7 +117,9 @@ export function AppProvider({ children }) {
       localStorage.setItem('coso_token', res.token);
       setUser(res.user);
       setAddresses([]);
-      addToast('Profile registered successfully!', 'success');
+      setLoyaltyPoints(res.user.loyaltyPoints || 50);
+      setReferralCode(res.user.referralCode || '');
+      addToast('Account created! You earned 50 welcome points 🎉', 'success');
       return res.user;
     } catch (err) {
       addToast(err.message || 'Registration failed.', 'error');
@@ -124,6 +131,8 @@ export function AppProvider({ children }) {
     localStorage.removeItem('coso_token');
     setUser(null);
     setAddresses([]);
+    setLoyaltyPoints(0);
+    setReferralCode('');
     addToast('Logged out successfully.', 'info');
   };
 
@@ -131,10 +140,22 @@ export function AppProvider({ children }) {
     try {
       const updatedUser = await api.updateProfile(profileData);
       setUser(updatedUser);
+      if (updatedUser.loyaltyPoints !== undefined) setLoyaltyPoints(updatedUser.loyaltyPoints);
       addToast('Profile changes saved.', 'success');
     } catch (err) {
       addToast(err.message || 'Failed to update profile.', 'error');
       throw err;
+    }
+  };
+
+  const subscribeNewsletter = async (email) => {
+    try {
+      const res = await api.subscribeNewsletter(email);
+      addToast(res.message || 'Subscribed successfully!', 'success');
+      return true;
+    } catch (err) {
+      addToast(err.message || 'Subscription failed.', 'error');
+      return false;
     }
   };
 
@@ -175,44 +196,43 @@ export function AppProvider({ children }) {
       addToast('Please select a size', 'error');
       return false;
     }
-    setCart((prev) => {
-      const existingIdx = prev.findIndex(
-        (item) => item.id === product.id && item.size === size && item.color === color
-      );
 
-      if (existingIdx > -1) {
+    const existingIdx = cart.findIndex(
+      (item) => item.id === product.id && item.size === size && item.color === color
+    );
+
+    if (existingIdx > -1) {
+      setCart((prev) => {
         const updated = [...prev];
         updated[existingIdx].quantity += quantity;
-        addToast(`Increased quantity of ${product.title} in bag`, 'success');
         return updated;
-      } else {
-        addToast(`${product.title} added to bag`, 'success');
-        return [
-          ...prev,
-          {
-            id: product.id,
-            title: product.title,
-            price: product.price,
-            image: product.image,
-            category: product.category,
-            size,
-            color,
-            quantity
-          }
-        ];
-      }
-    });
+      });
+      addToast(`Increased quantity of ${product.title} in bag`, 'success');
+    } else {
+      setCart((prev) => [
+        ...prev,
+        {
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          image: product.image,
+          category: product.category,
+          size,
+          color,
+          quantity
+        }
+      ]);
+      addToast(`${product.title} added to bag`, 'success');
+    }
     return true;
   };
 
   const removeFromCart = (id, size, color) => {
-    setCart((prev) => {
-      const item = prev.find((i) => i.id === id && i.size === size && i.color === color);
-      if (item) {
-        addToast(`Removed ${item.title} from bag`, 'info');
-      }
-      return prev.filter((i) => !(i.id === id && i.size === size && i.color === color));
-    });
+    const item = cart.find((i) => i.id === id && i.size === size && i.color === color);
+    if (item) {
+      addToast(`Removed ${item.title} from bag`, 'info');
+    }
+    setCart((prev) => prev.filter((i) => !(i.id === id && i.size === size && i.color === color)));
   };
 
   const updateCartQuantity = (id, size, color, quantity) => {
@@ -287,15 +307,14 @@ export function AppProvider({ children }) {
 
   // --- WISHLIST CONTROLLERS ---
   const toggleWishlist = (productId) => {
-    setWishlist((prev) => {
-      if (prev.includes(productId)) {
-        addToast('Removed from wishlist', 'info');
-        return prev.filter((id) => id !== productId);
-      } else {
-        addToast('Added to wishlist', 'success');
-        return [...prev, productId];
-      }
-    });
+    const isAlreadyWishlisted = wishlist.includes(productId);
+    if (isAlreadyWishlisted) {
+      setWishlist((prev) => prev.filter((id) => id !== productId));
+      addToast('Removed from wishlist', 'info');
+    } else {
+      setWishlist((prev) => [...prev, productId]);
+      addToast('Added to wishlist', 'success');
+    }
   };
 
   const isInWishlist = (productId) => wishlist.includes(productId);
@@ -323,6 +342,11 @@ export function AppProvider({ children }) {
         changePassword,
         saveAddress,
         deleteAddress,
+        subscribeNewsletter,
+
+        // Loyalty
+        loyaltyPoints,
+        referralCode,
 
         // Cart
         cart,

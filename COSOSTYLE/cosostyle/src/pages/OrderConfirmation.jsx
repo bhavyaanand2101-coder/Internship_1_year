@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { CheckCircle, Truck, FileText, ShoppingBag, ArrowRight } from 'lucide-react';
-import { mockApi } from '../lib/mockApi';
+import { api } from '../lib/api';
 import { useToasts } from '../context/AppContext';
 import SEO from '../components/SEO';
 
@@ -13,12 +13,14 @@ export default function OrderConfirmation() {
 
   useEffect(() => {
     async function fetchOrder() {
-      const orders = await mockApi.getUserOrders();
-      const found = orders.find((o) => o.id === id);
-      if (found) {
+      try {
+        const found = await api.getOrder(id);
         setOrder(found);
+      } catch (err) {
+        console.error('Failed to load order confirmation details:', err);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     }
     fetchOrder();
   }, [id]);

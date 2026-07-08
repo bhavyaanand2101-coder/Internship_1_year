@@ -42,11 +42,19 @@ export default function Checkout() {
   const [shippingZip, setShippingZip] = useState('');
   const [shippingCountry, setShippingCountry] = useState('India');
 
+  // Gift wrapping and order notes
+  const [isGiftWrapping, setIsGiftWrapping] = useState(false);
+  const [orderNotes, setOrderNotes] = useState('');
+  const [guestEmail, setGuestEmail] = useState('');
+
   // Payment States
-  const [paymentMethod, setPaymentMethod] = useState('card');
+  const [paymentMethod, setPaymentMethod] = useState('card'); // 'card' | 'upi' | 'netbanking' | 'wallet' | 'cod'
   const [cardNumber, setCardNumber] = useState('');
   const [cardExpiry, setCardExpiry] = useState('');
   const [cardCvc, setCardCvc] = useState('');
+  const [upiId, setUpiId] = useState('');
+  const [netBankingBank, setNetBankingBank] = useState('');
+  const [selectedWallet, setSelectedWallet] = useState('');
   
   const [loading, setLoading] = useState(false);
 
@@ -54,6 +62,7 @@ export default function Checkout() {
     if (user && addresses.length > 0) {
       const def = addresses.find((a) => a.isDefault) || addresses[0];
       setSelectedAddrId(def.id);
+      setIsAddingNewAddress(false);
     } else {
       setIsAddingNewAddress(true);
     }
@@ -74,8 +83,9 @@ export default function Checkout() {
     return 99;
   };
 
+  const giftCost = isGiftWrapping ? 50 : 0;
   const finalShipping = getShippingCost();
-  const finalTotal = cartSubtotal - discountAmount + finalShipping + taxAmount;
+  const finalTotal = cartSubtotal - discountAmount + finalShipping + taxAmount + giftCost;
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
@@ -121,9 +131,36 @@ export default function Checkout() {
       }
     }
 
+    // Input Validations by Payment Method
     if (paymentMethod === 'card') {
       if (!cardNumber || !cardExpiry || !cardCvc) {
         addToast('Please enter credit card details.', 'error');
+        setLoading(false);
+        return;
+      }
+    } else if (paymentMethod === 'upi') {
+      if (!upiId || !upiId.includes('@')) {
+        addToast('Please enter a valid UPI ID (e.g., name@okaxis).', 'error');
+        setLoading(false);
+        return;
+      }
+    } else if (paymentMethod === 'netbanking') {
+      if (!netBankingBank) {
+        addToast('Please select your preferred banking portal.', 'error');
+        setLoading(false);
+        return;
+      }
+    } else if (paymentMethod === 'wallet') {
+      if (!selectedWallet) {
+        addToast('Please select your wallet option.', 'error');
+        setLoading(false);
+        return;
+      }
+    }
+
+    if (!user) {
+      if (!guestEmail || !guestEmail.includes('@')) {
+        addToast('Please enter a valid guest email address.', 'error');
         setLoading(false);
         return;
       }
@@ -138,9 +175,12 @@ export default function Checkout() {
         discount: discountAmount,
         total: finalTotal,
         shippingAddress: activeShippingAddress,
+        notes: orderNotes,
+        giftWrapped: isGiftWrapping,
+        guestEmail: !user ? guestEmail : undefined,
         paymentDetails: {
           method: paymentMethod,
-          last4: cardNumber ? cardNumber.slice(-4) : 'Paypal/Stripe'
+          last4: cardNumber ? cardNumber.slice(-4) : (upiId ? upiId : (netBankingBank ? netBankingBank : selectedWallet))
         }
       });
       clearCart();
@@ -156,7 +196,7 @@ export default function Checkout() {
   if (cart.length === 0) return null;
 
   return (
-    <div className="w-full bg-black min-h-screen py-12 select-none animate-fade-in">
+    <div className="w-full bg-black min-h-screen py-12 select-none animate-fade-in text-white">
       <SEO title="Secure Checkout" />
 
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-12">
@@ -164,7 +204,7 @@ export default function Checkout() {
         {/* Left Form */}
         <div className="lg:col-span-7 space-y-10">
           
-          <div className="border-b border-neutral-950 pb-4">
+          <div className="border-b border-neutral-900 pb-4">
             <h1 className="text-white text-4xl font-black font-impact tracking-widest uppercase">
               SECURE CHECKOUT
             </h1>
@@ -211,7 +251,7 @@ export default function Checkout() {
 
                   <button
                     type="button"
-                    onClick={() => setIsAddingNewAddress(true)}
+                    onClick={() => { setIsAddingNewAddress(true); setSelectedAddrId(null); }}
                     className="text-[10px] font-black text-brand-red tracking-widest hover:underline uppercase cursor-pointer"
                   >
                     + ADD NEW ADDRESS
@@ -221,6 +261,19 @@ export default function Checkout() {
 
               {isAddingNewAddress && (
                 <div className="space-y-4 animate-fade-in">
+                  {!user && (
+                    <div className="border border-neutral-900 bg-neutral-950/20 p-4 rounded-luxury space-y-2 mb-2 text-left">
+                      <label className="block text-[9px] font-bold text-neutral-500 tracking-widest uppercase mb-1">GUEST EMAIL FOR UPDATES</label>
+                      <input
+                        type="email"
+                        required
+                        value={guestEmail}
+                        onChange={(e) => setGuestEmail(e.target.value)}
+                        className="bg-black border border-neutral-900 rounded-full focus:border-neutral-500 text-white text-xs font-semibold tracking-wider placeholder-neutral-700 outline-none w-full p-3 px-4 transition"
+                        placeholder="GUEST@EMAIL.COM"
+                      />
+                    </div>
+                  )}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-[9px] font-bold text-neutral-500 tracking-widest uppercase mb-1">RECIPIENT NAME</label>
@@ -335,6 +388,37 @@ export default function Checkout() {
               </div>
             </div>
 
+            {/* OPTIONAL ADDONS: GIFT WRAP & NOTES */}
+            <div className="space-y-6">
+              <h3 className="text-white font-black text-xs tracking-widest uppercase flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-brand-red rounded-full"></span>
+                ADDITIONAL SERVICES & NOTES
+              </h3>
+              
+              <div className="p-5 border border-neutral-900 bg-[#050507]/40 rounded-luxury space-y-4">
+                <label className="flex items-center gap-3 cursor-pointer select-none text-xs font-bold uppercase text-neutral-300 hover:text-white">
+                  <input
+                    type="checkbox"
+                    checked={isGiftWrapping}
+                    onChange={(e) => setIsGiftWrapping(e.target.checked)}
+                    className="accent-brand-red cursor-pointer"
+                  />
+                  <span>ADD PREMIUM GIFT WRAPPING (ADD ₹50.00)</span>
+                </label>
+                
+                <div>
+                  <label className="block text-[9px] font-bold text-neutral-500 tracking-widest uppercase mb-1">ORDER NOTES / DELIVERY INSTRUCTIONS</label>
+                  <textarea
+                    rows={3}
+                    value={orderNotes}
+                    onChange={(e) => setOrderNotes(e.target.value)}
+                    className="bg-black border border-neutral-900 rounded-luxury focus:border-neutral-500 text-white text-xs font-semibold tracking-wider placeholder-neutral-700 outline-none w-full p-3 px-4 transition resize-none uppercase"
+                    placeholder="E.G. LEAVE AT THE FRONT DOOR, PRIVATE PACKAGING REQUEST"
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* 3. PAYMENT GATEWAY */}
             <div className="space-y-6">
               <h3 className="text-white font-black text-xs tracking-widest uppercase flex items-center gap-2">
@@ -342,19 +426,25 @@ export default function Checkout() {
                 3. SECURE PAYMENT DETAILS
               </h3>
 
-              <div className="grid grid-cols-3 gap-2 border-b border-neutral-950 pb-4">
-                {['card', 'paypal', 'stripe'].map((method) => (
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 border-b border-neutral-900 pb-4">
+                {[
+                  { id: 'card', label: 'CARDS' },
+                  { id: 'upi', label: 'UPI' },
+                  { id: 'netbanking', label: 'NET BANK' },
+                  { id: 'wallet', label: 'WALLETS' },
+                  { id: 'cod', label: 'COD' }
+                ].map((method) => (
                   <button
-                    key={method}
+                    key={method.id}
                     type="button"
-                    onClick={() => setPaymentMethod(method)}
-                    className={`py-3 text-[10px] font-black tracking-widest uppercase border transition rounded-full cursor-pointer ${
-                      paymentMethod === method
+                    onClick={() => setPaymentMethod(method.id)}
+                    className={`py-3.5 text-[9px] font-black tracking-widest uppercase border transition rounded-full cursor-pointer ${
+                      paymentMethod === method.id
                         ? 'bg-brand-red border-brand-red text-white'
                         : 'border-neutral-900 bg-neutral-950/40 text-neutral-400 hover:border-neutral-600'
                     }`}
                   >
-                    {method === 'card' ? 'CREDIT CARD' : method.toUpperCase()}
+                    {method.label}
                   </button>
                 ))}
               </div>
@@ -400,13 +490,82 @@ export default function Checkout() {
                 </div>
               )}
 
-              {paymentMethod !== 'card' && (
-                <div className="bg-neutral-950/20 border border-neutral-900/40 p-6 rounded-luxury text-center animate-fade-in">
-                  <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-wider">
-                    REDIRECTIONS VIA SECURE GATEWAY ENCRYPTION
+              {paymentMethod === 'upi' && (
+                <div className="space-y-4 animate-fade-in">
+                  <div>
+                    <label className="block text-[9px] font-bold text-neutral-500 tracking-widest uppercase mb-1">UPI ID (VPA)</label>
+                    <input
+                      type="text"
+                      required
+                      value={upiId}
+                      onChange={(e) => setUpiId(e.target.value)}
+                      className="bg-black border border-neutral-900 rounded-full focus:border-neutral-500 text-white text-xs font-semibold tracking-wider placeholder-neutral-700 outline-none w-full p-3 px-4 transition uppercase"
+                      placeholder="alex@okaxis"
+                    />
+                  </div>
+                  <div className="p-4 bg-neutral-950/20 border border-neutral-900 rounded-luxury text-center">
+                    <p className="text-[10px] text-brand-red font-bold uppercase tracking-wider">
+                      UPI TRANSACTION VERIFICATION REQUEST
+                    </p>
+                    <p className="text-[9px] text-neutral-500 font-semibold uppercase mt-1">
+                      A request will be sent to your UPI client App to authorize the ₹{finalTotal.toFixed(2)} payment.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {paymentMethod === 'netbanking' && (
+                <div className="space-y-4 animate-fade-in">
+                  <div>
+                    <label className="block text-[9px] font-bold text-neutral-500 tracking-widest uppercase mb-1">PREFERRED BANK PORTAL</label>
+                    <select
+                      value={netBankingBank}
+                      onChange={(e) => setNetBankingBank(e.target.value)}
+                      className="bg-black border border-neutral-900 rounded-full focus:border-neutral-500 text-white text-xs font-semibold tracking-wider placeholder-neutral-700 outline-none w-full p-3 px-4 transition uppercase"
+                      required
+                    >
+                      <option value="">-- SELECT BANK --</option>
+                      <option value="HDFC Bank">HDFC BANK</option>
+                      <option value="ICICI Bank">ICICI BANK</option>
+                      <option value="State Bank of India">STATE BANK OF INDIA</option>
+                      <option value="Axis Bank">AXIS BANK</option>
+                      <option value="Kotak Mahindra Bank">KOTAK MAHINDRA BANK</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              {paymentMethod === 'wallet' && (
+                <div className="space-y-4 animate-fade-in">
+                  <div>
+                    <label className="block text-[9px] font-bold text-neutral-500 tracking-widest uppercase mb-1">SELECT WALLET PROVIDER</label>
+                    <div className="grid grid-cols-2 gap-4">
+                      {['PayTM', 'PhonePe', 'Amazon Pay', 'Google Pay'].map((w) => (
+                        <button
+                          key={w}
+                          type="button"
+                          onClick={() => setSelectedWallet(w)}
+                          className={`py-3 text-[10px] font-black tracking-widest border uppercase transition rounded-full cursor-pointer ${
+                            selectedWallet === w
+                              ? 'bg-brand-red border-brand-red text-white'
+                              : 'border-neutral-900 bg-neutral-950/40 text-neutral-400 hover:border-neutral-600'
+                          }`}
+                        >
+                          {w}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {paymentMethod === 'cod' && (
+                <div className="bg-neutral-950/20 border border-neutral-900/40 p-6 rounded-luxury text-center animate-fade-in space-y-2">
+                  <p className="text-[10px] text-brand-red font-bold uppercase tracking-wider">
+                    CASH ON DELIVERY ENABLED
                   </p>
-                  <p className="text-[9px] text-neutral-600 font-semibold uppercase mt-1">
-                    You will finalize the transaction in an overlay popup after clicking place order.
+                  <p className="text-[9px] text-neutral-500 font-semibold uppercase">
+                    Pay our courier agent in cash or scanning QR code upon home package arrival. An additional cash handling fee may apply.
                   </p>
                 </div>
               )}
@@ -499,6 +658,13 @@ export default function Checkout() {
                 <span>ESTIMATED TAX (8%)</span>
                 <span className="text-white">₹{taxAmount.toFixed(2)}</span>
               </div>
+
+              {isGiftWrapping && (
+                <div className="flex justify-between items-center text-white">
+                  <span>GIFT WRAPPING ADDON</span>
+                  <span>₹50.00</span>
+                </div>
+              )}
 
               <div className="flex justify-between items-center">
                 <span>SHIPPING CHARGES</span>
