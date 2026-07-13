@@ -1,3 +1,4 @@
+// [2026-07-13] Order status constants: Placed, Processing, Shipped, Delivered, Cancelled
 import mongoose from 'mongoose';
 import { isJsonDb } from '../config/db.js';
 import { JsonModel } from '../config/jsonDb.js';

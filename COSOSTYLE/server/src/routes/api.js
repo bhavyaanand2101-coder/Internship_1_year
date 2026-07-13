@@ -1,3 +1,4 @@
+// [2026-07-13] CoSoStyle Core REST API Routes & Controllers
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
