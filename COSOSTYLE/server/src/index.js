@@ -1,3 +1,4 @@
+// [2026-07-14] Express application entry point with security middleware
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';

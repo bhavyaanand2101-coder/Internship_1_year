@@ -1,3 +1,4 @@
+// [2026-07-14] JSON File DB Fallback Adapter for seamless offline operation
 import fs from 'fs';
 import path from 'path';
 
