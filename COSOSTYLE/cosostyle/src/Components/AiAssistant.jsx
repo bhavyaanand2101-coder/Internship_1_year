@@ -1,3 +1,4 @@
+// [2026-07-15] Gemini 2.5 Flash powered shopping stylist component
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Send, Sparkles, Bot, Trash2, ChevronDown, Maximize2, Minimize2, Copy, Check, RotateCcw, Download, ShoppingBag, Heart, User, Search, RefreshCw } from 'lucide-react';
 import { api } from '../lib/api';
