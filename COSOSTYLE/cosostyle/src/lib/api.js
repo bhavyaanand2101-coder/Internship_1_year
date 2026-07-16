@@ -1,3 +1,4 @@
+// [2026-07-16] Client-side API fetch client with error handling
 const BASE_URL = 'http://localhost:5001/api';
 
 async function apiRequest(endpoint, options = {}) {

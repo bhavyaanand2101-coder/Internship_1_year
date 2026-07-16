@@ -1,3 +1,4 @@
+// [2026-07-16] Shop catalog page with multi-parameter filter bar
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Search, ChevronDown, SlidersHorizontal, X, Grid3X3, List, Eye } from 'lucide-react';

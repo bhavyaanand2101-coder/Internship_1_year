@@ -1,3 +1,4 @@
+// [2026-07-16] Single product view with gallery and size chart
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Heart, ChevronDown, ChevronUp, Star, ZoomIn, Info, X, Sparkles } from 'lucide-react';
