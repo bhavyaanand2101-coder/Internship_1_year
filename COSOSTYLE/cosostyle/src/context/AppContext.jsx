@@ -1,3 +1,4 @@
+// [2026-07-17] AppContext: cart, wishlist, auth and toast providers
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { api } from '../lib/api';
 

@@ -1,3 +1,4 @@
+// [2026-07-17] Wishlist page with grid layout
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useWishlist } from '../context/AppContext';

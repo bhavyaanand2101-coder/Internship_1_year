@@ -1,3 +1,4 @@
+// [2026-07-17] Multi-step checkout view
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth, useCart, useToasts } from '../context/AppContext';
