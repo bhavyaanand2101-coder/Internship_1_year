@@ -1,3 +1,4 @@
+// [2026-07-20] User account dashboard with orders and returns
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth, useRecentlyViewed, useToasts, useAppContext } from '../context/AppContext';

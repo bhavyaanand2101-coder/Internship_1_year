@@ -1,3 +1,4 @@
+// [2026-07-20] CoSoStyle streetwear blog page
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../lib/api';

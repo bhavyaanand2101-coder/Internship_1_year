@@ -1,3 +1,4 @@
+// [2026-07-20] Admin panel for products, orders, coupons, users
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth, useToasts } from '../context/AppContext';
