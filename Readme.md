@@ -7,3 +7,6 @@ git push origin main
 
 
 
+
+
+<!-- [2026-07-21] CoSoStyle platform & AI Assistant documentation updated -->
